@@ -66,6 +66,7 @@ define(['./data', './controls'], function(data, controls) {
 
 
         draw: function (svg, newData, filters, color) {
+          if (DEBUG) { if (newData.length == 0) {console.warn('no new data', filters)} }
           // Setup scales & axises
           barchart.xScale.domain([0, d3.max(newData, function (d) { return d.value; })])
             .nice();
@@ -131,7 +132,7 @@ define(['./data', './controls'], function(data, controls) {
               if (filters.partner === 'all') {  // top partner chart: select partner
                 return localData.lookup(d.partner, 'partnerAreas', 'text');
               } else {                          // top commodities chart: select commodity
-                return localData.commodityName(d.commodity);
+                return localData.commodityName(d.commodity, filters.type);
               }
             });
           values
@@ -170,7 +171,7 @@ define(['./data', './controls'], function(data, controls) {
           // Update bars & text
           var groups = svg.selectAll('g.item');
           groups.selectAll('rect')
-            .attr('width', function (d,i) { return barchart.xScale(+d.value); });
+            .attr('width', function (d,i) { return barchart.xScale(+d.value) || 1; });
           groups.selectAll('text.value')
             .attr('x', function (d,i) { return barchart.xScale(+d.value)+3; });
         }

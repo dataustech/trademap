@@ -33,7 +33,17 @@ define(function(require) {
       // reporterAreas.json, partnerAreas.json and clasificationsHS_AG2.json
       reporterAreasSelect: [],
       partnerAreasSelect: [],
+      typeCodesSelect: [{
+          "id": "C",
+          "text": "Goods",
+          "parent": "#"
+      }, {
+          "id": "S",
+          "text": "Services",
+          "parent": "#"
+      }],
       commodityCodesSelect: [],
+      serviceCodesSelect: [],
       reporterAreas: {},
       partnerAreas: {},
       flowByCode: {},
@@ -46,17 +56,25 @@ define(function(require) {
       xFilterByReporter:  {},
       xFilterByPartner:   {},
       xFilterByYear:      {},
+      xFilterByType:      {},
       xFilterByCommodity: {},
       xFilterByFlow:      {},
       xFilterByAmount:    {},
 
       // Formatting functions
-      commodityName: function (commodity) {
+      commodityName: function (commodity, type) {
         try {
-          var text = this.commodityCodes.get(commodity).text;
-          return text.slice(text.indexOf(' - ')+3);
+          if (type == 'C') {
+            var text = data.commodityCodes.get(commodity).text;
+            return text.slice(text.indexOf(' - ')+3);
+          }
+          if (type == 'S') {
+            //TODO FEATURE this could be imprved to consider parents e.g. "Transport" for "Passengers"
+            var text = data.serviceCodes.get(commodity).text;
+            return text.slice(text.indexOf(' ')+1);
+          }
         } catch (err) {
-          if (DEBUG) { console.warn('There was a problem getting a commodity name: ' + err); }
+          if (DEBUG) { console.warn('There was a problem getting a commodity name for '+commodity+' of type '+type+': ' + err); }
           return 'unknown';
         }
       },
@@ -133,17 +151,24 @@ define(function(require) {
         // Decide base query URL and use of CORS based on domain and cors support
         if (location.host !== 'comtrade.un.org' && !Modernizr.cors) {
           // Not same domain and no CORS (basically IE9 locked on dev server) then use proxy.php
-          data.baseQueryUrl = 'proxy.php?fmt=csv&max=50000&type=C&freq=A&px=HS&rg=1%2C2';
+          data.baseQueryUrl = 'proxy.php?fmt=csv&max=50000&freq=A&rg=1%2C2';
           data.useCors = false;
         }
         if (location.host !== 'comtrade.un.org' && Modernizr.cors) {
-          data.baseQueryUrl = 'http://comtrade.un.org/api/get?fmt=csv&max=50000&type=C&freq=A&px=HS&rg=1%2C2'
+          data.baseQueryUrl = 'https://comtrade.un.org/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2'
           data.useCors = true;
         }
         if (location.host === 'comtrade.un.org') {
-          data.baseQueryUrl = '/api/get?fmt=csv&max=50000&type=C&freq=A&px=HS&rg=1%2C2'
+          data.baseQueryUrl = '/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2'
           data.useCors = false;
         }
+		//console.log(data);console.log(window.location.href);console.log(location.host);
+		// DEBUG/LOCAL just override here for local usage 2016-10
+		//data.baseQueryUrl = '/data/RequestURL_0' + requestCount + '.csv';
+		//data.baseQueryUrl = 'http://localhost/trademap/api/get/?fmt=csv&max=50000&type=C&freq=A&px=HS&rg=1%2C2';
+		// data.baseQueryUrl = 'http://localhost:8888/beis/trademap/api/get/?fmt=csv&max=50000&freq=A&px=HS&rg=1%2C2';
+		// data.useCors = true;
+
 
         var ajaxSettings = {
           dataType: 'json'
@@ -153,13 +178,15 @@ define(function(require) {
           $.ajax('data/reporterAreas.min.json', ajaxSettings),
           $.ajax('data/partnerAreas.min.json', ajaxSettings),
           $.ajax('data/classificationHS_AG2.min.json', ajaxSettings),
+          $.ajax('data/classificationEB02.topLevel.json', ajaxSettings),
           $.ajax('data/isoCodes.csv'),
           $.ajax('data/world-110m.json', ajaxSettings)
-        ).then(function success (reporterAreas, partnerAreas, commodityCodes, isoCodes, worldJson) {
+        ).then(function success (reporterAreas, partnerAreas, commodityCodes, serviceCodes, isoCodes, worldJson) {
           // Add results to the data object for use in the app.
           data.reporterAreasSelect  = reporterAreas[0].results;
           data.partnerAreasSelect   = partnerAreas[0].results;
           data.commodityCodesSelect = commodityCodes[0].results;
+          data.serviceCodesSelect   = serviceCodes[0].results;
           data.worldJson = worldJson[0];
 
           // Parse isoCodes csv
@@ -171,6 +198,7 @@ define(function(require) {
           data.flowByCode      = d3.map([{ id: '1', text: 'imports'}, { id: '2', text: 'exports'}, { id: '0', text: 'balance'}], function (d) { return d.id; });
           data.partnerAreas    = d3.map(partnerAreas[0].results,   function (d) { return d.id; });
           data.commodityCodes  = d3.map(commodityCodes[0].results, function (d) { return d.id; });
+          data.serviceCodes    = d3.map(serviceCodes[0].results,   function (d) { return d.id; });
 
           // countryByISONum will return a single result (the last match in isoCodes.csv)
           data.countryByISONum = d3.map(codes,                     function (d) { return d.isoNumerical; });
@@ -186,7 +214,7 @@ define(function(require) {
             try {
               return data[mapName].get(lookupVal)[propertyName];
             } catch (err) {
-              //if (DEBUG) { console.warn('There was a problem looking up ' + lookupVal + ' in ' + mapName + '.' + propertyName + ': ' + err); }
+              if (DEBUG) { console.warn('There was a problem looking up ' + lookupVal + ' in ' + mapName + '.' + propertyName + ': ' + err); }
               return 'unknown';
             }
           };
@@ -195,6 +223,8 @@ define(function(require) {
           data.reporterAreasSelect  = data.reporterAreasSelect.filter( function (d) { return d.id !== 'all'; });
           data.partnerAreasSelect   = data.partnerAreasSelect.filter(  function (d) { return (d.id !== 'all'); });
           data.commodityCodesSelect = data.commodityCodesSelect.filter(function (d) { return (d.id !== 'ALL' && d.id !== 'AG2'); });
+          //TODO There might be more unwanted services to filter here.
+          data.serviceCodesSelect   = data.serviceCodesSelect.filter(function (d) { return (d.id !== 'ALL'); });
 
           // Call the callback
           callback();
@@ -207,6 +237,7 @@ define(function(require) {
         this.xFilterByReporter  = this.xFilter.dimension(function(d){ return +d.reporter;  });
         this.xFilterByPartner   = this.xFilter.dimension(function(d){ return +d.partner;   });
         this.xFilterByYear      = this.xFilter.dimension(function(d){ return +d.year;      });
+        this.xFilterByType      = this.xFilter.dimension(function(d){ return d.type;       });
         this.xFilterByCommodity = this.xFilter.dimension(function(d){ return d.commodity;  });
         this.xFilterByFlow      = this.xFilter.dimension(function(d){ return +d.flow;      });
         this.xFilterByAmount    = this.xFilter.dimension(function(d){ return +d.value;     });
@@ -222,7 +253,8 @@ define(function(require) {
        *   reporter: 826,     // Reporter code in UN format
        *   partner:  862,     // Partner code in UN format
        *   year:     'all',   // Year can be 'all' or apecific year: 2012 (FUTURE: Multi-year queries are allowed for up to 5 years)
-       *   commodity:72       // Can be a specific 2-digit HS code or 'TOTAL' or 'AG2'
+       *   commodity:72       // Can be a specific 2-digit HS code or 'TOTAL' or 'AG2' or an EB02 code for a service
+       *   type:     'S'      // Can be either S or C for service or commodities
        * }
        * Callback is called with callback(error, ready)
        * ready will be true if new data was received and added to crossfilter or false otherwise.
@@ -321,6 +353,7 @@ define(function(require) {
        *   reporter: 826,     // Reporter code
        *   partner:  862,     // Partner code
        *   year:     'all',   // Year
+       *   type:     'S'      // Type can be 'S' or 'C' for service or good
        *   commodity:72       // Can be a specific 2-digit HS code or 'TOTAL' or 'AG2'
        * }
        * limit will be used to return the top x number of records
@@ -329,6 +362,7 @@ define(function(require) {
         // Clear all filters on the xFilter
         this.xFilterByReporter.filterAll();
         this.xFilterByPartner.filterAll();
+        this.xFilterByType.filterAll();
         this.xFilterByYear.filterAll();
         this.xFilterByCommodity.filterAll();
         this.xFilterByFlow.filterAll();
@@ -336,15 +370,21 @@ define(function(require) {
 
         // Add filters by each dimension
         if (typeof filters.reporter !== 'undefined')                                 { this.xFilterByReporter.filter(+filters.reporter); }
-        // NOTE: when partner=all we return all but the world
-        //       when partner=num we  return that
-        //       when partner=undefined we return all including world
+        // NOTE: when partner=all we return all except the world
+        //       when partner=num we return that
+        //       when partner=undefined we return all including world by not filtering
         if (typeof filters.partner !== 'undefined' && filters.partner === 'all')     { this.xFilterByPartner.filter(function (d) { return (+d !== 0); }); }
         if (typeof filters.partner !== 'undefined' && filters.partner !== 'all')     { this.xFilterByPartner.filter(+filters.partner); }
         if (typeof filters.year !== 'undefined' && filters.year !== 'all')           { this.xFilterByYear.filter(+filters.year); }
-        if (typeof filters.commodity !== 'undefined' && filters.commodity !== 'AG2') { this.xFilterByCommodity.filter(filters.commodity); }
-        if (typeof filters.commodity !== 'undefined' && filters.commodity === 'AG2') { this.xFilterByCommodity.filter(function (d) { return d !== 'TOTAL'; } ); }
-        if (typeof filters.commodity === 'undefined')                                { this.xFilterByCommodity.filter(function (d) { return d === 'TOTAL'; } ); }
+        if (typeof filters.type !== 'undefined')                                     { this.xFilterByType.filter(filters.type); }
+
+        // If a specific commodity is selected then filter by it
+        if (typeof filters.commodity !== 'undefined' && filters.commodity !== 'AG2' && filters.commodity !== 'TOTAL') { this.xFilterByCommodity.filter(filters.commodity); }
+        // If AG2 is requested return all commodities excluding TOTALS (keeping in account that the value is TOTAL for goods and 200 for services)
+        if (typeof filters.commodity !== 'undefined' && filters.commodity === 'AG2') { this.xFilterByCommodity.filter(function (d) { return (d !== 'TOTAL' && +d !== 200); } ); }
+        // If no commodity is selected or TOTAL is selected then return TOTALS (keeping in account that the value is TOTAL for goods and 200 for services)
+        if (typeof filters.commodity === 'undefined' || filters.commodity === 'TOTAL') { this.xFilterByCommodity.filter(function (d) { return (d === 'TOTAL' || +d == 200); } ); }
+
         if (typeof filters.flow !== 'undefined' && +filters.flow !== 0 )             { this.xFilterByFlow.filter(filters.flow); }
 
         // Get the data from xFilter
@@ -358,8 +398,8 @@ define(function(require) {
 
       /*
        * Takes a dataset where imports and exports are in different records
-       * and combines them into a single dataset with one record per partner
-       * and different properties for import, export, balance and ranking.
+       * and combines them into a dataset with a single record per partner
+       * and different properties for import, export, balance and ranking (on the same record).
        * This should be called after getting data which includes "world" as a
        * partner so that percentages of imports and exports will be calculated.
        */
@@ -374,20 +414,17 @@ define(function(require) {
         impExpData = impExpData.filter(function (v) {
           if (+v.partner !== 0) { return true; }
           else {
+            worldDetails.reporter = v.reporter;
+            worldDetails.partner = v.partner;
+            worldDetails.type = v.type;
+            worldDetails.commodity = v.commodity;
+            worldDetails.year = v.year;
             if (v.flow === 1) {
               totImports = v.value;
-              worldDetails.reporter = v.reporter;
-              worldDetails.partner = v.partner;
-              worldDetails.commodity = v.commodity;
-              worldDetails.year = v.year;
               worldDetails.importVal = v.value;
             }
             if (v.flow === 2) {
               totExports = v.value;
-              worldDetails.reporter = v.reporter;
-              worldDetails.partner = v.partner;
-              worldDetails.commodity = v.commodity;
-              worldDetails.year = v.year;
               worldDetails.exportVal = v.value;
             }
             return false;
@@ -468,9 +505,43 @@ define(function(require) {
         var requestUrl = data.baseQueryUrl;
         if (typeof filters.reporter !== 'undefined')    { requestUrl += '&r=' +filters.reporter; } else { requestUrl += '&r=0'; }
         if (typeof filters.partner !== 'undefined')     { requestUrl += '&p=' +filters.partner;  } else { requestUrl += '&p=all'; }
-        if (typeof filters.year !== 'undefined' && filters.year !== null)
-                                                        { requestUrl += '&ps='+filters.year;     } else { requestUrl += '&ps=now'; }
-        if (typeof filters.commodity !== 'undefined')   { requestUrl += '&cc='+filters.commodity;} else { requestUrl += '&cc=AG2'; }
+
+        if (typeof filters.year !== 'undefined' && filters.year !== null) {
+          requestUrl += '&ps='+filters.year;
+        } else {
+          requestUrl += '&ps=now';
+        }
+        // Build URL for goods
+        if (typeof filters.type !== 'undefined' && filters.type == 'C') {
+          requestUrl += '&type=C&px=HS';
+          if (typeof filters.commodity !== 'undefined')   { requestUrl += '&cc='+filters.commodity;} else { requestUrl += '&cc=AG2'; }
+        }
+        // Build URL for services
+        if (typeof filters.type !== 'undefined' && filters.type == 'S') {
+          requestUrl += '&type=S&px=EB02';
+          if (typeof filters.commodity == 'undefined' || filters.commodity == 'TOTAL' || filters.commodity == 'ALL' || filters.commodity == 'AG2' ) {
+            // If no specific commodity code is specified or a TOTAL or ALL has been requested,
+            // instead using ALL that would return all nested levels, if we have less than 20
+            // options in the dropdown we query the api listing all of those instead
+            // e.g. for the 11 top level categories.
+            if (filters.commodity == 'TOTAL') {
+              requestUrl += '&cc=200';
+            } else if (data.serviceCodesSelect.length < 20) {
+              requestUrl += '&cc=';
+              var svc_types = [];
+              data.serviceCodesSelect.forEach(function (i) {
+                svc_types.push(i.id);
+              });
+              requestUrl += svc_types.join();              
+              requestUrl.slice(0,-3);
+            } else {
+              requestUrl += '&cc=ALL';
+            }
+          } else  {
+            // If a commodityCode is specified then add it to the query
+            requestUrl += '&cc='+filters.commodity;
+          }
+        }
         return requestUrl;
       },
 
@@ -481,12 +552,13 @@ define(function(require) {
             reporter:   +d['Reporter Code'],
             partner:    +d['Partner Code'],
             year:       +d.Year,
+            // We infer the type from the classification field. Goods start with "H" but can be H0, H1, H2, H3, H4 while services have classification EB
+            type:        ({ H: 'C', E: 'S'})[d.Classification.slice(0,1)],
             commodity:   d['Commodity Code'],
             flow:       +d['Trade Flow Code'],
             value:      +d['Trade Value (US$)']
           };
         });
-
         // Run the filters on xFilter and extract the data we already may have (unset the partner filter to include world)
         var dataFilter = $.extend({},filters);
         if (dataFilter.partner == 'all') { delete dataFilter.partner; }
@@ -501,6 +573,7 @@ define(function(require) {
             if (
               nd.reporter  === xd.reporter  &&
               nd.partner   === xd.partner   &&
+              nd.type      === xd.type      &&
               nd.commodity === xd.commodity &&
               nd.flow      === xd.flow      &&
               nd.year      === xd.year      &&
@@ -512,12 +585,20 @@ define(function(require) {
           });
           return !dup;
         });
-
-        // Add the new data to xFilter
-        this.xFilter.add(insertData);
+        // Add the new data to xFilter (check first it is valid )
+        if ((insertData.length == 1) && (typeof(insertData[0].type) == "undefined")){
+			if(DEBUG) {
+          		console.warn('API QUERY FAILED from %s: r=%s p=%s cc=%s type=%s y=%s', filters.initiator, filters.reporter, filters.partner, filters.commodity, filters.type, filters.year);
+          		console.groupCollapsed('details...');
+				console.log(csvData, newData, insertData);
+				console.groupEnd();
+			}
+        } else {
+			this.xFilter.add(insertData);        
+        }
 
         if(DEBUG) {
-          console.groupCollapsed('API QUERY SUCCESS from %s: r=%s p=%s c=%s y=%s', filters.initiator, filters.reporter, filters.partner, filters.commodity, filters.year);
+          console.groupCollapsed('API QUERY SUCCESS from %s: r=%s p=%s cc=%s type=%s y=%s', filters.initiator, filters.reporter, filters.partner, filters.commodity, filters.type, filters.year);
           console.log('filters: %o', filters);
           console.log('Added %d new records. Retrieved %d records. Checked %d possible matches and discarded %d duplicates. New xFilter size: %d', insertData.length, newData.length, xFdata.length, duplicates.length, this.xFilter.size());
           console.log('duplicates discarded: %o', duplicates);

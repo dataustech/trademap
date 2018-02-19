@@ -57,13 +57,15 @@ define(['../data', '../rowchart', '../gui', '../controls'], function(data, rowch
                 partner:  0,
                 year:   +filters.year,
                 commodity:   'AG2',
-                initiator: 'topExportCommodities'
+                initiator: 'topExportCommodities',
+                type: filters.type
               },
               dataFilter = {
                 reporter: +filters.reporter,
                 partner:  0,
                 year:   +filters.year,
-                commodity:   'AG2'
+                commodity:   'AG2',
+                type: filters.type
               },
               title = '';
 
@@ -72,12 +74,12 @@ define(['../data', '../rowchart', '../gui', '../controls'], function(data, rowch
 
           // CASE 2: reporter = selected    commodity = null        partner = null
           if(filters.reporter && (!filters.commodity || filters.commodity === 'TOTAL') && !filters.partner) {
-            title = localData.lookup(filters.reporter, 'reporterAreas', 'text') + ' - Top-10 exports of goods to the world in ' + filters.year;
+            title = localData.lookup(filters.reporter, 'reporterAreas', 'text') + ' - Top-10 exports of '+({ S: 'services', C: 'goods' })[filters.type]+' to the world in ' + filters.year;
           }
 
           // CASE 3: reporter = selected    commodity = null        partner = selected
           if(filters.reporter && (!filters.commodity || filters.commodity === 'TOTAL') && filters.partner) {
-            title = localData.lookup(filters.reporter, 'reporterAreas', 'text') + ' - Top-10 exports of goods to ' + localData.lookup(filters.partner, 'partnerAreas', 'text') + ' in ' + filters.year;
+            title = localData.lookup(filters.reporter, 'reporterAreas', 'text') + ' - Top-10 exports of '+({ S: 'services', C: 'goods' })[filters.type]+' to ' + localData.lookup(filters.partner, 'partnerAreas', 'text') + ' in ' + filters.year;
             queryFilter.partner = +filters.partner;
             dataFilter.partner = +filters.partner;
           }
@@ -102,6 +104,7 @@ define(['../data', '../rowchart', '../gui', '../controls'], function(data, rowch
             if (err || !ready) { return; }
             // Get the data, update title, display panel and update chart
             var newData = localData.getData(dataFilter, numEntries);
+//             if (newData.length == 0) {console.warn('no new data in ' + title)}
             // Set chart title
             $chartTitle.html(title);
             // Set download link

@@ -92,12 +92,14 @@ define(['../data', '../gui', '../controls'], function(data, gui, controls) {
                 partner:  0,
                 year:   +filters.year,
                 commodity:   'AG2',
-                initiator: 'infoBox'
+                initiator: 'infoBox',
+                type: filters.type
               },
               dataFilter = {
                 reporter: +filters.reporter,
                 year:   +filters.year,
-                commodity:   'TOTAL'
+                commodity:   'TOTAL',
+                type: filters.type
               };
 
           // NOTE that we leave dataFilter.partner undefined when a partner is selected
@@ -171,11 +173,11 @@ define(['../data', '../gui', '../controls'], function(data, gui, controls) {
               partnerName = localData.lookup(details.partner, 'partnerAreas', 'text'),
               subtitle = '<strong>' +
                          reporterName +
-                         '</strong> trade in goods with <strong>' +
+                         '</strong> trade in '+({ S: 'services', C: 'goods' })[details.type]+' with <strong>' +
                          partnerName +
                          '</strong> in <strong>' + details.year + '</strong><br />';
           if (details.commodity && details.commodity !== 'TOTAL') {
-            subtitle += '<strong>' + localData.commodityName(details.commodity) + '</strong>';
+            subtitle += '<strong>' + localData.commodityName(details.commodity, details.type) + '</strong>';
           }
           $panel.find('.subtitle').html(subtitle);
 
@@ -187,12 +189,19 @@ define(['../data', '../gui', '../controls'], function(data, gui, controls) {
 
           // Show ranking only if partner and rankings are given
           if (details.partner && details.partner !== 0 && details.importRank && details.exportRank) {
+          try {
             var ranking = partnerName + ' was the ' + localData.numOrdinal(details.exportRank) + ' largest export market for ' +
                           reporterName + ' (' + details.exportPc.toFixed(1) + '% of ' + reporterName + ' exports) and the ' +
                           localData.numOrdinal(details.importRank) + ' largest import market for ' + reporterName +
                           ' (' + details.importPc.toFixed(1) + '% of ' + reporterName + ' imports)';
+            } catch (err) {
+            	//debugger;
+            	var ranking = partnerName + ' was the ' + localData.numOrdinal(details.exportRank) + ' largest export market for ' +
+                          reporterName + '  and the ' + localData.numOrdinal(details.importRank) + 
+                          ' largest import market for ' + reporterName + '.';
+            }
             if (details.commodity && details.commodity !== 'TOTAL') {
-              ranking += ' for '+ localData.commodityName(details.commodity);
+              ranking += ' for '+ localData.commodityName(details.commodity, details.type);
             }
             ranking += ' in ' + details.year + '.';
             $panel.find('.ranking').html(ranking);
