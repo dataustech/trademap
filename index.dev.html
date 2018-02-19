@@ -6,20 +6,20 @@
 
     <!-- General meta tags -->
     <link rel="author" href="humans.txt" />
-    <meta name="author" content="UK Department for Business Innovation and Skills">
+    <meta name="author" content="Department for International Trade / Department for Business, Energy and Industrial Strategy (UK)">
     <meta name="Description" content="An interactive visualization of international trade based on UN COMTRADE data.">
-    <meta name="Keywords" content="trade, goods, services, comtrade, united nations, department for business innovation and skills">
+    <meta name="Keywords" content="trade, goods, services, comtrade, united nations, department for international trade, department for business, energy and industrial strategy">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="shortcut icon" href="favicon.ico?v=2">
 
     <!-- Facebook tags -->
-    <meta property="og:title"       content="International Trade in Goods and services based on UN Comtrade data" />
+    <meta property="og:title"       content="International Trade in Goods and Services based on UN Comtrade data" />
     <meta property="og:type"        content="Website" />
     <meta property="og:image"       content="http://comtrade.un.org/labs/BIS-trade-in-goods/img/fbThumb.png" />
     <meta property="og:url"         content="http://comtrade.un.org/labs/BIS-trade-in-goods" />
-    <meta property="og:description" content="An interactive data visualization made by the UK Department for Business, Innovation & Skills exploring UN COMTRADE data." />
+    <meta property="og:description" content="An interactive data visualization made by the UK Department for International Trade / Department for Business, Energy and Industrial Strategy exploring UN COMTRADE data." />
 
-    <title>International Trade in Goods and services based on UN Comtrade data</title>
+    <title>International trade in goods and services based on UN Comtrade data</title>
 
     <!-- Modernizr should not be compiled/minified with other scripts -->
     <script type="text/javascript" src="libs/modernizr.custom.js"></script>
@@ -83,8 +83,8 @@
             <span class="icon-bar"></span>
           </button>
           <div class="navbar-brand">
-            <p>International Trade in Goods and Services based on UN Comtrade data</p>
-            <small>Developed by the Department for Business Innovation and Skills (UK)</small>
+            <p>International trade in goods and services based on UN Comtrade data</p>
+            <small>This prototype was developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK</small>
           </div>
         </div>
 
@@ -98,6 +98,7 @@
                 <li><a href="pages/contacts.html" data-toggle="modal" data-target="#myModal">Key contacts</a></li>
                 <li><a href="pages/furtherinfo.html" data-toggle="modal" data-target="#myModal">Further information</a></li>
                 <li><a href="pages/licence.html" data-toggle="modal" data-target="#myModal">Licence and Copyright</a></li>
+                <li><a href="pages/cookie_policy.html" data-toggle="modal" data-target="#myModal">Cookie policy</a></li>
                 <li><a href="#" id="startIntro">Show intro</a></li>
                 <li><a href="#footer" id="goToFooter">Credits</a></li>
               </ul>
@@ -138,8 +139,9 @@
             <!-- Year selection -->
             <div class="selectYearWrapper">
               <select id="selectYear" class="select2control" disabled>
+                <option value="2014" selected>2015</option>
                 <option value="2014">2014</option>
-                <option value="2013" selected>2013</option>
+                <option value="2013">2013</option>
                 <option value="2012">2012</option>
                 <option value="2011">2011</option>
                 <option value="2010">2010</option>
@@ -206,7 +208,7 @@
 
       <!-- Feedback button -->
       <div id="feedback-tab">
-        <a href="https://www.surveymonkey.com/r/Trade-Visualisation-Feedback" target="_blank">Feedback</a>
+        <a href="https://ditresearch.eu.qualtrics.com/jfe/form/SV_4Uy6qaGYAfOEndj" target="_blank">Feedback</a>
       </div>
 
 
@@ -216,7 +218,7 @@
       <div id="choropleth" class="fill-screen chart" style="display: none">
         <!-- Chart title -->
         <div id="choroplethTitle">
-          <div class="dropdown titleDropdown">
+          <div class="dropdown titleDropdown" id="choroplethDropdownMenuDiv">
             <button class="btn btn-xs dropdown-toggle" type="button" id="choroplethDropdownMenu" data-toggle="dropdown" aria-expanded="true" data-toggle="tooltip" data-placement="bottom" title="Extra options"><span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="choroplethDropdownMenu">
               <li role="presentation"><a role="menuitem" tabindex="-1" data-target="choropleth" href="javascript:;"  data-format="svg" class="downloadChart"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Download as SVG</a></li>
@@ -404,16 +406,17 @@
       <div id="footer" class="fill-screen" style="display: none">
         <div class="col-sm-6">
           <p>Developed by:</p>
-          <img class="logo" src="img/image-BISLogo-landscapecolour-png.mod.png" width="412" height="40" alt="Department for Business Innovation and Skills Logo">
+          <img class="logo" src="img/DIT_logo.png" width="223" height="106" alt="Department for International Trade Logo"> &nbsp; &nbsp; &nbsp; &nbsp;
+          <img class="logo" src="img/img-low-res-Dept-for-Business-Energy-and-Industrial-Strat_294_SML_AW.png" width="220" height="117" alt="Department for Business, Energy and Industrial Strategy Logo">
           <p>&nbsp;</p>
           <p>&nbsp;</p>
           <p>Based on data from:</p>
           <img class="logo" src="img/comtradelogo.png" width="450" height="85" alt="UN COMTRADE Logo" />
         </div>
         <div class="col-sm-6">
-          <small>The designations employed and the presentation of material on UN Comtrade do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area, or of its authorities, or concerning the delimitations of its frontiers or boundaries. Where the designation “country or area” appears on this internet site, it covers countries, territories or areas.</small>
+          <small>The designations employed and the presentation of material on UN Comtrade do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area, or of its authorities, or concerning the delimitations of its frontiers or boundaries. Where the designation “country or area” appears on this internet site, it covers countries, territories or areas. The UK Government, who developed the visualisation, takes no responsibility for the underlying data.</small>
           <p class="licence">
-            The International Trade in Goods visualization is licenced under a <a href="http://www.gnu.org/licenses/gpl-2.0.txt">GPL v2</a> Licence and is available on <a href="https://github.com/UK-BIS-Analysis/trademap">GitHub</a>:<br/>
+            The International Trade in Goods and Services visualization is licenced under a <a href="http://www.gnu.org/licenses/gpl-2.0.txt">GPL v2</a> Licence and is available on <a href="https://github.com/UK-BIS-Analysis/trademap">GitHub</a>:<br/>
             <a aria-label="Fork UK-BIS-Analysis/trademap on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/UK-BIS-Analysis/trademap#forks_count" data-count-href="/UK-BIS-Analysis/trademap/network" data-style="mega" data-icon="octicon-git-branch" href="https://github.com/UK-BIS-Analysis/trademap/fork" class="github-button">Fork</a>
             <a aria-label="Star UK-BIS-Analysis/trademap on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/UK-BIS-Analysis/trademap#stargazers_count" data-count-href="/UK-BIS-Analysis/trademap/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/UK-BIS-Analysis/trademap" class="github-button">Star</a>
           </p>
@@ -422,8 +425,8 @@
 
       <!-- EMBED CREDIT -->
       <div id="embedCredit" style="display: none">
-        <p>International Trade in Goods based on UN Comtrade data</p>
-        <small>Developed by the Department for Business Innovation and Skills (UK)<br />
+        <p>International trade in goods and services based on UN Comtrade</p>
+        <small>Developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK<br />
         See the full data <a href="#">here</a>.</small>
       </div>
 
@@ -473,6 +476,7 @@
     <script async defer id="github-bjs" src="//buttons.github.io/buttons.js"></script>
 
     <!-- Google Analytics tracking code -->
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

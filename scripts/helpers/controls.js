@@ -166,7 +166,7 @@ define(['./data'], function(data) {
       if (controls.filters.type != newfilters.type) {
         newfilters.commodity = undefined;
         // Update placeholder
-        if (newfilters.type == 'S') controls.$selectCommodity.data('select2').opts.placeholder = "Select service";
+        if (newfilters.type == 'S') controls.$selectCommodity.data('select2').opts.placeholder = "Select service type";
         if (newfilters.type == 'C') controls.$selectCommodity.data('select2').opts.placeholder = "Select commodity";
         controls.$selectCommodity.data('select2').setPlaceholder()
         // Purge the displayed value in the commodity dropdown
@@ -240,8 +240,10 @@ define(['./data'], function(data) {
         // Set the filters from the URL
         this.changeFilters(URLfilters);
       } else {
-        // Then initialize filters to reporter=UK year 2014 and type Goods
-        controls.changeFilters({ reporter: 826, year: 2014, type: "C" });
+      	var today = new Date();
+      	var init_year = today.getMonth() < 7 ? today.getFullYear() - 2 : today.getFullYear() - 1;
+        // Then initialize filters to reporter=UK, year is estimate of most recent year where there is data, and type Goods
+        controls.changeFilters({ reporter: 826, year: init_year, type: "C" });
       }
     },
 
@@ -278,7 +280,7 @@ define(['./data'], function(data) {
         query += '&';
       }
       query = query.slice(0, -1);
-      History.replaceState(null,'International Trade in Goods by Country and Commodity',query)
+      History.replaceState(null,'International Trade in Goods and Services by Country and Commodity',query)
     },
 
 
@@ -354,8 +356,6 @@ define(['./data'], function(data) {
       $('#myModal .modal-body').html(err);
       $('#myModal').modal({ show: true });
     }
-
-
 
 
   };
