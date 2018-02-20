@@ -1,5 +1,6 @@
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ZipPlugin = require('zip-webpack-plugin');
 
 const project = process.env.project.trim() || "nisra";
 
@@ -68,6 +69,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles.css'),
+    new ZipPlugin({
+      path: path.resolve(__dirname, 'dist'),
+      filename: project+'.zip'
+    })
   ]
 };
