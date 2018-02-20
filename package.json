@@ -1,34 +1,44 @@
 {
   "name": "trademap",
   "version": "1.1.0",
-  "description": "BIS International Trade visualization based on UN COMTRADE data",
-  "main": "Gruntfile.js",
+  "description": "Trade map visualization",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:nisra": "set project=nisra && webpack --progress --config webpack.prod.js",
+    "build:comtrade": "set project=comtrade && webpack  --progress --config webpack.prod.js",
+    "dev:nisra": "set project=nisra && webpack --progress --config webpack.dev.js",
+    "dev:comtrade": "set project=comtrade && webpack --progress --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UK-BIS-Analysis/trademap.git"
+    "url": "git+https://github.com/mjs2020/trademap.git"
   },
   "author": "Francesco Merletti (me@fm.to.it)",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/UK-BIS-Analysis/trademap/issues"
+    "url": "https://github.com/mjs2020/trademap/issues"
   },
-  "homepage": "https://github.com/UK-BIS-Analysis/trademap#readme",
+  "homepage": "https://github.com/mjs2020/trademap#readme",
   "devDependencies": {
-    "almond": "^0.3.3",
-    "grunt": "^1.0.1",
-    "grunt-contrib-compress": "^1.3.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-cssmin": "^1.0.2",
-    "grunt-contrib-htmlmin": "^2.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-requirejs": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-filerev": "^2.3.1",
-    "grunt-regex-replace": "^0.4.0",
-    "grunt-usemin": "^3.1.1"
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "autoprefixer": "^8.0.0",
+    "babel-loader": "^8.0.0-beta.0",
+    "css-loader": "^0.28.9",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.7",
+    "node-sass": "^4.7.2",
+    "postcss-loader": "^2.1.0",
+    "precss": "^3.1.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.2",
+    "uglifyjs-webpack-plugin": "^1.2.0",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1",
+    "webpack-merge": "^4.1.1"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.12.9"
   }
 }
