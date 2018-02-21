@@ -58,12 +58,38 @@ module.exports = {
         })
       },
       {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.html$/,
+        use: [
+          {
+              loader: "file-loader",
+              options: {
+                  name: "[name].[ext]",
+              },
+          },
+          {
+              loader: "extract-loader",
+          },
+          {
+              loader: "html-loader",
+              options: {
+                  attrs: ["img:src"],
+                  minimize: true,
+                  removeComments: true,
+                  collapseWhitespace: true
+              },
+          },
+        ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
         use: [
           {
             loader: 'file-loader',
-            options: {}
-          }
+            options: {
+              name: '[name].[ext]',
+              useRelativePath: true
+            }
+          } 
         ]
       }
     ]
