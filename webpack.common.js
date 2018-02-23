@@ -91,11 +91,24 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: [
-            'file-loader'
-          ]
-        }
+        use: [
+          'file-loader'
+        ]
+      },
+      {
+        test: /\.modernizrrc.js$/,
+        use: [ 'modernizr-loader' ]
+      },
+      {
+        test: /\.modernizrrc(\.json)?$/,
+        use: [ 'modernizr-loader', 'json-loader' ]
+      }
     ]
+  },
+  resolve: {
+    alias: {
+      modernizr$: path.resolve(__dirname, ".modernizrrc")
+    }
   },
   plugins: [
     new ExtractTextPlugin('styles.css')
