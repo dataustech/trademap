@@ -1,8 +1,6 @@
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var ZipPlugin = require('zip-webpack-plugin');
-
-const project = process.env.project.trim() || "nisra";
+const project = (process.env.project || "nisra").trim();
 
 module.exports = {
   entry: './src/'+project+'/app.js',
@@ -10,7 +8,6 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist/'+project)
   },
-  devtool: "source-map",
   module: {
     rules: [
       {
@@ -81,7 +78,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
         use: [
           {
             loader: 'file-loader',
@@ -91,14 +88,16 @@ module.exports = {
             }
           } 
         ]
-      }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: [
+            'file-loader'
+          ]
+        }
     ]
   },
   plugins: [
-    new ExtractTextPlugin('styles.css'),
-    new ZipPlugin({
-      path: path.resolve(__dirname, 'dist'),
-      filename: project+'.zip'
-    })
+    new ExtractTextPlugin('styles.css')
   ]
 };

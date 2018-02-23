@@ -7,8 +7,8 @@
     "clean:comtrade": "rimraf dist/comtrade*",
     "build:nisra": "npm run clean:nisra && set project=nisra && webpack --progress --display-error-details --config webpack.prod.js",
     "build:comtrade": "npm run clean:comtrade && set project=comtrade && webpack  --progress --display-error-details --config webpack.prod.js",
-    "dev:nisra": "set project=nisra && webpack --progress --config webpack.dev.js",
-    "dev:comtrade": "set project=comtrade && webpack --progress --config webpack.dev.js"
+    "start:nisra": "set project=nisra && webpack-dev-server --config webpack.dev.js",
+    "start:comtrade": "set project=nisra && webpack-dev-server --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
