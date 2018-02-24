@@ -1,0 +1,10 @@
+# /node_modules/* and /bower_components/* ignored by default
+
+# Ignore built files
+build/*
+
+# Ignore webpack configs
+webpack.*.js
+
+# Ignore app.js files
+src/nisra/app.js
