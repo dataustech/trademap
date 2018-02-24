@@ -1,9 +1,12 @@
+const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
 const common = require('./webpack.common.js');
 const WebpackClearConsole = require("webpack-clear-console").WebpackClearConsole;
+
+const project = (process.env.project || 'nisra').trim();
 
 module.exports = merge(common, {
     plugins: [
