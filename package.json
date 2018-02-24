@@ -3,12 +3,14 @@
   "version": "1.1.0",
   "description": "Trade map visualization",
   "scripts": {
+    "build:nisra": "npm run clean:nisra && npm run preprocess:nisra && webpack --progress --display-error-details --config webpack.prod.js",
+    "build:comtrade": "npm run clean:nisra && npm run preprocess:comtrade &&  webpack  --progress --display-error-details --config webpack.prod.js",
     "clean:nisra": "rimraf dist/nisra*",
     "clean:comtrade": "rimraf dist/comtrade*",
-    "build:nisra": "npm run clean:nisra && set project=nisra && webpack --progress --display-error-details --config webpack.prod.js",
-    "build:comtrade": "npm run clean:comtrade && set project=comtrade && webpack  --progress --display-error-details --config webpack.prod.js",
-    "start:nisra": "set project=nisra && webpack-dev-server --config webpack.dev.js",
-    "start:comtrade": "set project=nisra && webpack-dev-server --config webpack.dev.js"
+    "preprocess:nisra": "set project=nisra && node preprocess.nisra.js",
+    "preprocess:comtrade": "set project=comtrade && node preprocess.comtrade.js",
+    "start:nisra": "npm run clean:nisra && npm run preprocess:nisra && webpack-dev-server --config webpack.dev.js",
+    "start:comtrade": "npm run clean:comtrade && npm run preprocess:comtrade && webpack-dev-server --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,7 @@
     "file-loader": "^1.1.7",
     "html-loader": "^0.5.5",
     "json-loader": "^0.5.7",
+    "mkdirp": "^0.5.1",
     "modernizr-loader": "^1.0.1",
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.1.0",
@@ -54,8 +57,8 @@
     "d3": "^4.13.0",
     "file-saver": "^1.3.3",
     "intro.js": "^2.8.0-alpha.1",
-    "modernizr": "^3.5.0",
     "jquery": "^3.3.1",
+    "modernizr": "^3.5.0",
     "popper.js": "^1.12.9",
     "topojson": "^3.0.2"
   }

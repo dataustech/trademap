@@ -9,7 +9,6 @@ import './index.html';
 // txt & csv
 import 'file-loader?name=[name].[ext]!./robots.txt';
 import 'file-loader?name=[name].[ext]!./humans.txt';
-import 'file-loader?name=[path][name].[ext]!./data/isoCodes.csv';
 
 // img
 import './favicon.ico';
