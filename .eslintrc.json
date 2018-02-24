@@ -5,6 +5,11 @@
         "no-console": 0,
         "comma-dangle": 0,
         "no-plusplus": 0,
-        "no-underscore-dangle": 1
+        "no-underscore-dangle": 1,
+        "no-restricted-globals": 0,
+        "no-mixed-operators": [
+          "error",
+          { "allowSamePrecedence": true }
+        ]
     }
 }

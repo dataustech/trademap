@@ -2,9 +2,3 @@
 
 # Ignore built files
 build/*
-
-# Ignore webpack configs
-webpack.*.js
-
-# Ignore app.js files
-src/nisra/app.js
