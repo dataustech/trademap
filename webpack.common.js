@@ -1,5 +1,8 @@
+/* eslint import/no-extraneous-dependencies: 0 */
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
 
 const project = (process.env.project || 'nisra').trim();
 
@@ -38,11 +41,8 @@ module.exports = {
               loader: 'postcss-loader',
               options: {
                 sourceMap: true,
-                plugins: function () {
-                  return [
-                    require('precss'),
-                    require('autoprefixer')
-                  ];
+                plugins() {
+                  return [precss, autoprefixer];
                 }
               }
             },
@@ -59,22 +59,22 @@ module.exports = {
         test: /\.html$/,
         use: [
           {
-              loader: 'file-loader',
-              options: {
-                  name: "[name].[ext]",
-              },
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+            },
           },
           {
-              loader: "extract-loader",
+            loader: 'extract-loader',
           },
           {
-              loader: "html-loader",
-              options: {
-                  attrs: ["img:src"],
-                  minimize: true,
-                  removeComments: true,
-                  collapseWhitespace: true
-              },
+            loader: 'html-loader',
+            options: {
+              attrs: ['img:src'],
+              minimize: true,
+              removeComments: true,
+              collapseWhitespace: true
+            },
           },
         ]
       },
@@ -98,17 +98,17 @@ module.exports = {
       },
       {
         test: /\.modernizrrc.js$/,
-        use: [ 'modernizr-loader' ]
+        use: ['modernizr-loader']
       },
       {
         test: /\.modernizrrc(\.json)?$/,
-        use: [ 'modernizr-loader', 'json-loader' ]
+        use: ['modernizr-loader', 'json-loader']
       }
     ]
   },
   resolve: {
     alias: {
-      modernizr$: path.resolve(__dirname, ".modernizrrc")
+      modernizr$: path.resolve(__dirname, '.modernizrrc')
     }
   },
   plugins: [
