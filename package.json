@@ -1,34 +1,57 @@
 {
   "name": "trademap",
   "version": "1.1.0",
-  "description": "BIS International Trade visualization based on UN COMTRADE data",
-  "main": "Gruntfile.js",
+  "description": "Trade map visualization",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean:nisra": "rimraf dist/nisra*",
+    "clean:comtrade": "rimraf dist/comtrade*",
+    "build:nisra": "npm run clean:nisra && set project=nisra && webpack --progress --display-error-details --config webpack.prod.js",
+    "build:comtrade": "npm run clean:comtrade && set project=comtrade && webpack  --progress --display-error-details --config webpack.prod.js",
+    "start:nisra": "set project=nisra && webpack-dev-server --config webpack.dev.js",
+    "start:comtrade": "set project=nisra && webpack-dev-server --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UK-BIS-Analysis/trademap.git"
+    "url": "git+https://github.com/mjs2020/trademap.git"
   },
   "author": "Francesco Merletti (me@fm.to.it)",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/UK-BIS-Analysis/trademap/issues"
+    "url": "https://github.com/mjs2020/trademap/issues"
   },
-  "homepage": "https://github.com/UK-BIS-Analysis/trademap#readme",
+  "homepage": "https://github.com/mjs2020/trademap#readme",
   "devDependencies": {
-    "almond": "^0.3.3",
-    "grunt": "^1.0.1",
-    "grunt-contrib-compress": "^1.3.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-cssmin": "^1.0.2",
-    "grunt-contrib-htmlmin": "^2.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-requirejs": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-filerev": "^2.3.1",
-    "grunt-regex-replace": "^0.4.0",
-    "grunt-usemin": "^3.1.1"
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "autoprefixer": "^8.0.0",
+    "babel-loader": "^8.0.0-beta.0",
+    "css-loader": "^0.28.9",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "extract-loader": "^1.0.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.7",
+    "html-loader": "^0.5.5",
+    "json-loader": "^0.5.7",
+    "modernizr-loader": "^1.0.1",
+    "node-sass": "^4.7.2",
+    "postcss-loader": "^2.1.0",
+    "precss": "^3.1.0",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.2",
+    "uglifyjs-webpack-plugin": "^1.2.0",
+    "webpack": "^3.11.0",
+    "webpack-clear-console": "^1.0.3",
+    "webpack-dev-server": "^2.11.1",
+    "webpack-merge": "^4.1.1",
+    "zip-webpack-plugin": "^2.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0",
+    "modernizr": "^3.5.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.12.9"
   }
 }
