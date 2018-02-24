@@ -1,12 +1,13 @@
 const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const project = (process.env.project || "nisra").trim();
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const project = (process.env.project || 'nisra').trim();
 
 module.exports = {
-  entry: './src/'+project+'/app.js',
+  entry: path.resolve(__dirname, 'src', project, 'app.js'),
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist/'+project)
+    path: path.resolve(__dirname, 'dist', project)
   },
   module: {
     rules: [
@@ -58,7 +59,7 @@ module.exports = {
         test: /\.html$/,
         use: [
           {
-              loader: "file-loader",
+              loader: 'file-loader',
               options: {
                   name: "[name].[ext]",
               },
@@ -86,7 +87,7 @@ module.exports = {
               name: '[name].[ext]',
               useRelativePath: true
             }
-          } 
+          }
         ]
       },
       {
