@@ -6,9 +6,8 @@
 import * as d3 from 'd3';
 import $ from 'jquery';
 import crossfilter from 'crossfilter';
-import Modernizr from 'modernizr';
 
-const data = {
+export default {
   /*
    * PROPERTIES
    * Some basic properties that we store and persist throughout the application
@@ -59,12 +58,12 @@ const data = {
       let text;
       switch (type) {
         case 'C':
-          text = data.commodityCodes.get(commodity).text.slice(text.indexOf(' - ') + 3);
+          text = this.commodityCodes.get(commodity).text.slice(text.indexOf(' - ') + 3);
           break;
         case 'S':
           // TODO FEATURE this could be imprved to consider
           // parents e.g. "Transport" for "Passengers"
-          text = data.serviceCodes.get(commodity).text.slice(text.indexOf(' ') + 1);
+          text = this.serviceCodes.get(commodity).text.slice(text.indexOf(' ') + 1);
           break;
         default:
           break;
@@ -75,34 +74,16 @@ const data = {
       return 'unknown';
     }
   },
-  numFormat(num, item, p) {
-    let prec = p;
-    if (prec) {
-      prec = `.${prec}`;
-    } else {
-      prec = '.1';
-    }
-    let f = d3.format(`$,${prec}f`);
-    if (num === 0) {
-      return '0';
-    }
-    if (typeof num !== 'number' || isNaN(num)) {
-      return 'No data';
-    }
-    // If over one billion, display in billions
-    if (Math.abs(num) >= 1000000000) {
-      return `${f((Math.round(num / 100000000)) / 10)} bn`;
-    }
-    // If over one million, display in millions
-    if (Math.abs(num) >= 1000000) {
-      return `${f((Math.round(num / 100000)) / 10)} m`;
-    }
-    // If over one thousand, display in thousands
-    if (Math.abs(num) >= 1000) {
-      return `${f((Math.round(num / 100)) / 10)} th`;
-    }
-    f = d3.format('$,f');
+  numFormat(num) {
+    let f = d3.format('$,.1f');
+    if (typeof num !== 'number' || isNaN(num)) return 'No data';
+    if (num === 0) return '0';
+    // Display in billions/millios/thousands
+    if (Math.abs(num) >= 1000000000) return `${f((Math.round(num / 100000000)) / 10)} bn`;
+    if (Math.abs(num) >= 1000000) return `${f((Math.round(num / 100000)) / 10)} m`;
+    if (Math.abs(num) >= 1000) return `${f((Math.round(num / 100)) / 10)} th`;
     // Else display without unit
+    f = d3.format('$,f');
     return f(num);
   },
   numFormatFull(num) {
@@ -143,32 +124,11 @@ const data = {
    * function that makes AJAX request and therefore uses a callback
    */
   setup(callback) {
-    // Decide base query URL and use of CORS based on domain and cors support
-    if (window.location.host !== 'comtrade.un.org' && !Modernizr.cors) {
-      // Not same domain and no CORS (basically IE9 locked on dev server) then use proxy.php
-      data.baseQueryUrl = 'proxy.php?fmt=csv&max=50000&freq=A&rg=1%2C2';
-      data.useCors = false;
-    }
-    if (window.location.host !== 'comtrade.un.org' && Modernizr.cors) {
-      data.baseQueryUrl = 'https://comtrade.un.org/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2';
-      data.useCors = true;
-    }
-    if (window.location.host === 'comtrade.un.org') {
-      data.baseQueryUrl = '/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2';
-      data.useCors = false;
-    }
-    // console.log(data);console.log(window.location.href);console.log(location.host);
-
-    // data.baseQueryUrl = '/data/RequestURL_0' + requestCount + '.csv';
-    // data.baseQueryUrl = 'http://localhost/trademap/api/get/?fmt=csv&max=50000&type=C&freq=A&px=HS&rg=1%2C2';
-    // data.baseQueryUrl = 'http://localhost:8888/beis/trademap/api/get/?fmt=csv&max=50000&freq=A&px=HS&rg=1%2C2';
-    // data.useCors = true;
-
+    this.baseQueryUrl = '/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2';
 
     const ajaxSettings = {
       dataType: 'json'
     };
-
     $.when(
       $.ajax('data/reporterAreas.min.json', ajaxSettings),
       $.ajax('data/partnerAreas.min.json', ajaxSettings),
@@ -178,33 +138,33 @@ const data = {
       $.ajax('data/world-110m.min.json', ajaxSettings)
     ).then((reporterAreas, partnerAreas, commodityCodes, serviceCodes, isoCodes, worldJson) => {
       // Add results to the data object for use in the app.
-      data.reporterAreasSelect = reporterAreas[0].results;
-      data.partnerAreasSelect = partnerAreas[0].results;
-      data.commodityCodesSelect = commodityCodes[0].results;
-      data.serviceCodesSelect = serviceCodes[0].results;
-      [data.worldJson] = worldJson;
+      this.reporterAreasSelect = reporterAreas[0].results;
+      this.partnerAreasSelect = partnerAreas[0].results;
+      this.commodityCodesSelect = commodityCodes[0].results;
+      this.serviceCodesSelect = serviceCodes[0].results;
+      [this.worldJson] = worldJson;
 
       // Parse isoCodes csv
-      const codes = d3.csv.parse(isoCodes[0]);
+      const codes = d3.csvParse(isoCodes[0]);
 
       // Create d3 maps (these are basically used as lookup tables thoughout the app)
-      data.countryByUnNum = d3.map(codes, d => d.unCode);
-      data.reporterAreas = d3.map(reporterAreas[0].results, d => d.id);
-      data.flowByCode = d3.map([{ id: '1', text: 'imports' }, { id: '2', text: 'exports' }, { id: '0', text: 'balance' }], d => d.id);
-      data.partnerAreas = d3.map(partnerAreas[0].results, d => d.id);
-      data.commodityCodes = d3.map(commodityCodes[0].results, d => d.id);
-      data.serviceCodes = d3.map(serviceCodes[0].results, d => d.id);
+      this.countryByUnNum = d3.map(codes, d => d.unCode);
+      this.reporterAreas = d3.map(reporterAreas[0].results, d => d.id);
+      this.flowByCode = d3.map([{ id: '1', text: 'imports' }, { id: '2', text: 'exports' }, { id: '0', text: 'balance' }], d => d.id);
+      this.partnerAreas = d3.map(partnerAreas[0].results, d => d.id);
+      this.commodityCodes = d3.map(commodityCodes[0].results, d => d.id);
+      this.serviceCodes = d3.map(serviceCodes[0].results, d => d.id);
 
       // countryByISONum will return a single result (the last match in isoCodes.csv)
-      data.countryByISONum = d3.map(codes, d => d.isoNumerical);
+      this.countryByISONum = d3.map(codes, d => d.isoNumerical);
       // areasByISONum will return an array of matching areas in the UN system
-      data.areasByISONum = isoNum => codes.filter(el => +el.isoNumerical === +isoNum);
+      this.areasByISONum = isoNum => codes.filter(el => +el.isoNumerical === +isoNum);
 
       // Create a lookup function which does error handling so
       // we don't have to do it elsewhere in the app
-      data.lookup = (lookupVal, mapName, propertyName) => {
+      this.lookup = (lookupVal, mapName, propertyName) => {
         try {
-          return data[mapName].get(lookupVal)[propertyName];
+          return this[mapName].get(lookupVal)[propertyName];
         } catch (err) {
           console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
           return 'unknown';
@@ -212,16 +172,16 @@ const data = {
       };
 
       // Remove unwanted values
-      data.reporterAreasSelect = data.reporterAreasSelect.filter(d => d.id !== 'all');
-      data.partnerAreasSelect = data.partnerAreasSelect.filter(d => (d.id !== 'all'));
-      data.commodityCodesSelect = data.commodityCodesSelect.filter(d => (d.id !== 'ALL' && d.id !== 'AG2'));
+      this.reporterAreasSelect = this.reporterAreasSelect.filter(d => d.id !== 'all');
+      this.partnerAreasSelect = this.partnerAreasSelect.filter(d => (d.id !== 'all'));
+      this.commodityCodesSelect = this.commodityCodesSelect.filter(d => (d.id !== 'ALL' && d.id !== 'AG2'));
       // TODO There might be more unwanted services to filter here.
-      data.serviceCodesSelect = data.serviceCodesSelect.filter(d => (d.id !== 'ALL'));
+      this.serviceCodesSelect = this.serviceCodesSelect.filter(d => (d.id !== 'ALL'));
 
       // Call the callback
       callback();
-    }, () => {
-      callback('There was an error with one of the initial requests.');
+    }, (err) => {
+      callback(`There was an error with one of the initial requests: ${err}`);
     }); // Close when-then blocks
 
     // Setup crossfilter and dimensions
@@ -254,21 +214,22 @@ const data = {
    * ready will be true if new data was received and added to crossfilter or false otherwise.
    */
   query(filters, callback) {
+    console.log('query');
     // Get current time and build URL
     const requestUrl = this.buildUrl(filters);
     const time = new Date();
 
     // Check history to see if query was already run and skip the call if it was already run
-    if (data.queryHistory.indexOf(requestUrl) > -1) {
+    if (this.queryHistory.indexOf(requestUrl) > -1) {
       callback(null, true);
       return;
     }
 
     // If the API was called less than a second ago, or if the query is in the queue then we need to
     // postpone the call and fire the queryQueueUpdate event
-    const timeAgo = time.getTime() - data.timestamp;
-    if (timeAgo < 1100 || data.queryRunning.indexOf(requestUrl) > -1) {
-      window.setTimeout(() => { data.query(filters, callback); }, timeAgo + 100);
+    const timeAgo = time.getTime() - this.timestamp;
+    if (timeAgo < 1100 || this.queryRunning.indexOf(requestUrl) > -1) {
+      window.setTimeout(() => { this.query(filters, callback); }, timeAgo + 100);
       if (this.queryQueue.indexOf(requestUrl) < 0) {
         this.queryQueue.push(requestUrl);
         this.fireQueryQueueUpdateEvent();
@@ -278,10 +239,10 @@ const data = {
     }
 
     // Make call
+    console.log('making request');
     $.ajax({
       url: requestUrl,
       timeout: 75000,
-      crossDomain: data.useCors,
       // NOTE: context setting is imporant as it binds the
       // callback to the data object we are creating.
       // Otherwise we cannot access any of the properties in the callback.
@@ -298,6 +259,7 @@ const data = {
         $('#loadingDiv').fadeIn();
       },
       success: function success(result) {
+        console.log('success');
         // Add data to crossfilter and the query to the history
         this.addData(result, filters);
         this.queryHistory.push(requestUrl);
@@ -305,13 +267,14 @@ const data = {
         callback(null, true);
       },
       error: function error(xhr, status, err) {
+        console.log('fail');
         // If error is 409 then check the response text and requeue if rate
         // limit is reached or display error if hourly limit is reached
         // Responses have dirty charachters so we use a regex and replace
         // to reduce the response to only printable ASCII chars.
         if (xhr.status === 409 && xhr.responseText.replace(/[^\x20-\x7E]+/g, '') === 'RATE LIMIT: You must wait 1 seconds.') {
           console.log('API 409 Error: Requeueing the request.');
-          data.query(requestUrl, callback);
+          this.query(requestUrl, callback);
           callback(null, false);
         } else if (xhr.status === 409 && xhr.responseText.replace(/[^\x20-\x7E]+/g, '').indexOf('USAGE LIMIT: Hourly usage limit of 100 actions reached.') > -1) {
           console.log('API 409 Error: API LIMIT REACHED!');
@@ -494,7 +457,7 @@ const data = {
    * (methods that are only used internally in the data module)
    */
   buildUrl(filters) {
-    let requestUrl = data.baseQueryUrl;
+    let requestUrl = this.baseQueryUrl;
     if (typeof filters.reporter !== 'undefined') { requestUrl += `&r=${filters.reporter}`; } else { requestUrl += '&r=0'; }
     if (typeof filters.partner !== 'undefined') { requestUrl += `&p=${filters.partner}`; } else { requestUrl += '&p=all'; }
 
@@ -518,10 +481,10 @@ const data = {
         // e.g. for the 11 top level categories.
         if (filters.commodity === 'TOTAL') {
           requestUrl += '&cc=200';
-        } else if (data.serviceCodesSelect.length < 20) {
+        } else if (this.serviceCodesSelect.length < 20) {
           requestUrl += '&cc=';
           const svcTypes = [];
-          data.serviceCodesSelect.forEach((i) => {
+          this.serviceCodesSelect.forEach((i) => {
             svcTypes.push(i.id);
           });
           requestUrl += svcTypes.join();
@@ -539,7 +502,7 @@ const data = {
 
   addData(csvData, filters) {
     // Parse and select the fields from the response we want to store
-    const newData = d3.csv.parse(csvData, d => ({
+    const newData = d3.csvParse(csvData, d => ({
       reporter: +d['Reporter Code'],
       partner: +d['Partner Code'],
       year: +d.Year,
@@ -601,5 +564,3 @@ const data = {
   }
 
 };
-
-export default data;

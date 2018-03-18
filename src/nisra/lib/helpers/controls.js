@@ -6,6 +6,7 @@
 import * as d3 from 'd3';
 
 import $ from 'jquery';
+import 'select2';
 import data from './data';
 
 const controls = {
@@ -24,39 +25,45 @@ const controls = {
   setup() {
     // Display the navBar (which is otherwise hidden)
     $('#navbar').show();
-
     // SETUP SELECT2 DROPDOWN SELECTORS
     // Setup the reporters dropdown
-    this.$selectReporter
+    controls.$selectReporter
       .select2({
         placeholder: 'Select a reporter',
+        theme: 'bootstrap',
         allowClear: true,
         data: data.reporterAreasSelect
       })
       .on('change', controls.onFilterChange);
+
     // Setup the partners dropdown
-    this.$selectPartner
+    controls.$selectPartner
       .select2({
         placeholder: 'Select a partner',
         allowClear: true,
         disabled: true,
+        theme: 'bootstrap',
         data: data.partnerAreasSelect
       })
-      .on('change', controls.onFilterChange)
-      .select2('disable');
+      .on('change', controls.onFilterChange);
+
     // Setup the type dropdown
-    this.$selectType
+    controls.$selectType
       .select2({
         minimumResultsForSearch: Infinity,
-        data: data.typeCodesSelect
+        data: data.typeCodesSelect,
+        theme: 'bootstrap',
+        disabled: true
       })
-      .on('change', controls.onFilterChange)
-      .select2('disable');
+      .on('change', controls.onFilterChange);
+
     // Setup the commodities dropdown
-    this.$selectCommodity
+    controls.$selectCommodity
       .select2({
         placeholder: 'Select a commodity',
         allowClear: true,
+        theme: 'bootstrap',
+        disabled: true,
         data() {
           // Check if services or commodities are selected in
           // controls.filters and return options based on this
@@ -65,12 +72,13 @@ const controls = {
           return { text: 'undefined', results: [] };
         }
       })
-      .on('change', controls.onFilterChange)
-      .select2('disable');
+      .on('change', controls.onFilterChange);
+
     // Setup the year selector
-    this.$selectYear
+    controls.$selectYear
       .select2({
         allowClear: false,
+        theme: 'bootstrap',
         minimumResultsForSearch: Infinity,
         disabled: true
       })
@@ -87,16 +95,15 @@ const controls = {
       });
     });
 
-
     // ADD IMPORT/EXPORT/BALANCE BUTTON BEHAVIOURS
-    this.$flowButtons.on('click', (event) => {
+    controls.$flowButtons.on('click', (event) => {
       $('#flowButtons button').removeClass('btn-primary').addClass('btn-default');
       $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
       controls.onFilterChange();
     });
 
     // ADD CLEARFILTERS BUTTON BEHAVIOR
-    this.$clearFilters.on('click', () => {
+    controls.$clearFilters.on('click', () => {
       $('#selectReporter, #selectPartner, #selectCommodity')
         .off('change', controls.onFilterChange)
         .val(null)
@@ -110,6 +117,7 @@ const controls = {
       e.preventDefault();
       $('#contextMenu').hide();
     });
+
     $('#contextMenu .setReporter').on('click', (e) => {
       e.preventDefault();
       if (!$(e.target.parentNode).hasClass('disabled')) {
@@ -117,6 +125,7 @@ const controls = {
       }
       $('#contextMenu').hide();
     });
+
     $('#contextMenu .setPartner').on('click', (e) => {
       e.preventDefault();
       if (!$(e.target.parentNode).hasClass('disabled')) {
@@ -126,7 +135,7 @@ const controls = {
     });
   },
 
-  getFilters() {
+  getFilters: () => {
     const newFilters = {};
     if (controls.$selectReporter.val() !== '') { newFilters.reporter = controls.$selectReporter.val(); }
     if (controls.$selectPartner.val() !== '') { newFilters.partner = controls.$selectPartner.val(); }
@@ -155,9 +164,8 @@ const controls = {
     if (controls.filters.type !== newfilters.type) {
       newfilters.commodity = undefined;
       // Update placeholder
-      if (newfilters.type === 'S') controls.$selectCommodity.data('select2').opts.placeholder = 'Select service type';
-      if (newfilters.type === 'C') controls.$selectCommodity.data('select2').opts.placeholder = 'Select commodity';
-      controls.$selectCommodity.data('select2').setPlaceholder();
+      if (newfilters.type === 'S') controls.$selectCommodity.data('select2').selection.placeholder.text = 'Select service type';
+      if (newfilters.type === 'C') controls.$selectCommodity.data('select2').selection.placeholder.text = 'Select commodity';
       // Purge the displayed value in the commodity dropdown
       controls.$selectCommodity.select2('val', '');
     }
@@ -215,10 +223,10 @@ const controls = {
   },
 
   initializeFilters() {
-    const URLfilters = this.decodeURL();
+    const URLfilters = controls.decodeURL();
     if (URLfilters && URLfilters.reporter && URLfilters.type) {
       // Set the filters from the URL
-      this.changeFilters(URLfilters);
+      controls.changeFilters(URLfilters);
     } else {
       const today = new Date();
       const initYear = today.getMonth() < 7 ? today.getFullYear() - 2 : today.getFullYear() - 1;
