@@ -9,8 +9,8 @@
     "clean:comtrade": "rimraf dist/comtrade*",
     "preprocess:nisra": "set project=nisra && node preprocess.nisra.js",
     "preprocess:comtrade": "set project=comtrade && node preprocess.comtrade.js",
-    "start:nisra": "npm run clean:nisra && npm run preprocess:nisra && webpack-dev-server --config webpack.dev.js",
-    "start:comtrade": "npm run clean:comtrade && npm run preprocess:comtrade && webpack-dev-server --config webpack.dev.js"
+    "start:nisra": "npm run clean:nisra && npm run preprocess:nisra && webpack-dev-server --config webpack.dev.nisra.js",
+    "start:comtrade": "npm run clean:comtrade && npm run preprocess:comtrade && webpack-dev-server --config webpack.dev.comtrade.js"
   },
   "repository": {
     "type": "git",
