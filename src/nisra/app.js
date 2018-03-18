@@ -13,7 +13,12 @@ import 'file-loader?name=[name].[ext]!./humans.txt';
 // img
 import './favicon.ico';
 
-// sass to css
+// sass & css
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'intro.js/introjs.css';
+import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 import './sass/main.scss';
 
 // javascript libs
