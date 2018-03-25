@@ -83,7 +83,7 @@ export default {
         .attr('data-placement', 'right')
         .tooltip();
     } else {
-      $('a.downloadChart').on('click', () => {
+      $('a.downloadChart').on('click', function handleClick() {
         // We are copying the SVG element into a virtual DOM (documentFragement)
         const svgId = $(this).attr('data-target');
         const format = $(this).attr('data-format');
