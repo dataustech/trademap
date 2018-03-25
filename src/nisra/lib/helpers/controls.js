@@ -237,10 +237,9 @@ const controls = {
   },
 
   decodeURL() {
-    const { History } = window;
     try {
       const filters = {};
-      const state = History.getState();
+      const state = window.history.getState();
       state.hash.split('?', 2)[1].split('&').forEach((param) => {
         const p = param.replace(/%20|\+/g, ' ').split('=');
         filters[decodeURIComponent(p[0])] = (p[1] ? decodeURIComponent(p[1]) : undefined);
@@ -252,7 +251,6 @@ const controls = {
   },
 
   updateURL(filters) {
-    const { History } = window;
     let query = '?';
     Object.keys(filters).forEach((prop) => {
       query += encodeURIComponent(prop);
@@ -262,7 +260,7 @@ const controls = {
       query += '&';
     });
     query = query.slice(0, -1);
-    History.replaceState(null, 'International Trade in Goods and Services by Country and Commodity', query);
+    window.history.replaceState(null, 'International Trade in Goods and Services by Country and Commodity', query);
   },
 
   updateYears(yearList) {
