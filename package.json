@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/mjs2020/trademap/issues"
   },
-  "homepage": "https://github.com/mjs2020/trademap#readme",
+  "homepage": "https://github.com/mjs2020/trademap",
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.40",

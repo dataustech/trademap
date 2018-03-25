@@ -4,6 +4,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+const packageJson = require('./package.json');
+const commitHash = require('child_process')
+  .execSync('git rev-parse HEAD')
+  .toString();
+const commitLink = `${packageJson.homepage}/commit/${commitHash}`;
 
 const project = (process.env.project || 'nisra').trim();
 
@@ -122,6 +127,11 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
+    }),
+    new webpack.DefinePlugin({
+      __VERSION__: JSON.stringify(packageJson.version),
+      __COMMIT_HASH__: JSON.stringify(commitHash),
+      __COMMIT_LINK__: JSON.stringify(commitLink)
     })
   ]
 };

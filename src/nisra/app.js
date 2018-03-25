@@ -2,6 +2,7 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 /* eslint import/first: 0 */
 /* eslint import/no-unresolved: 0 */
+/* eslint no-undef: 0 */
 
 // html
 import './index.html';
@@ -31,5 +32,9 @@ import 'bootstrap';
 
 // javascript app
 import main from './lib/main';
+
+// version
+console.log(`package.json version ${__VERSION__}`);
+console.log(`git commit: ${__COMMIT_HASH__}: ${__COMMIT_LINK__}`);
 
 main();
