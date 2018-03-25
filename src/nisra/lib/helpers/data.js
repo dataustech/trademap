@@ -214,7 +214,6 @@ export default {
    * ready will be true if new data was received and added to crossfilter or false otherwise.
    */
   query(filters, callback) {
-    console.log('query');
     // Get current time and build URL
     const requestUrl = this.buildUrl(filters);
     const time = new Date();
@@ -239,7 +238,6 @@ export default {
     }
 
     // Make call
-    console.log('making request');
     $.ajax({
       url: requestUrl,
       timeout: 75000,
@@ -259,7 +257,6 @@ export default {
         $('#loadingDiv').fadeIn();
       },
       success: function success(result) {
-        console.log('success');
         // Add data to crossfilter and the query to the history
         this.addData(result, filters);
         this.queryHistory.push(requestUrl);
@@ -267,7 +264,6 @@ export default {
         callback(null, true);
       },
       error: function error(xhr, status, err) {
-        console.log('fail');
         // If error is 409 then check the response text and requeue if rate
         // limit is reached or display error if hourly limit is reached
         // Responses have dirty charachters so we use a regex and replace

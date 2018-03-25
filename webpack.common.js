@@ -8,6 +8,7 @@ const packageJson = require('./package.json');
 const commitHash = require('child_process')
   .execSync('git rev-parse HEAD')
   .toString();
+
 const commitLink = `${packageJson.homepage}/commit/${commitHash}`;
 
 const project = (process.env.project || 'nisra').trim();
