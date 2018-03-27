@@ -30,7 +30,8 @@ const controls = {
     controls.$selectReporter
       .select2({
         placeholder: 'Select a reporter',
-        theme: 'bootstrap',
+        theme: 'classic',
+        width: 'resolve',
         allowClear: true,
         data: data.reporterAreasSelect
       })
@@ -42,7 +43,8 @@ const controls = {
         placeholder: 'Select a partner',
         allowClear: true,
         disabled: true,
-        theme: 'bootstrap',
+        theme: 'classic',
+        width: 'resolve',
         data: data.partnerAreasSelect
       })
       .on('change', controls.onFilterChange);
@@ -52,7 +54,8 @@ const controls = {
       .select2({
         minimumResultsForSearch: Infinity,
         data: data.typeCodesSelect,
-        theme: 'bootstrap',
+        theme: 'classic',
+        width: 'resolve',
         disabled: true
       })
       .on('change', controls.onFilterChange);
@@ -62,7 +65,8 @@ const controls = {
       .select2({
         placeholder: 'Select a commodity',
         allowClear: true,
-        theme: 'bootstrap',
+        theme: 'classic',
+        width: 'resolve',
         disabled: true,
         data() {
           // Check if services or commodities are selected in
@@ -78,7 +82,8 @@ const controls = {
     controls.$selectYear
       .select2({
         allowClear: false,
-        theme: 'bootstrap',
+        theme: 'classic',
+        width: 'resolve',
         minimumResultsForSearch: Infinity,
         disabled: true
       })
