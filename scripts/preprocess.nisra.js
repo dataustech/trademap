@@ -3,14 +3,14 @@ const path = require('path');
 const fs = require('fs');
 const { Transform } = require('stream');
 const mkdirp = require('mkdirp');
-const { output: { path: outputDir } } = require('./webpack.common');
+const { output: { path: outputDir } } = require('../webpack.common.js');
 
 const outPath = path.resolve(outputDir, 'data');
 mkdirp.sync(outPath);
 
 // minify json helper
 function minify(inFilename, outFilename) {
-  const inFile = path.resolve(__dirname, 'src', 'nisra', 'data', inFilename);
+  const inFile = path.resolve(__dirname, '../src', 'nisra', 'data', inFilename);
   const outFile = path.resolve(outPath, outFilename);
   const inStream = fs.createReadStream(inFile);
   const outStream = fs.createWriteStream(outFile);
@@ -27,7 +27,7 @@ function minify(inFilename, outFilename) {
 
 // filter commodities helper
 function commoditiesFilter(inFilename, outFilename) {
-  const inFile = path.resolve(__dirname, 'src', 'nisra', 'data', inFilename);
+  const inFile = path.resolve(__dirname, '../src', 'nisra', 'data', inFilename);
   const outFile = path.resolve(outPath, outFilename);
   const rawdata = fs.readFileSync(inFile);
   const data = JSON.parse(rawdata);
@@ -37,7 +37,7 @@ function commoditiesFilter(inFilename, outFilename) {
 
 // copy file
 function copyFile(inFilename, outFilename) {
-  const inFile = path.resolve(__dirname, 'src', 'nisra', 'data', inFilename);
+  const inFile = path.resolve(__dirname, '../src', 'nisra', 'data', inFilename);
   const outFile = path.resolve(outPath, outFilename);
   const inStream = fs.createReadStream(inFile);
   const outStream = fs.createWriteStream(outFile);

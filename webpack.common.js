@@ -11,7 +11,7 @@ const commitHash = require('child_process')
 
 const commitLink = `${packageJson.homepage}/commit/${commitHash}`;
 
-const project = (process.env.project || 'nisra').trim();
+const project = (process.env.PROJECT || 'nisra').trim();
 
 module.exports = {
   entry: path.resolve(__dirname, 'src', project, 'app.js'),
@@ -96,8 +96,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]',
-              useRelativePath: true
+              name: 'assets/[name].[ext]'
             }
           }
         ]
@@ -105,7 +104,12 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
-          'file-loader'
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'assets/[name].[ext]'
+            }
+          }
         ]
       },
       {
