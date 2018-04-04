@@ -34,7 +34,6 @@ import 'bootstrap';
 import main from './lib/main';
 
 // version
-console.log(`package.json version ${__VERSION__}`);
-console.log(`git commit: ${__COMMIT_HASH__}: ${__COMMIT_LINK__}`);
+console.log(`${__PROJECT__} trademap: version ${__VERSION__} commit: ${__COMMIT_LINK__}`);
 
 main();
