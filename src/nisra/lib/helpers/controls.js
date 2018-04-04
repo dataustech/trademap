@@ -33,7 +33,7 @@ const controls = {
         theme: 'classic',
         width: 'resolve',
         allowClear: true,
-        data: data.reporterAreasSelect
+        data: data.reporterAreasSelectOptions
       })
       .on('change', controls.onFilterChange);
 
@@ -45,7 +45,7 @@ const controls = {
         disabled: true,
         theme: 'classic',
         width: 'resolve',
-        data: data.partnerAreasSelect
+        data: data.partnerAreasSelectOptions
       })
       .on('change', controls.onFilterChange);
 
@@ -53,7 +53,7 @@ const controls = {
     controls.$selectType
       .select2({
         minimumResultsForSearch: Infinity,
-        data: data.typeCodesSelect,
+        data: data.typeCodesSelectOptions,
         theme: 'classic',
         width: 'resolve',
         disabled: true
@@ -61,6 +61,7 @@ const controls = {
       .on('change', controls.onFilterChange);
 
     // Setup the commodities dropdown
+
     controls.$selectCommodity
       .select2({
         placeholder: 'Select a commodity',
@@ -68,12 +69,17 @@ const controls = {
         theme: 'classic',
         width: 'resolve',
         disabled: true,
-        data() {
-          // Check if services or commodities are selected in
-          // controls.filters and return options based on this
-          if (controls.filters.type === 'S') return { text: 'services', results: data.serviceCodesSelect };
-          if (controls.filters.type === 'C') return { text: 'goods', results: data.commodityCodesSelect };
-          return { text: 'undefined', results: [] };
+        ajax: {
+          transport(params, success, failure) {
+            // Check if services or commodities are selected in
+            // controls.filters and return options based on this
+            let options = { text: 'undefined', results: [] };
+            if (controls.filters.type === 'S') options = { text: 'services', results: data.serviceCodesSelectOptions };
+            if (controls.filters.type === 'C') options = { text: 'goods', results: data.commodityCodesSelectOptions };
+            const promise = new Promise(resolve => resolve(options));
+            promise.then(success);
+            promise.catch(failure);
+          }
         }
       })
       .on('change', controls.onFilterChange);
@@ -85,7 +91,8 @@ const controls = {
         theme: 'classic',
         width: 'resolve',
         minimumResultsForSearch: Infinity,
-        disabled: true
+        disabled: true,
+        data: data.yearsSelectOptions
       })
       .on('change', controls.onFilterChange);
 
@@ -206,8 +213,10 @@ const controls = {
 
     // Update the other fields
     if (filters.reporter && filters.reporter !== controls.$selectReporter.val()) {
-      console.log(`!!! set reporter to ${filters.reporter}`);
+      console.log(`Setting reporter to ${filters.reporter}`);
+      console.log(controls.$selectReporter);
       controls.$selectReporter.val(filters.reporter);
+      console.log(`Reporter set to ${controls.$selectReporter.val()}`);
     }
     if (filters.type && filters.type !== controls.$selectType.val()) {
       controls.$selectType.val(filters.type);
@@ -226,6 +235,8 @@ const controls = {
 
     // And trigger a single change event
     console.log('!!! triggering change');
+    console.log(controls.$selects);
+    controls.$selectReporter.trigger('change');
     controls.$selects.trigger('change');
   },
 
@@ -294,10 +305,10 @@ const controls = {
         .val(null)
         .trigger('change')
         .on('change', controls.onFilterChange);
-      $('#selectType').select2('disable');
-      $('#selectCommodity').select2('disable');
-      $('#selectPartner').select2('disable');
-      $('#selectYear').select2('disable');
+      $('#selectType').select2({ disabled: true });
+      $('#selectCommodity').select2({ disabled: true });
+      $('#selectPartner').select2({ disabled: true });
+      $('#selectYear').select2({ disabled: true });
       $('#switchPartners').prop('disabled', true);
     } else {
       $('#selectType').select2('enable');

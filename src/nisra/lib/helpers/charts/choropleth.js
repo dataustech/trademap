@@ -137,13 +137,13 @@ const chart = {
       title = [
         data.lookup(filters.reporter, 'countryByUnNum', 'name'),
         [
-          [' trade in ', ({ S: 'services', C: 'goods' })[filters.type], ' balance '].join(),
-          [' imports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join(),
-          [' exports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join()
+          [' trade in ', ({ S: 'services', C: 'goods' })[filters.type], ' balance '].join(''),
+          [' imports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join(''),
+          [' exports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join('')
         ][filters.flow],
         ' in ',
         filters.year
-      ].join();
+      ].join('');
     }
 
     // CASE 4&5: reporter = selected    commodity = selected
