@@ -45,12 +45,4 @@ function copyFile(inFilename, outFilename) {
 }
 
 console.log('Begin data assets minification');
-
-minify('classificationHS_AG2.json', 'classificationHS_AG2.min.json');
-minify('partnerAreas.json', 'partnerAreas.min.json');
-minify('reporterAreas.json', 'reporterAreas.min.json');
-minify('world-110m.json', 'world-110m.min.json');
-commoditiesFilter('classificationEB02.json', 'classificationEB02.topLevel.json');
-copyFile('isoCodes.csv', 'isoCodes.csv');
-
 console.log('Data assets minification completed');

@@ -2,7 +2,6 @@ import $ from 'jquery';
 import Modernizr from 'modernizr';
 
 // trademap requirements
-import data from './helpers/data';
 import gui from './helpers/gui';
 import controls from './helpers/controls';
 import charts from './helpers/charts';
@@ -27,39 +26,28 @@ export default function () {
     $('#loadingDiv').hide();
   }
 
-  // Setup data by calling the initial JSON files
-  data.setup((err) => {
-    // If the setup fails display an error and stop.
-    if (err) {
-      console.log(err);
-      $('#userAlert').removeClass('hidden');
-      $('#userAlert .message').html('Error: Failed to load required files for startup.');
-      return;
-    }
+  // Check if we have an embed parameter like "embed=yearChart".
+  const urlParameters = controls.decodeURL();
+  const chartNames = ['choropleth', 'yearChart', 'topImportCommodities', 'topExportCommodities', 'topImportMarkets', 'topExportMarkets'];
+  if (urlParameters.embed && chartNames.indexOf(urlParameters.embed) > -1) {
+    // If we do, then hide all other charts and call the embed setup and skip the rest
+    chartNames.splice(chartNames.indexOf(urlParameters.embed), 1);
+    embed.hide(chartNames);
+    embed.setup(urlParameters);
+    return;
+  }
 
-    // Check if we have an embed parameter like "embed=yearChart".
-    const urlParameters = controls.decodeURL();
-    const chartNames = ['choropleth', 'yearChart', 'topImportCommodities', 'topExportCommodities', 'topImportMarkets', 'topExportMarkets'];
-    if (urlParameters.embed && chartNames.indexOf(urlParameters.embed) > -1) {
-      // If we do, then hide all other charts and call the embed setup and skip the rest
-      chartNames.splice(chartNames.indexOf(urlParameters.embed), 1);
-      embed.hide(chartNames);
-      embed.setup(urlParameters);
-      return;
-    }
+  // Setup the gui
+  gui.setup();
 
-    // Setup the gui
-    gui.setup();
+  // Setup intro (which will internally check if it should be displayed)
+  intro.setup(urlParameters);
 
-    // Setup intro (which will internally check if it should be displayed)
-    intro.setup(urlParameters);
+  // Setup the controls
+  controls.setup();
 
-    // Setup the controls
-    controls.setup();
-
-    // Setup charts
-    charts.setup(() => {
-      controls.initializeFilters();
-    });
+  // Setup charts
+  charts.setup(() => {
+    controls.initializeFilters();
   });
 }

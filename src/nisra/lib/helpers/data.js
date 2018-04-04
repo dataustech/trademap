@@ -7,11 +7,28 @@ import * as d3 from 'd3';
 import $ from 'jquery';
 import crossfilter from 'crossfilter';
 
-export default {
+// data imports
+import reporterAreasSelectOptions from '../../data/reporterAreas.json';
+import partnerAreasSelectOptions from '../../data/partnerAreas.json';
+import yearsSelectOptions from '../../data/years.json';
+import commodityCodesSelectOptions from '../../data/classificationHS_AG2.json';
+import serviceCodesSelectOptions from '../../data/classificationEB02.topLevel.json';
+import isoCodes from '../../data/isoCodes.json';
+import worldJson from '../../data/world-110m.json';
+
+const countryByISONumMap = d3.map(isoCodes, d => d.isoNumerical);
+const countryByUnNumMap = d3.map(isoCodes, d => d.unCode);
+const areasByISONum = isoNum => isoCodes.filter(el => +el.isoNumerical === +isoNum);
+
+const xFilter = crossfilter();
+
+const data = {
   /*
    * PROPERTIES
    * Some basic properties that we store and persist throughout the application
    */
+
+  baseQueryUrl: '/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2',
 
   // queryHistory, queryQueue and timestamp are used to throttle and debounce queries
   queryHistory: [],
@@ -19,12 +36,13 @@ export default {
   queryRunning: [],
   timestamp: 0,
 
-  // Reporter, partner and classification arrays for select2 widgets and lookup objects
-  // These are populated during controls setup with data from
-  // reporterAreas.json, partnerAreas.json and clasificationsHS_AG2.json
-  reporterAreasSelect: [],
-  partnerAreasSelect: [],
-  typeCodesSelect: [{
+  // Reporter, partner and classification arrays for select2 widgets
+  reporterAreasSelectOptions,
+  partnerAreasSelectOptions,
+  commodityCodesSelectOptions,
+  serviceCodesSelectOptions,
+  yearsSelectOptions,
+  typeCodesSelectOptions: [{
     id: 'C',
     text: 'Goods',
     parent: '#'
@@ -33,24 +51,27 @@ export default {
     text: 'Services',
     parent: '#'
   }],
-  commodityCodesSelect: [],
-  serviceCodesSelect: [],
-  reporterAreas: {},
-  partnerAreas: {},
-  flowByCode: {},
-  commodityCodes: {},
-  countryByUnNum: {},
-  countryByISONum: {},
+  serviceCodesMap: d3.map(serviceCodesSelectOptions, d => d.id),
+  reporterAreasMap: d3.map(reporterAreasSelectOptions, d => d.id),
+  partnerAreasMap: d3.map(partnerAreasSelectOptions, d => d.id),
+  flowByCodeMap: d3.map([{ id: '1', text: 'imports' }, { id: '2', text: 'exports' }, { id: '0', text: 'balance' }], d => d.id),
+  commodityCodesMap: d3.map(commodityCodesSelectOptions, d => d.id),
+  countryByUnNumMap,
+  countryByISONumMap,
+  areasByISONum,
+
+  worldJson,
 
   // Crossfilter data
-  xFilter: {},
-  xFilterByReporter: {},
-  xFilterByPartner: {},
-  xFilterByYear: {},
-  xFilterByType: {},
-  xFilterByCommodity: {},
-  xFilterByFlow: {},
-  xFilterByAmount: {},
+  xFilter,
+  // Setup crossfilter dimensions
+  xFilterByReporter: xFilter.dimension(d => +d.reporter),
+  xFilterByPartner: xFilter.dimension(d => +d.partner),
+  xFilterByYear: xFilter.dimension(d => +d.year),
+  xFilterByType: xFilter.dimension(d => d.type),
+  xFilterByCommodity: xFilter.dimension(d => d.commodity),
+  xFilterByFlow: xFilter.dimension(d => +d.flow),
+  xFilterByAmount: xFilter.dimension(d => +d.value),
 
   // Formatting functions
   commodityName(commodity, type) {
@@ -111,92 +132,17 @@ export default {
     }
     return text;
   },
-
-
-  /*
-   * PUBLIC METHODS
-   * */
-
-
-  /*
-   * Initial setup function.
-   * Query static JSON files and populate variables. This is an asynchronous
-   * function that makes AJAX request and therefore uses a callback
-   */
-  setup(callback) {
-    this.baseQueryUrl = '/api/get?fmt=csv&max=50000&freq=A&rg=1%2C2';
-
-    const ajaxSettings = {
-      dataType: 'json'
-    };
-    $.when(
-      $.ajax('data/reporterAreas.min.json', ajaxSettings),
-      $.ajax('data/partnerAreas.min.json', ajaxSettings),
-      $.ajax('data/classificationHS_AG2.min.json', ajaxSettings),
-      $.ajax('data/classificationEB02.topLevel.json', ajaxSettings),
-      $.ajax('data/isoCodes.csv'),
-      $.ajax('data/world-110m.min.json', ajaxSettings)
-    ).then((reporterAreas, partnerAreas, commodityCodes, serviceCodes, isoCodes, worldJson) => {
-      // Add results to the data object for use in the app.
-      this.reporterAreasSelect = reporterAreas[0].results;
-      this.partnerAreasSelect = partnerAreas[0].results;
-      this.commodityCodesSelect = commodityCodes[0].results;
-      this.serviceCodesSelect = serviceCodes[0].results;
-      [this.worldJson] = worldJson;
-
-      // Parse isoCodes csv
-      const codes = d3.csvParse(isoCodes[0]);
-
-      // Create d3 maps (these are basically used as lookup tables thoughout the app)
-      this.countryByUnNum = d3.map(codes, d => d.unCode);
-      this.reporterAreas = d3.map(reporterAreas[0].results, d => d.id);
-      this.flowByCode = d3.map([{ id: '1', text: 'imports' }, { id: '2', text: 'exports' }, { id: '0', text: 'balance' }], d => d.id);
-      this.partnerAreas = d3.map(partnerAreas[0].results, d => d.id);
-      this.commodityCodes = d3.map(commodityCodes[0].results, d => d.id);
-      this.serviceCodes = d3.map(serviceCodes[0].results, d => d.id);
-
-      // countryByISONum will return a single result (the last match in isoCodes.csv)
-      this.countryByISONum = d3.map(codes, d => d.isoNumerical);
-      // areasByISONum will return an array of matching areas in the UN system
-      this.areasByISONum = isoNum => codes.filter(el => +el.isoNumerical === +isoNum);
-
-      // Create a lookup function which does error handling so
-      // we don't have to do it elsewhere in the app
-      this.lookup = (lookupVal, mapName, propertyName) => {
-        try {
-          return this[mapName].get(lookupVal)[propertyName];
-        } catch (err) {
-          console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
-          return 'unknown';
-        }
-      };
-
-      // Remove unwanted values
-      this.reporterAreasSelect = this.reporterAreasSelect.filter(d => d.id !== 'all');
-      this.partnerAreasSelect = this.partnerAreasSelect.filter(d => (d.id !== 'all'));
-      this.commodityCodesSelect = this.commodityCodesSelect.filter(d => (d.id !== 'ALL' && d.id !== 'AG2'));
-      // TODO There might be more unwanted services to filter here.
-      this.serviceCodesSelect = this.serviceCodesSelect.filter(d => (d.id !== 'ALL'));
-
-      // Call the callback
-      callback();
-    }, (err) => {
-      callback(`There was an error with one of the initial requests: ${err}`);
-    }); // Close when-then blocks
-
-    // Setup crossfilter and dimensions
-    this.xFilter = crossfilter();
-    this.xFilterByReporter = this.xFilter.dimension(d => +d.reporter);
-    this.xFilterByPartner = this.xFilter.dimension(d => +d.partner);
-    this.xFilterByYear = this.xFilter.dimension(d => +d.year);
-    this.xFilterByType = this.xFilter.dimension(d => d.type);
-    this.xFilterByCommodity = this.xFilter.dimension(d => d.commodity);
-    this.xFilterByFlow = this.xFilter.dimension(d => +d.flow);
-    this.xFilterByAmount = this.xFilter.dimension(d => +d.value);
-
-    // FUTURE Kick off queries right away to optimize load time?
+  // lookup function which does error handling so we don't have to do it elsewhere in the app
+  lookup: (lookupVal, mapName, propertyName) => {
+    try {
+      return data[`${mapName}Map`].get(lookupVal)[propertyName];
+    } catch (err) {
+      console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
+      return 'unknown';
+    }
   },
 
+  /* PUBLIC METHODS */
 
   /*
    * Run an API query
@@ -477,10 +423,10 @@ export default {
         // e.g. for the 11 top level categories.
         if (filters.commodity === 'TOTAL') {
           requestUrl += '&cc=200';
-        } else if (this.serviceCodesSelect.length < 20) {
+        } else if (this.serviceCodesSelectOptions.length < 20) {
           requestUrl += '&cc=';
           const svcTypes = [];
-          this.serviceCodesSelect.forEach((i) => {
+          this.serviceCodesSelectOptions.forEach((i) => {
             svcTypes.push(i.id);
           });
           requestUrl += svcTypes.join();
@@ -560,3 +506,5 @@ export default {
   }
 
 };
+
+export default data;
