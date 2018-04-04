@@ -91,12 +91,23 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+        test: /\.(png|svg|jpg|jpeg|gif)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
               name: 'assets/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(ico)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]'
             }
           }
         ]
@@ -134,6 +145,7 @@ module.exports = {
       jQuery: 'jquery'
     }),
     new webpack.DefinePlugin({
+      __PROJECT__: JSON.stringify(project),
       __VERSION__: JSON.stringify(packageJson.version),
       __COMMIT_HASH__: JSON.stringify(commitHash),
       __COMMIT_LINK__: JSON.stringify(commitLink)
