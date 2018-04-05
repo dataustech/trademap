@@ -238,7 +238,7 @@ const chart = {
       // Assign behaviours to hover over country
       .on('mouseenter', (d) => {
         try {
-          const partner = data.countryByISONum.get(d.id).unCode;
+          const partner = data.countryByISONumMap.get(d.id).unCode;
           const partnerDetails = newDataByPartner.get(partner);
           if (partnerDetails) {
             infoBox.displayHover(partnerDetails);
@@ -374,7 +374,7 @@ const chart = {
       .attr('dy', 15)
       .text((d, i) => {
         if (+flow === 0) {
-          return `${['Deficit', 'Surplus'][i]} (${legendData[i].values.count} partners)`;
+          return `${['Deficit', 'Surplus'][i]} (${legendData[i].value.count} partners)`;
         }
         let returnTxt = '';
         const topPercentile = (3 / totalPartners) * 100;
