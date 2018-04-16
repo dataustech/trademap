@@ -77,14 +77,17 @@ const data = {
   commodityName(commodity, type) {
     try {
       let text;
+      let comm;
       switch (type) {
         case 'C':
-          text = this.commodityCodes.get(commodity).text.slice(text.indexOf(' - ') + 3);
+          comm = this.commodityCodesMap.get(commodity.toString());
+          text = comm.text.slice(comm.text.indexOf(' - ') + 3);
           break;
         case 'S':
           // TODO FEATURE this could be imprved to consider
           // parents e.g. "Transport" for "Passengers"
-          text = this.serviceCodes.get(commodity).text.slice(text.indexOf(' ') + 1);
+          comm = this.serviceCodesMap.get(commodity.toString());
+          text = comm.text.slice(comm.text.indexOf(' ') + 1);
           break;
         default:
           break;

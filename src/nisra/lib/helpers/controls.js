@@ -213,10 +213,7 @@ const controls = {
 
     // Update the other fields
     if (filters.reporter && filters.reporter !== controls.$selectReporter.val()) {
-      console.log(`Setting reporter to ${filters.reporter}`);
-      console.log(controls.$selectReporter);
       controls.$selectReporter.val(filters.reporter);
-      console.log(`Reporter set to ${controls.$selectReporter.val()}`);
     }
     if (filters.type && filters.type !== controls.$selectType.val()) {
       controls.$selectType.val(filters.type);
@@ -234,8 +231,6 @@ const controls = {
     }
 
     // And trigger a single change event
-    console.log('!!! triggering change');
-    console.log(controls.$selects);
     controls.$selectReporter.trigger('change');
     controls.$selects.trigger('change');
   },

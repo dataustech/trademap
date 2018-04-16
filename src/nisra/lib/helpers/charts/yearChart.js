@@ -200,13 +200,11 @@ const chart = {
 
     // If there is data only for one flow direction add an empty nest.
     if (nestedData.length < 2) {
-      console.log(nestedData);
       if (+nestedData[0].key === 2) {
         nestedData.unshift({ key: 1, values: [] });
       } else {
         nestedData.push({ key: 2, values: [] });
       }
-      console.log(nestedData);
     }
 
     // Update scale domains with newData values and the line generation function

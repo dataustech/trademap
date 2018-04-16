@@ -79,17 +79,23 @@ export default {
       .call(this.yAxis);
 
     // Enter groups and bars
+    // Bind to data
     const groups = svg.select('.bars').selectAll('g.item')
       .data(newData);
-    groups.enter()
+    // Exit old groups
+    groups.exit().remove();
+    // Enter new groups
+    let newGroups = groups.enter()
       .append('g')
-      .append('rect')
+      .classed('item', true);
+    // Add rect to new groups
+    newGroups.append('rect')
       .attr('width', '0')
       .attr('height', '0');
-    groups.classed('item', true)
-      .attr('transform', (d, i) => `translate(0,${this.yScale(i)})`);
-    groups.selectAll('g.item text').remove();
-    const bars = groups.select('rect')
+    newGroups = newGroups.merge(groups);
+    newGroups.attr('transform', (d, i) => `translate(0,${this.yScale(i)})`);
+    newGroups.selectAll('text').remove();
+    const bars = newGroups.select('rect')
       .on('click', (d) => {
         if (filters.partner === 'all') { // top partner chart: select partner
           controls.changeFilters({ partner: d.partner });
@@ -97,8 +103,8 @@ export default {
           controls.changeFilters({ commodity: d.commodity });
         }
       });
-    const labels = groups.append('text').classed('label', true);
-    const values = groups.append('text').classed('value', true);
+    const labels = newGroups.append('text').classed('label', true);
+    const values = newGroups.append('text').classed('value', true);
 
     // Update groups and bars
     bars.transition()
