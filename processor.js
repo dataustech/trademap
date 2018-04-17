@@ -1,37 +1,38 @@
 const fs = require('fs-extra');
-const readline = require('readline');
 const path = require('path');
 
-// TODO regex
-const rowRegex = /\d/;
+const rowRegex = /^([1-3])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
 const data = {
-    byYear: {},
-    byReporterSitc: {}
+  byYear: {},
+  byReporterSitc: {}
 }
 
 // read list of files
 fs.readDir(path.join(__dirname, 'data'))
-.then(files => Promise.all(files.map(filename => {
-    // read each file & split by lines
+  .then(files => Promise.all(files.map((filename) => {
+    // if file extension is txt then read file & split by lines
+    if (path.extname(filename) != 'txt') return null;
     return fs.readFile(path.join(__dirname, 'data', filename))
-    .then(filecontent => filecontent.toString().split("\n"))
-    .then(rows => Promise.all(rows.map(row => {
+      .then(filecontent => filecontent.toString().split('\n'))
+      .then(rows => Promise.all(rows.map((row) => {
         // process each row
-        const [rowStr, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass] = row.match(regex);
-        let record = {filename, row, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass};
+        const [, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass] = row.match(rowRegex);
+        const record = {
+          filename, row, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass
+        };
         // Init year array if not present & add
         if (!data.byYear[year]) data.byYear[year] = [];
         data.byYear[year].push(record);
         // TODO put the row in the correct reporter(nuts1)/sitc2
-
-    })));
-})))
-.then(() => {
+        return '';
+      })));
+  })))
+  .then(() => {
     // TODO Aggregate and generate totals
-})
-.then(() => {
+  })
+  .then(() => {
     // TODO write output to files
-});
+  });
 
 // qtrno $ 1-6
 // flow $ 7 (I or E)
