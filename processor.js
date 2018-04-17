@@ -1,33 +1,46 @@
+/* eslint max-len: 0 */
 const fs = require('fs-extra');
 const path = require('path');
 
+const srcDir = path.join(__dirname, 'src/nisra/api');
 const rowRegex = /^([1-3])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
 const data = {
   byYear: {},
   byReporterSitc: {}
-}
+};
 
 // read list of files
-fs.readDir(path.join(__dirname, 'data'))
+fs.readdir(srcDir)
   .then(files => Promise.all(files.map((filename) => {
     // if file extension is txt then read file & split by lines
-    if (path.extname(filename) != 'txt') return null;
-    return fs.readFile(path.join(__dirname, 'data', filename))
+    if (path.extname(filename) !== '.txt') return null;
+    console.log(`Reading file ${filename}`);
+    return fs.readFile(path.join(srcDir, filename))
       .then(filecontent => filecontent.toString().split('\n'))
       .then(rows => Promise.all(rows.map((row) => {
+        console.log(`Processing row: ${row}`);
         // process each row
-        const [, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass] = row.match(rowRegex);
+        const [, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass]
+          = row.match(rowRegex);
         const record = {
           filename, row, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass
         };
         // Init year array if not present & add
         if (!data.byYear[year]) data.byYear[year] = [];
         data.byYear[year].push(record);
-        // TODO put the row in the correct reporter(nuts1)/sitc2
-        return '';
+        // put the row in the correct reporter(nuts1)/sitc1
+        const sitc1Key = `${nuts1}-${sitc1}`;
+        const sitc2Key = `${nuts1}-${sitc2}`;
+        if (!data.byReporterSitc[sitc1Key]) data.byReporterSitc[sitc1Key] = [];
+        data.byReporterSitc[sitc1Key].push(record);
+        // put the row in the correct reporter(nuts1)/sitc2
+        if (!data.byReporterSitc[sitc2Key]) data.byReporterSitc[sitc2Key] = [];
+        data.byReporterSitc[sitc2Key].push(record);
+        return null;
       })));
   })))
   .then(() => {
+    console.log('Finished processing rows');
     // TODO Aggregate and generate totals
   })
   .then(() => {
