@@ -3,8 +3,9 @@ const fs = require('fs-extra');
 const path = require('path');
 
 const srcDir = path.join(__dirname, 'src/nisra/api');
-const rowRegex = /^([1-3])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
+const rowRegex = /^([1-4])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
 const data = {
+  byHash: {},
   byYear: {},
   byReporterSitc: {}
 };
@@ -17,31 +18,37 @@ fs.readdir(srcDir)
     console.log(`Reading file ${filename}`);
     return fs.readFile(path.join(srcDir, filename))
       .then(filecontent => filecontent.toString().split('\n'))
-      .then(rows => Promise.all(rows.map((row) => {
-        console.log(`Processing row: ${row}`);
-        // process each row
+      .then(rows => Promise.all(rows.map((row, index) => {
+        // console.log(`Processing row: ${row}`);
+        if (!row) return null;
+        const matches = row.match(rowRegex);
+        if (!matches) throw new Error(`Row numner ${index}: "${row}" in file ${filename} did not match regex`);
         const [, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass]
-          = row.match(rowRegex);
-        const record = {
-          filename, row, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass
-        };
-        // Init year array if not present & add
-        if (!data.byYear[year]) data.byYear[year] = [];
-        data.byYear[year].push(record);
-        // put the row in the correct reporter(nuts1)/sitc1
-        const sitc1Key = `${nuts1}-${sitc1}`;
-        const sitc2Key = `${nuts1}-${sitc2}`;
-        if (!data.byReporterSitc[sitc1Key]) data.byReporterSitc[sitc1Key] = [];
-        data.byReporterSitc[sitc1Key].push(record);
-        // put the row in the correct reporter(nuts1)/sitc2
-        if (!data.byReporterSitc[sitc2Key]) data.byReporterSitc[sitc2Key] = [];
-        data.byReporterSitc[sitc2Key].push(record);
+          = matches.map(v => v.trim());
+        const rowHash = `${year}${flow}${nuts1}${labarea}${codseq}${codalpha}${sitc1}${sitc2}`;
+        // Add to data.byHash first the do the byYear and by reporter-sitc later
+        if (!data.byHash[rowHash]) {
+          data.byHash[rowHash] = {
+            year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, values: {}, masses: {}, totalValue: 0, totalMass: 0
+          };
+        }
+        data.byHash[rowHash].values[qtrno] = value;
+        data.byHash[rowHash].masses[qtrno] = mass;
+        data.byHash[rowHash].totalValue += value;
+        data.byHash[rowHash].totalMass += mass;
         return null;
       })));
   })))
   .then(() => {
-    console.log('Finished processing rows');
-    // TODO Aggregate and generate totals
+    console.log('Finished processing rows, computing totals');
+    Object.keys(data.byHash).forEach((hash) => {
+      if (Object.keys(data.byHash[hash].values).length !== 4) throw new Error(`${hash} did not have data for 4 quarters, only had data for: ${Object.keys(data.byHash[hash].values).join(', ')}`);
+    });
+    // TODO reduce quarters into years:
+      // sum together totals for records where flow, nuts1,labarea,codeseq,codealpha,sitc1 & sitc2 match
+    // TODO Aggregate and generate totals per year
+    // TODO total by sitc1 (add row with sitc2=null)
+    // TODO total by sitc2 (add row with sitc1=null)
   })
   .then(() => {
     // TODO write output to files
