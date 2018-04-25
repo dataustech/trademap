@@ -1,8 +1,11 @@
 /* eslint max-len: 0 */
 const fs = require('fs-extra');
+const jsonToCSV = require('json-to-csv');
 const path = require('path');
 
 const srcDir = path.join(__dirname, 'src/nisra/api');
+const destDirByYear = path.join(__dirname, 'dist/nisra/api/byYear');
+const destDirByReporterSitc = path.join(__dirname, 'dist/nisra/api/byReporterSitc');
 const rowRegex = /^([1-4])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
 const data = {
   byHash: {},
@@ -11,55 +14,101 @@ const data = {
 };
 
 // read list of files
+console.log('Reading files...');
 fs.readdir(srcDir)
   .then(files => Promise.all(files.map((filename) => {
     // if file extension is txt then read file & split by lines
     if (path.extname(filename) !== '.txt') return null;
-    console.log(`Reading file ${filename}`);
     return fs.readFile(path.join(srcDir, filename))
       .then(filecontent => filecontent.toString().split('\n'))
       .then(rows => Promise.all(rows.map((row, index) => {
-        // console.log(`Processing row: ${row}`);
+
+        // Extract CSV record
         if (!row) return null;
         const matches = row.match(rowRegex);
         if (!matches) throw new Error(`Row numner ${index}: "${row}" in file ${filename} did not match regex`);
         const [, qtrno, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass]
           = matches.map(v => v.trim());
-        const rowHash = `${year}${flow}${nuts1}${labarea}${codseq}${codalpha}${sitc1}${sitc2}`;
-        // Add to data.byHash first the do the byYear and by reporter-sitc later
-        if (!data.byHash[rowHash]) {
-          data.byHash[rowHash] = {
-            year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, values: {}, masses: {}, totalValue: 0, totalMass: 0
-          };
-        }
-        data.byHash[rowHash].values[qtrno] = value;
-        data.byHash[rowHash].masses[qtrno] = mass;
-        data.byHash[rowHash].totalValue += value;
-        data.byHash[rowHash].totalMass += mass;
-        return null;
+        // Each csv quarterly record should be added to six yearly records:
+        // year, flow, nuts1, codalpha, sitc1, sitc2
+        // y     y     y      y         y      y      <--- original data point
+        // y     y     y      y         y      null   <--- total of sitc1
+        // y     y     y      y         null   null   <--- total trade between reporter and partner
+        // y     y     y      null      null   null   <--- total trade of reporter
+        // y     y     y      null      y      null   <--- total trade of reporter by sitc1
+        // y     y     y      null      y      y      <--- total trade of reporter by sitc2
+        const masks = [
+          {},
+          { sitc2: null },
+          { sitc1: null, sitc2: null },
+          { codalpha: null, sitc1: null, sitc2: null },
+          { codalpha: null, sitc2: null },
+          { codalpha: null }
+        ];
+        masks.forEach((mask) => {
+          const record = Object.assign(mask, {
+            year, flow, nuts1, codalpha, sitc1, sitc2, value: 0
+          });
+          const hash = `${record.year}_${record.flow}_${record.nuts1}_${record.codalpha}_${record.sitc1}_${record.sitc2}`;
+          if (!data.byHash[hash]) {
+            data.byHash[hash] = record;
+          }
+          // add to total
+          data.byHash[hash].value += parseInt(value, 10);
+        });
       })));
   })))
   .then(() => {
-    console.log('Finished processing rows, computing totals');
+    console.log('Finished processing rows and computing totals, sorting into buckets');
     Object.keys(data.byHash).forEach((hash) => {
-      if (Object.keys(data.byHash[hash].values).length !== 4) throw new Error(`${hash} did not have data for 4 quarters, only had data for: ${Object.keys(data.byHash[hash].values).join(', ')}`);
+      const record = data.byHash[hash];
+      // Sort data into byYear
+      if (!data.byYear[record.year]) data.byYear[record.year] = [];
+      data.byYear[record.year].push(record);
+
+      // Sort data into byReporterSitc
+      if (record.sitc1 !== null) {
+        const nuts1Sitc1Key = `${record.nuts1}_${record.sitc1}`;
+        if (!data.byReporterSitc[nuts1Sitc1Key]) data.byReporterSitc[nuts1Sitc1Key] = [];
+        data.byReporterSitc[nuts1Sitc1Key].push(record);
+      }
+      if (record.sitc2 !== null) {
+        const nuts1Sitc2Key = `${record.nuts1}_${record.sitc2}`;
+        if (!data.byReporterSitc[nuts1Sitc2Key]) data.byReporterSitc[nuts1Sitc2Key] = [];
+        data.byReporterSitc[nuts1Sitc2Key].push(record);
+      }
     });
-    // TODO reduce quarters into years:
-      // sum together totals for records where flow, nuts1,labarea,codeseq,codealpha,sitc1 & sitc2 match
-    // TODO Aggregate and generate totals per year
-    // TODO total by sitc1 (add row with sitc2=null)
-    // TODO total by sitc2 (add row with sitc1=null)
   })
   .then(() => {
-    // TODO write output to files
-  });
+    console.log('Finished sorting.');
+    // Write output to files for byYear
+    console.log(`Writing out ${Object.keys(data.byYear).length} year buckets:`);
+    return Promise.all(Object.keys(data.byYear).map((year) => {
+      const destFile = path.join(destDirByYear, `${year}.csv`);
+      console.log(destFile);
+      return jsonToCSV(data.byYear[year], destFile);
+    }));
+  })
+  .then(() => {
+    // Write output to files for byReporterSitc
+    console.log(`Writing out ${Object.keys(data.byReporterSitc).length} reporter_sitc buckets:`);
+    return Promise.all(Object.keys(data.byReporterSitc).map((key) => {
+      const destFile = path.join(destDirByReporterSitc, `${key}.csv`);
+      console.log(destFile);
+      return jsonToCSV(data.byReporterSitc[key], destFile);
+    }));
+  })
+  .then(() => console.log('All done!'));
+
+
+
 
 // qtrno $ 1-6
-// flow $ 7 (I or E)
+// flow $ 7         ---> import or export (I or E)
 // nuts1 $ 8-9
-// labarea $ 10
-// codseq $ 11-13
-// codalpha $ 14-15
+// labarea $ 10     ---> 1 letter world region
+// codseq $ 11-13   ---> 3 char numerical coding of partner country (currently ignored)
+// codalpha $ 14-15 ---> 2 letter country code or #n region code
 // sitc1 $16  (SITC Section – 1-digit)
 // sitc2 $17-18  (SITC Division – 2-digit)
 // value 19-27

@@ -37,6 +37,7 @@
     "file-loader": "^1.1.7",
     "html-loader": "^0.5.5",
     "json-loader": "^0.5.7",
+    "json-to-csv": "^1.0.0",
     "mkdirp": "^0.5.1",
     "modernizr-loader": "^1.0.1",
     "node-sass": "^4.7.2",
