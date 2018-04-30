@@ -1,6 +1,5 @@
 /* eslint max-len: 0 */
 const fs = require('fs-extra');
-const jsonToCSV = require('json-to-csv');
 const path = require('path');
 
 const srcDir = path.join(__dirname, 'src/nisra/api');
@@ -86,7 +85,7 @@ fs.readdir(srcDir)
     return Promise.all(Object.keys(data.byYear).map((year) => {
       const destFile = path.join(destDirByYear, `${year}.csv`);
       console.log(destFile);
-      return jsonToCSV(data.byYear[year], destFile);
+      return fs.outputFile(destFile, toCsv(data.byYear[year]));
     }));
   })
   .then(() => {
@@ -95,7 +94,7 @@ fs.readdir(srcDir)
     return Promise.all(Object.keys(data.byReporterSitc).map((key) => {
       const destFile = path.join(destDirByReporterSitc, `${key}.csv`);
       console.log(destFile);
-      return jsonToCSV(data.byReporterSitc[key], destFile);
+      return fs.outputFile(destFile, toCsv(data.byReporterSitc[key]));
     }));
   })
   .then(() => console.log('All done!'));
@@ -145,3 +144,15 @@ fs.readdir(srcDir)
 // 3Q2017EEAAA  #1667       21        3
 // 3Q2017EEAAA  #1668       19        3
 // 3Q2017EEAAA  #1669      119       38
+
+
+function toCsv (collection, fields) {
+    let output = fields.join(',');
+    output += '\n';
+    output += collection.reduce((out, record) => {
+        fields.forEach(field => {
+            out += record[field] + ',';
+        });
+        out += '\n;'
+    },'');
+}
