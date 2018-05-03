@@ -68,6 +68,7 @@ fs.readdir(srcDir)
     Object.keys(data.byHash).forEach((hash) => {
       const record = data.byHash[hash];
       // Sort data into byReporterYear
+      // TODO not all data goes into all buckets
       const yearKey = `${record.nuts1}_${record.year}`;
       if (!data.byReporterYear[yearKey]) data.byReporterYear[yearKey] = [];
       data.byReporterYear[yearKey].push(record);
