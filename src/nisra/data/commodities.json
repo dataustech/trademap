@@ -1,0 +1,310 @@
+{
+  "0": {
+    "type": "sitc1",
+    "name": "Food & live animals"
+  },
+  "1": {
+    "type": "sitc1",
+    "name": "Beverages & tobacco"
+  },
+  "2": {
+    "type": "sitc1",
+    "name": "Crude materials"
+  },
+  "3": {
+    "type": "sitc1",
+    "name": "Mineral fuels"
+  },
+  "4": {
+    "type": "sitc1",
+    "name": "Animal & vegetable oils"
+  },
+  "5": {
+    "type": "sitc1",
+    "name": "Chemicals & related products"
+  },
+  "6": {
+    "type": "sitc1",
+    "name": "Manufactured goods classified chiefly by material"
+  },
+  "7": {
+    "type": "sitc1",
+    "name": "Machinery & transport equipment"
+  },
+  "8": {
+    "type": "sitc1",
+    "name": "Miscellaneous manufactured articles"
+  },
+  "9": {
+    "type": "sitc1",
+    "name": "Commodities/transactions not class'd elsewhere in SITC"
+  },
+  "11": {
+    "type": "sitc2",
+    "name": "Beverages"
+  },
+  "12": {
+    "type": "sitc2",
+    "name": "Tobacco & tobacco manufactures"
+  },
+  "21": {
+    "type": "sitc2",
+    "name": "Hides"
+  },
+  "22": {
+    "type": "sitc2",
+    "name": "Oil seeds & oleaginous fruits"
+  },
+  "23": {
+    "type": "sitc2",
+    "name": "Crude rubber (including synthetic & reclaimed)"
+  },
+  "24": {
+    "type": "sitc2",
+    "name": "Cork & wood"
+  },
+  "25": {
+    "type": "sitc2",
+    "name": "Pulp & waste paper"
+  },
+  "26": {
+    "type": "sitc2",
+    "name": "Textile fibres not manufactured & their waste etc"
+  },
+  "27": {
+    "type": "sitc2",
+    "name": "Crude fertilizers & crude minerals (exc fuels etc)"
+  },
+  "28": {
+    "type": "sitc2",
+    "name": "Metalliferous ores & metal scrap"
+  },
+  "29": {
+    "type": "sitc2",
+    "name": "Crude animal & vegetable materials n.e.s."
+  },
+  "32": {
+    "type": "sitc2",
+    "name": "Coal"
+  },
+  "33": {
+    "type": "sitc2",
+    "name": "Petroleum"
+  },
+  "34": {
+    "type": "sitc2",
+    "name": "Gas"
+  },
+  "35": {
+    "type": "sitc2",
+    "name": "Electric current"
+  },
+  "41": {
+    "type": "sitc2",
+    "name": "Animal oils & fats"
+  },
+  "42": {
+    "type": "sitc2",
+    "name": "Fixed vegetable fats & oils"
+  },
+  "43": {
+    "type": "sitc2",
+    "name": "Animal or vegetable fats & oils"
+  },
+  "51": {
+    "type": "sitc2",
+    "name": "Organic chemicals"
+  },
+  "52": {
+    "type": "sitc2",
+    "name": "Inorganic chemicals"
+  },
+  "53": {
+    "type": "sitc2",
+    "name": "Dyeing"
+  },
+  "54": {
+    "type": "sitc2",
+    "name": "Medicinal & pharmaceutical products"
+  },
+  "55": {
+    "type": "sitc2",
+    "name": "Essential oils & perfume materials; toilet preps etc"
+  },
+  "56": {
+    "type": "sitc2",
+    "name": "Fertilizers (other than those of group 272)"
+  },
+  "57": {
+    "type": "sitc2",
+    "name": "Plastics in primary forms"
+  },
+  "58": {
+    "type": "sitc2",
+    "name": "Plastics in non-primary forms"
+  },
+  "59": {
+    "type": "sitc2",
+    "name": "Chemical materials & products n.e.s."
+  },
+  "61": {
+    "type": "sitc2",
+    "name": "Leather"
+  },
+  "62": {
+    "type": "sitc2",
+    "name": "Rubber manufactures n.e.s."
+  },
+  "63": {
+    "type": "sitc2",
+    "name": "Cork & wood manufactures (excluding furniture)"
+  },
+  "64": {
+    "type": "sitc2",
+    "name": "Paper"
+  },
+  "65": {
+    "type": "sitc2",
+    "name": "Textile yarn"
+  },
+  "66": {
+    "type": "sitc2",
+    "name": "Non-metallic mineral manufactures n.e.s."
+  },
+  "67": {
+    "type": "sitc2",
+    "name": "Iron & steel"
+  },
+  "68": {
+    "type": "sitc2",
+    "name": "Non-ferrous metals"
+  },
+  "69": {
+    "type": "sitc2",
+    "name": "Manufactures of metal n.e.s."
+  },
+  "71": {
+    "type": "sitc2",
+    "name": "Power generating machinery & equipment"
+  },
+  "72": {
+    "type": "sitc2",
+    "name": "Machinery specialized for particular industries"
+  },
+  "73": {
+    "type": "sitc2",
+    "name": "Metalworking machinery"
+  },
+  "74": {
+    "type": "sitc2",
+    "name": "General industrial machinery & eqp. & machine pt.n.e.s."
+  },
+  "75": {
+    "type": "sitc2",
+    "name": "Office machines & adp machines"
+  },
+  "76": {
+    "type": "sitc2",
+    "name": "Telecomms & sound recording & reproducing app. & eqp."
+  },
+  "77": {
+    "type": "sitc2",
+    "name": "Ele machinery"
+  },
+  "78": {
+    "type": "sitc2",
+    "name": "Road vehicles (including air cushion vehicles)"
+  },
+  "79": {
+    "type": "sitc2",
+    "name": "Other transport equipment"
+  },
+  "81": {
+    "type": "sitc2",
+    "name": "P/fab buildings;sanit."
+  },
+  "82": {
+    "type": "sitc2",
+    "name": "Furniture & parts thereof; bedding"
+  },
+  "83": {
+    "type": "sitc2",
+    "name": "Travel goods"
+  },
+  "84": {
+    "type": "sitc2",
+    "name": "Articles of apparel & clothing accessories"
+  },
+  "85": {
+    "type": "sitc2",
+    "name": "Footwear"
+  },
+  "87": {
+    "type": "sitc2",
+    "name": "Professional"
+  },
+  "88": {
+    "type": "sitc2",
+    "name": "Photographic & optical goods"
+  },
+  "89": {
+    "type": "sitc2",
+    "name": "Miscellaneous manufactured articles n.e.s."
+  },
+  "91": {
+    "type": "sitc2",
+    "name": "Postal packages not classified according to kind"
+  },
+  "93": {
+    "type": "sitc2",
+    "name": "Special transactions and commodities not classified according to kind"
+  },
+  "96": {
+    "type": "sitc2",
+    "name": "Coin (other than gold coin)"
+  },
+  "98": {
+    "type": "sitc2",
+    "name": "Military arms and ammunition"
+  },
+  "00": {
+    "type": "sitc2",
+    "name": "Live animals other than animals of division 03"
+  },
+  "01": {
+    "type": "sitc2",
+    "name": "Meat & meat preparations"
+  },
+  "02": {
+    "type": "sitc2",
+    "name": "Dairy products & birds' eggs"
+  },
+  "03": {
+    "type": "sitc2",
+    "name": "Fish"
+  },
+  "04": {
+    "type": "sitc2",
+    "name": "Cereals & cereal preparations"
+  },
+  "05": {
+    "type": "sitc2",
+    "name": "Vegetables & fruit"
+  },
+  "06": {
+    "type": "sitc2",
+    "name": "Sugar"
+  },
+  "07": {
+    "type": "sitc2",
+    "name": "Coffee"
+  },
+  "08": {
+    "type": "sitc2",
+    "name": "Feeding stuff for animals (not inc.unmilled cereals)"
+  },
+  "09": {
+    "type": "sitc2",
+    "name": "Miscellaneous edible products & preparations"
+  }
+}

@@ -1,6 +1,6 @@
 # NISRA trademap
 
-## Static api
+## Static HMRC Data API
 
 ### Data sources
 
@@ -12,7 +12,7 @@ Each row is formatted as follows:
 3Q2017EEAAA  #1001     2025     1805
 ```
 
-The data can be extracted as per the following table:
+The data can be extracted from each row as indicated in the following table:
 
 | Field name          | Chars     | Values                                                                     |
 | ------------------- | --------- | -------------------------------------------------------------------------- |
@@ -22,11 +22,13 @@ The data can be extracted as per the following table:
 | Reporter (NUTS1)    | 8-9 (2)   | Identifier of the NUTS1 reporter (12 possible, see separate table)         |
 | Partner (Labarea)   | 10 (1)    | Identifier of partner world region (values `A` to `J`, see separate table) |
 | Partner (codeseq)   | 11-13 (3) | Identifier of partner country (numerical)                                  |
-| Partner (codealpha) | 14-15 (2) | Identifier of partner country (alpha), see separate table                  |
-| SITC1               | 16 (1)    | Identifier of trade category in SITC1, see separate table                  |
-| SITC2               | 1-18 (2)  | Identifier of trade category in SITC2, see separate table                  |
-| Value               | 19-27 (9) | Value of trade in GBP                                                      |
-| Mass                | 28-36 (9) | Mass of trade in Kg                                                        |
+| Partner (codealpha) | 14-15 (2) | Identifier of partner country (alpha), see dictionary below                |
+| SITC1               | 16 (1)    | Identifier of trade category in SITC1, see dictionary below                |
+| SITC2               | 1-18 (2)  | Identifier of trade category in SITC2, see dictionary below                |
+| Value               | 19-27 (9) | Value of trade in GBP (thousands)                                          |
+| Mass                | 28-36 (9) | Mass of trade in Kg (thousands)                                            |
+
+**_NOTE:_** Chars column expressed as `startIndex`-`endIndex` (`length`)
 
 This is a regular expression which allows extracting values from a row:
 
@@ -34,61 +36,116 @@ This is a regular expression which allows extracting values from a row:
 /^([1-4])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/
 ```
 
-To make this data usable by the web-based visualization these files need to be split into manageable chunks that can be loaded on demand. Values should be represented by year, not by quarter. Total values also need to be computed to show data such as:
+### Data processing and aggregation
 
-- Total trade in **year** between **reporter** and **partner** of SITC1
-- Total trade in **year** between **reporter** and **partner** of SITC2
-- Total trade in **year** between **reporter** and **partner**
-- Total trade in **year** between **reporter** and **world** of SITC1
-- Total trade in **year** between **reporter** and **world** of SITC2
-- Total trade in **year** between **reporter** and **world**
+Praparing data for consumption by the data visualisation requires the following steps:
 
-The `scripts/nisra/api-processor.js` script will read the source files from `src/nisra/api` and ouput them as individual csv files in `dist/nisra/api` in the following structure:
-
-```
-api/
-├── byReporterYear/  <---- byReporterYear csvs populate choropleth and row charts (each file < 300Kb)
-│   ├── EA_2013.csv  <---- reporter to every partner (109) for every commodity (110) 
-│   |                      for import and export (2) = 109x110x2 = ~24k records
-│   ├── EA_2013.csv
-│   ├── ...
-│   ├── EA_2016.csv
-│   ├── EA_2017.csv
-├── byReporterSitc/  <---- byReporterSitc csvs populate year line chart
-│   ├── EA_0.csv     <---- reporter to every partners (109) for SITC1=0 import and export (2) for every year (5) = 109x2x5 = 1090 records
-│   ├── EA_1.csv     <---- Reporter=EA (1) to all partners (110) for SITC1=1 (totals) (1) import and export (2) for every year (21) = 1x110x1x2x21 = 4620 records (~1Kb)
-│   ├── EA_00.csv         <--- Reporter=EA (1) to all partners (110) for SITC2=00 (totals) (1) import and export (2) for every year (21) = 1x110x1x2x21 = 4620 records (~1Kb)
-│   ├── EA_01.csv         <--- Reporter=EA (1) to all partners (110) for SITC2=01 (1) import and export (2) for every year (21) = 1x110x1x2x21 = 4620 records (~1Kb)
-│   ├── ... ()            <--- 12 reporters x 100 SITC2 codes = 1200 files
-```
+- Values should be aggregated from quarterly to yearly data.
+- Aggregated totals should be computed as shown in the table below.
+- Bilateral trade (imports + exports) and trade balance (exports - imports) are computed for each record (including aggregated totals).
+- (TODO) % of total exports/imports should be computed for each partner-reporter
+- (TODO) Ranking should be computed for partners for import, export, bilateral and balance (including aggregated totals).
 
 
-nuts1
+Given a REPORTER and a PARTNER(codalpha) find all other PARTNERs(codalpha)
+Given a REPORTER and a PARTNER(labarea) find all other PARTNERs(labarea)
 
-EA  East
-EM  East Midland
-LO  Londo
-NE  North Eas
-NI  Northern Ireland
-NW  North West
-SC  Scotland
-SE  South East’
-SW  South West
-WA  Wales
-WM  West Midlands
-YH  Yorkshire and the Humbe
-ZA  Unallocated-Know
-ZB  Unallocated-Unknown
 
-labarea (world regions)
 
-A  #1  Asia and Oceania
-B  #2   Eastern Europe
-C  European Union
-D  #3  Latin America and the Caribbean
-E  Low Value Trade (Non-EU)
-F  #4   Middle East and North Africa
-G  #5  North America
-H  #6  Sub-Saharan Africa
-I  #7    Western Europe
-J  Ships and Stores (Non-EU)
+The aggregated totals should map to the following **aggregation levels** which respond to the following queries:
+
+| Partner  | Comm   | Description                                               | Used in                                      |
+| :------: | :----: | --------------------------------------------------------- | -------------------------------------------- |
+| codalpha | SITC2  | Trade in **Y** between **rep** and **part** of **SITC2**  | map, infobox, yearChart, topPart., topComm.  |
+| codalpha | SITC1  | Trade in **Y** between **rep** and **part** of **SITC1**  | map, infobox, yearChart, topPart., topComm.  |
+| codalpha | all    | Trade in **Y** between **rep** and **part**               | map, infobox, yearChart, topPart.            |
+| labarea  | SITC2  | Trade in **Y** between **rep** and **part** of **SITC2**  | map, infobox, yearChart, topPart., topComm.  |
+| labarea  | SITC1  | Trade in **Y** between **rep** and **part** of **SITC1**  | map, infobox, yearChart, topPart., topComm.  |
+| labarea  | all    | Trade in **Y** between **rep** and **part**               | map, infobox, yearChart, topPart.            |
+| all      | SITC2  | Trade in **Y** between **rep** and **world** of **SITC2** | yearChart, topComm.                          |
+| all      | SITC1  | Trade in **Y** between **rep** and **world** of **SITC1** | yearChart, topComm.                          |
+| all      | all    | Trade in **Y** between **rep** and **world**              | yearChart                                    |
+
+**_NOTE:_** In the visualization controls **year** and **reporter** (`nuts1`) are always set; **partner** (`codalpha` or `labarea`) and **commodity** (`sitc1` or `sitc2`) are optional.
+
+### Static API interface
+
+To make the data usable by the web-based visualization it needs to to be split into manageable chunks that can be loaded on demand via a simple API.
+
+The [`scripts/nisra/api-processor.js`](../../scripts/nisra/api-processor.js) script will read the source files from `src/nisra/api` and ouput them in a folder structure in `dist/nisra/api`. It currently takes a few minutes to run and generates the destination folder structure.
+
+**_NOTE:_** HMRC files are not included in this repository for licencing reasons.
+
+The static file api has the following structure:
+
+/api/`{reporter}`/`{partner}`/`{year}`/`{commodity}`/data.csv
+
+Values can be:
+
+| field     | values                                                         |
+| --------- | -------------------------------------------------------------- |
+| reporter  | A value from the `reporters` dictionary (see below)            |
+| partner   | A value from the `partners` dictionary (see below) or `"all"`  |
+| year      | A year value (2013-2017) or `"all"`                            |
+| commodity | An SITC1 value or SITC2 value or `"all"`                       |
+
+**_NOTE:_** wide queries (e.g. `/api/EA/all/all/all/data.csv`) are supporded but will return larger files.
+
+### Data dictionaries
+
+Data dictionaries for reporters, partners, years, commodities are stored in the [`data`](data) sub-folder.
+
+#### Reporters [(nuts1)](https://en.wikipedia.org/wiki/NUTS_1_statistical_regions_of_England)
+
+See/edit [`reporters.json`](data/reporters.json).
+
+There are 12 reporters:
+
+| nuts1 | name                     |
+| ----- | ------------------------ |
+| EA    | East                     |
+| EM    | East Midlands            |
+| LO    | London                   |
+| NE    | North East               |
+| NI    | Northern Ireland         |
+| NW    | North West               |
+| SC    | Scotland                 |
+| SE    | South East               |
+| SW    | South West               |
+| WA    | Wales                    |
+| WM    | West Midlands            |
+| YH    | Yorkshire and the Humber |
+| ZA    | Unallocated-Known        |
+| ZB    | Unallocated-Unknown      |
+
+#### Partners (codalpha or labarea: 119 values)
+
+There are 119 partners which can be identified by:
+
+- `codalpha` a two letter code identifying the indivudual country (codes starting with `#` as well as `QS` and `QR` are aggregates and are therefore excluded)
+- `labarea` a single letter code (`A-J`) identifying a geographic or political region.
+
+The json object will contain for each country the labarea that it belongs to and the numerical ISO id that identifies the country in the choropleth.
+
+See/edit [`partners.json`](data/partners.json).
+
+#### Years (5 values)
+
+See/edit [`years.json`](data/years.json).
+
+There is curently data for 5 years (from 2013 to 2017). Edit if other data is added.
+
+#### Commodities (77 values)
+
+See/edit [`commodities.json`](data/commodities.json).
+
+There are 10 classifications in SITC1 (0-9) and 67 classifications in SITC2 (00-98) for a total of 77 values.
+
+## Filters and behaviours
+
+| Rep   | Part  | Comm  | Year  | Choropleth / InfoBox      | Year linechart            | Markets rowCharts | Commodities rowCharts |
+| :---: | :---: | :---: | :---: | ------------------------- | ------------------------- | ----------------- | --------------------- |
+| X     | -     | -     | X     | rep to world for all sitc | rep to world for all sitc |                   |                       |
+| X     | X     | -     | X     | rep to part               | rep to part               |                   |                       |
+| X     | -     | X     | X     | rep to world for sitc     | rep to world for sitc     |                   |                       |
+| X     | X     | X     | X     | rep to part for sitc      | rep to part for sitc      |                   |                       |
