@@ -6,6 +6,9 @@ import $ from 'jquery';
 
 const introJs = require('intro.js');
 
+const intro = introJs();
+const introCookie = document.cookie.replace(/(?:(?:^|.*;\s*)introDone\s*=\s*([^;]*).*$)|^.*$/, '$1');
+
 const steps = [
   // 01. Welcome & description
   {
@@ -87,60 +90,56 @@ const steps = [
   }
 ];
 
+function preventScroll(event) {
+  const code = event.keyCode || event.which;
+  if (['wheel', 'mousewheel', 'DOMMouseScroll'].indexOf(event.type) > -1 || [32, 33, 34, 35, 36, 38, 40].indexOf(code) > -1) {
+    event.preventDefault();
+  }
+}
+function disableScroll() {
+  $(window).on('mousewheel.trademap DOMMouseScroll.trademap keydown.trademap', preventScroll);
+}
+function enableScroll() {
+  $(window).off('mousewheel.trademap DOMMouseScroll.trademap keydown.trademap');
+}
+function scrollToElement(target) {
+  let topOffset = Math.max(0, $(target).offset().top - ($(window).height() / 2));
+  // Exceptions:
+  if (target.id === 'feedback-tab') {
+    topOffset = 0;
+  }
+  if (target.id === 'infoBox') {
+    topOffset = 0;
+    $('#infoBox').css('top', `${$(window).height() - $('#infoBox').height() - 10}px`);
+  }
+  $('html, body').animate({
+    scrollTop: topOffset
+  }, 500);
+}
+function setCookie() {
+  document.cookie = 'introDone=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/';
+}
+function startIntro() {
+  $('html, body').animate({
+    scrollTop: 0
+  }, 500);
+  disableScroll();
+  intro.start();
+}
+function startIntroAfterLoad(event) {
+  if (event.queryCount === 0) {
+    startIntro();
+    window.removeEventListener('queryQueueUpdate', startIntroAfterLoad, false);
+  }
+}
+function finishIntro() {
+  enableScroll();
+  setCookie();
+}
+
 export default {
 
   setup(urlParameters) {
-    // Setup intro and utility functions
-    const intro = introJs();
-    const introCookie = document.cookie.replace(/(?:(?:^|.*;\s*)introDone\s*=\s*([^;]*).*$)|^.*$/, '$1');
-
-    function preventScroll(event) {
-      const code = event.keyCode || event.which;
-      if (['wheel', 'mousewheel', 'DOMMouseScroll'].indexOf(event.type) > -1 || [32, 33, 34, 35, 36, 38, 40].indexOf(code) > -1) {
-        event.preventDefault();
-      }
-    }
-    function disableScroll() {
-      $(window).on('mousewheel.trademap DOMMouseScroll.trademap keydown.trademap', preventScroll);
-    }
-    function enableScroll() {
-      $(window).off('mousewheel.trademap DOMMouseScroll.trademap keydown.trademap');
-    }
-    function scrollToElement(target) {
-      let topOffset = Math.max(0, $(target).offset().top - ($(window).height() / 2));
-      // Exceptions:
-      if (target.id === 'feedback-tab') {
-        topOffset = 0;
-      }
-      if (target.id === 'infoBox') {
-        topOffset = 0;
-        $('#infoBox').css('top', `${$(window).height() - $('#infoBox').height() - 10}px`);
-      }
-      $('html, body').animate({
-        scrollTop: topOffset
-      }, 500);
-    }
-    function setCookie() {
-      document.cookie = 'introDone=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/';
-    }
-    function startIntro() {
-      $('html, body').animate({
-        scrollTop: 0
-      }, 500);
-      disableScroll();
-      intro.start();
-    }
-    function startIntroAfterLoad(event) {
-      if (event.queryCount === 0) {
-        startIntro();
-        window.removeEventListener('queryQueueUpdate', startIntroAfterLoad, false);
-      }
-    }
-    function finishIntro() {
-      enableScroll();
-      setCookie();
-    }
-
     // Configure introjs
     intro.setOptions({
       skipLabel: '<span class="glyphicon glyphicon-remove"></span>',
