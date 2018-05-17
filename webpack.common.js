@@ -7,7 +7,7 @@ const webpack = require('webpack');
 const packageJson = require('./package.json');
 const child = require('child_process');
 
-const devMode = process.env.NODE_ENV !== 'production';
+// const devMode = process.env.NODE_ENV !== 'production';
 
 let commitHash = 'Unknown commit';
 try {
@@ -23,9 +23,10 @@ const project = (process.env.PROJECT || 'nisra').trim();
 module.exports = {
   entry: path.resolve(__dirname, 'src', project, 'app.js'),
   output: {
-    filename: 'bundle.js',
+    filename: 'main.bundle.js',
     path: path.resolve(__dirname, 'dist', project)
   },
+  target: 'web',
   module: {
     rules: [
       {
@@ -46,7 +47,7 @@ module.exports = {
       {
         test: /\.(scss)$/,
         use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -140,14 +141,14 @@ module.exports = {
     ]
   },
   resolve: {
+    mainFields: ['browser', 'module', 'main'],
     alias: {
       modernizr$: path.resolve(__dirname, '.modernizrrc')
     }
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: devMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      filename: 'styles.css'
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',

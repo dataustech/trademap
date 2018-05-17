@@ -1,27 +1,28 @@
 {
   "name": "trademap",
   "version": "1.1.0",
+  "author": "Francesco Merletti (me@fm.to.it)",
   "description": "Trade map visualization",
-  "scripts": {
-    "clean:comtrade": "rimraf dist/comtrade*",
-    "build:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack  --progress --mode=production --display-error-details --config webpack.prod.js",
-    "start:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack-dev-server --mode=development --config webpack.dev.js",
-    "preprocess:nisra": "set project=nisra && node scripts/nisra/api-processor.js",
-    "clean:nisra": "rimraf dist/nisra*",
-    "build:nisra": "cross-env PROJECT=nisra webpack --progress --mode=production --display-error-details --config webpack.prod.js",
-    "start:nisra": "npm run clean:nisra && cross-env PROJECT=nisra npm run preprocess:nisra && webpack-dev-server --mode=development --config webpack.dev.js",
-    "start": "npm run start:comtrade"
+  "homepage": "https://github.com/mjs2020/trademap",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mjs2020/trademap/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mjs2020/trademap.git"
   },
-  "author": "Francesco Merletti (me@fm.to.it)",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/mjs2020/trademap/issues"
+  "sideEffects": false,
+  "scripts": {
+    "clean:comtrade": "rimraf dist/comtrade*",
+    "build:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack --progress --mode=production --display-error-details --config webpack.prod.js",
+    "start:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack-dev-server --mode=production --config webpack.dev.js",
+    "preprocess:nisra": "set project=nisra && node scripts/nisra/api-processor.js",
+    "clean:nisra": "rimraf dist/nisra*",
+    "build:nisra": "cross-env PROJECT=nisra webpack --progress --mode=production --display-error-details --config webpack.prod.js",
+    "start:nisra": "npm run clean:nisra && cross-env PROJECT=nisra npm run preprocess:nisra && webpack-dev-server --mode=production --config webpack.dev.js",
+    "start": "npm run start:comtrade"
   },
-  "homepage": "https://github.com/mjs2020/trademap",
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.40",
     "@babel/preset-env": "^7.0.0-beta.40",

@@ -7,21 +7,13 @@ const project = (process.env.PROJECT || 'nisra').trim();
 
 const projectConfigs = {
   nisra: {
-    // TODO remove this later
     devServer: {
       contentBase: path.join(__dirname, 'dist', 'nisra'),
-      proxy: {
-        '/api': {
-          target: 'https://comtrade.un.org',
-          secure: false,
-          changeOrigin: true
-        }
-      }
     }
   },
   comtrade: {
     devServer: {
-      contentBase: path.join(__dirname, 'dist', 'nisra'),
+      contentBase: path.join(__dirname, 'dist', 'comtrade'),
       proxy: {
         '/api': {
           target: 'https://comtrade.un.org',
