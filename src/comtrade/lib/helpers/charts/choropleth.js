@@ -18,18 +18,25 @@ const $chartTitle = $('#choroplethTitle .chartTitle');
 // SVG main properties
 const height = 720;
 const width = 1280;
-const svg = d3.select('#choropleth .chart')
-  .append('svg')
-  .classed('choropleth', true)
-  .classed('svgChart', true)
-  .attr('version', 1.1)
-  .attr('xmlns', 'http://www.w3.org/2000/svg')
-  .attr('id', 'choroplethSvg')
-  .attr('viewBox', `0 0 ${width} ${height}`)
-  .attr('preserveAspectRatio', 'xMidYMid meet');
+let svg;
+
+function resizeSvg() {
+  svg.attr('width', $chart.width())
+    .attr('height', '100%');
+}
 
 const chart = {
   setup(callback) {
+    svg = d3.select('#choropleth .chart')
+      .append('svg')
+      .classed('choropleth', true)
+      .classed('svgChart', true)
+      .attr('version', 1.1)
+      .attr('xmlns', 'http://www.w3.org/2000/svg')
+      .attr('id', 'choroplethSvg')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
     // Display the choropleth (which is otherwise hidden)
     $chart.show();
 
@@ -39,19 +46,15 @@ const chart = {
     // Some utility functions:
     const projection = geoKavrayskiy7()
       .scale(230)
-      .translate([(width / 2) + 50, (height / 2)])
-      .precision(+'.1');
+      .translate([(width / 2), (height / 2)])
+      .precision(0.1);
     const path = geoPath()
       .projection(projection);
-    const resizeSvg = () => {
-      svg.attr('width', $chart.width())
-        .attr('height', $chart.height());
-    };
 
     // Sized the SVG and bind the resize function to the
     // window resize event to make the map responsive
-    resizeSvg();
     d3.select(window).on('resize', resizeSvg);
+    resizeSvg();
 
     // Define sphere boundary
     svg.append('defs').append('path')
@@ -103,6 +106,9 @@ const chart = {
   },
 
   refresh(event, filters) {
+    // force a resize on refresh
+    resizeSvg();
+
     const queryFilter = {
       reporter: +filters.reporter,
       partner: 'all',
