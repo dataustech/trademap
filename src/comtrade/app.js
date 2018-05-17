@@ -28,6 +28,7 @@ import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 import './sass/main.scss';
 
 // javascript libs
+import $ from 'jquery';
 import 'bootstrap';
 
 // javascript app
@@ -36,4 +37,4 @@ import main from './lib/main';
 // version
 console.log(`${__PROJECT__} trademap: version ${__VERSION__} commit: ${__COMMIT_LINK__}`);
 
-main();
+$(document).ready(() => main());

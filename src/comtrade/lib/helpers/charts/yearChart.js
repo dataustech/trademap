@@ -25,9 +25,9 @@ const svg = d3.select('#yearChart .chart')
 const margin = {
   top: 25, right: 15, bottom: 75, left: 70
 };
-const height = $chart.height();
+let height = $chart.height();
 let width = $chart.width();
-const innerHeight = height - margin.top - margin.bottom;
+let innerHeight = height - margin.top - margin.bottom;
 let innerWidth = width - margin.left - margin.right;
 
 // Chart main objects
@@ -89,6 +89,9 @@ const chart = {
 
 
   refresh(event, filters) {
+    // force resize on refresh
+    chart.resizeSvg();
+
     // CASE 1: reporter = null
     if (!filters.reporter) {
       $container.slideUp();
@@ -171,6 +174,9 @@ const chart = {
 
 
   draw(newData) {
+    // force resize on drawing
+    chart.resizeSvg();
+
     // If no data is available display a "No data available" message.
     if (newData.length === 0) {
       svg.append('text')
@@ -309,24 +315,35 @@ const chart = {
   resizeSvg() {
     // Get new size & set new size to svg element
     width = $chart.width();
-    svg.attr('width', width);
+    height = $chart.height();
+    svg.attr('width', width)
+      .attr('height', height);
     // Update xScale
     innerWidth = width - margin.left - margin.right;
+    innerHeight = height - margin.top - margin.bottom;
     xScale.range([0, innerWidth]);
+    yScale.range([innerHeight, 0]);
     xAxis.scale(xScale);
-    // Redraw x axis
+    yAxis.scale(yScale);
+    // Redraw axises
     svg.select('.x.axis') // change the x axis
       .transition()
+      .attr('transform', `translate(${margin.left},${margin.top + innerHeight})`)
       .call(xAxis);
+    svg.select('.y.axis') // change the x axis
+      .transition()
+      .call(yAxis);
     // Move legend
     svg.select('g.legend')
       .attr('transform', `translate(${innerWidth + margin.left - (chart.colors[0].length * 120)},0)`);
     // Move dots
     svg.selectAll('circle.dot')
       .transition()
-      .attr('cx', d => xScale(d.year));
+      .attr('cx', d => xScale(d.year))
+      .attr('cy', d => yScale(d.value));
     // Update line paths
     line.x(d => xScale(d.year));
+    line.y(d => yScale(d.value));
     svg.selectAll('path.flow')
       .transition()
       .attr('d', d => line(d.values));
