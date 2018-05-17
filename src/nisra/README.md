@@ -43,14 +43,8 @@ Praparing data for consumption by the data visualisation requires the following 
 - Values should be aggregated from quarterly to yearly data.
 - Aggregated totals should be computed as shown in the table below.
 - Bilateral trade (imports + exports) and trade balance (exports - imports) are computed for each record (including aggregated totals).
-- (TODO) % of total exports/imports should be computed for each partner-reporter
-- (TODO) Ranking should be computed for partners for import, export, bilateral and balance (including aggregated totals).
-
-
-Given a REPORTER and a PARTNER(codalpha) find all other PARTNERs(codalpha)
-Given a REPORTER and a PARTNER(labarea) find all other PARTNERs(labarea)
-
-
+- % of total exports/imports should be computed for each partner-reporter at both labarea/codalpha level and sitc1/sitc2 level.
+- Ranking should be computed for partners for import, export, bilateral and balance (including aggregated totals).
 
 The aggregated totals should map to the following **aggregation levels** which respond to the following queries:
 
@@ -93,7 +87,7 @@ Values can be:
 
 ### Data dictionaries
 
-Data dictionaries for reporters, partners, years, commodities are stored in the [`data`](data) sub-folder.
+Data dictionaries for [`reporters`](data/reporters.json), [`partners`](data/partners.json), [`years`](data/years.json), [`commodities`](data/commodities.json) are stored in the [`data`](data) sub-folder.
 
 #### Reporters [(nuts1)](https://en.wikipedia.org/wiki/NUTS_1_statistical_regions_of_England)
 
@@ -143,9 +137,11 @@ There are 10 classifications in SITC1 (0-9) and 67 classifications in SITC2 (00-
 
 ## Filters and behaviours
 
+The following table represents the behaviours of the charts in response to specific filters. `X` markes a filter for which a selection is present while `-` markes an unselected filter. Reporter and year are always selected.
+
 | Rep   | Part  | Comm  | Year  | Choropleth / InfoBox      | Year linechart            | Markets rowCharts | Commodities rowCharts |
 | :---: | :---: | :---: | :---: | ------------------------- | ------------------------- | ----------------- | --------------------- |
-| X     | -     | -     | X     | rep to world for all sitc | rep to world for all sitc |                   |                       |
-| X     | X     | -     | X     | rep to part               | rep to part               |                   |                       |
-| X     | -     | X     | X     | rep to world for sitc     | rep to world for sitc     |                   |                       |
-| X     | X     | X     | X     | rep to part for sitc      | rep to part for sitc      |                   |                       |
+| `X`   | `-`   | `-`   | `X`   | rep to world for all sitc | rep to world for all sitc | shown             | shown                 |
+| `X`   | `X`   | `-`   | `X`   | rep to world for all sitc | rep to part for all sitc  | hidden            | shown                 |
+| `X`   | `-`   | `X`   | `X`   | rep to world for sitc     | rep to world for sitc     | shown             | hidden                |
+| `X`   | `X`   | `X`   | `X`   | rep to world for sitc     | rep to part for sitc      | hidden            | hidden                |
