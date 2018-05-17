@@ -155,4 +155,10 @@ function computeRanksAndPercentages(records, commodityType) {
     });
 }
 
-module.exports = { toCsv, extractRows, addRecordToData, computeRanksAndPercentages };
+function printProgress(message) {
+  process.stdout.clearLine();
+  process.stdout.cursorTo(0);
+  process.stdout.write(message);
+}
+
+module.exports = { toCsv, extractRows, addRecordToData, computeRanksAndPercentages, printProgress };
