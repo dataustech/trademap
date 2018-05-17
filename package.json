@@ -3,14 +3,14 @@
   "version": "1.1.0",
   "description": "Trade map visualization",
   "scripts": {
-    "build:nisra": "cross-env PROJECT=\"nisra\" npm run clean:nisra && npm run preprocess:nisra && webpack --progress --display-error-details --config webpack.prod.js",
-    "build:comtrade": "cross-env PROJECT=\"comtrade\" npm run clean:nisra && npm run preprocess:comtrade &&  webpack  --progress --display-error-details --config webpack.prod.js",
-    "clean:nisra": "rimraf dist/nisra*",
     "clean:comtrade": "rimraf dist/comtrade*",
-    "preprocess:nisra": "set project=nisra && node scripts/preprocess.nisra.js",
-    "preprocess:comtrade": "set project=comtrade && node scripts/preprocess.comtrade.js",
-    "start:nisra": "cross-env PROJECT=\"nisra\" npm run clean:nisra && npm run preprocess:nisra && webpack-dev-server --config webpack.dev.js",
-    "start:comtrade": "cross-env PROJECT=\"comtrade\" npm run clean:comtrade && npm run preprocess:comtrade && webpack-dev-server --config webpack.dev.js"
+    "build:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack  --progress --display-error-details --config webpack.prod.js",
+    "start:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack-dev-server --config webpack.dev.js",
+    "preprocess:nisra": "set project=nisra && node scripts/nisra/api-processor.js",
+    "clean:nisra": "rimraf dist/nisra*",
+    "build:nisra": "cross-env PROJECT=nisra webpack --progress --display-error-details --config webpack.prod.js",
+    "start:nisra": "npm run clean:nisra && cross-env PROJECT=nisra npm run preprocess:nisra && webpack-dev-server --config webpack.dev.js",
+    "start": "npm run start:comtrade"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "@babel/preset-env": "^7.0.0-beta.40",
     "autoprefixer": "^8.0.0",
     "babel-loader": "^8.0.0-beta.0",
+    "bluebird": "^3.5.1",
     "cross-env": "^5.1.4",
     "css-loader": "^0.28.10",
     "eslint": "^4.9.0",
