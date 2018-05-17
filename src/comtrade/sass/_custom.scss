@@ -70,7 +70,7 @@ nav.navbar {
   border-top: 1px solid #054D82;
 }
 /* The folowing media query makes the menu collapse on screen sizes less than 768px
- * See http://stackoverflow.com/a/20249415 */
+* See http://stackoverflow.com/a/20249415 */
 #footer p.licence {
   padding: 3em 2em 0 0;
 }
@@ -152,8 +152,8 @@ p.navbar-text {
 
 
 /*
- * IE STYLES
- */
+* IE STYLES
+*/
 body.no-fontsupport .glyphicon:before {
   font-family: 'Arial';
 }
@@ -173,8 +173,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- * STYLES FOR CONTROLS
- */
+* STYLES FOR CONTROLS
+*/
 #controls {
   padding: 0 15px;
 }
@@ -191,11 +191,12 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   font-size: 14px;
   z-index: 1;
 }
-#s2id_selectPartner {
+#selectPartnerContainer {
+  padding-left: 38px;
   position: absolute;
   top: 0;
   left: 0;
-  padding-left: 38px;
+  width: 100%;
   z-index: 0;
 }
 #s2id_selectPartner .select2-chosen::before {
@@ -209,11 +210,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 .clearBtnWrapper .btn {
   width: 100%;
 }
-/* 
+/*
 .btn-xs {
   background-color: #3aa9f8;
 }
- */
+*/
 #clearFilters {
   font-size: 14px;
 }
@@ -235,10 +236,10 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   color: #054D82;
 }
 /*
- * The following media query changes the gutter size between cols to be a bit slimmer
- * See http://stackoverflow.com/a/19179407
- * And also set the upper padding for the fullscreen pages
- * */
+* The following media query changes the gutter size between cols to be a bit slimmer
+* See http://stackoverflow.com/a/19179407
+* And also set the upper padding for the fullscreen pages
+* */
 @media (max-width: 768px) {
   #main,
   #charts {
@@ -294,8 +295,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- * STYLES FOR THE INFOBOX
- */
+* STYLES FOR THE INFOBOX
+*/
 #infoBox {
   position: absolute;
   height: 18em;
@@ -329,8 +330,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- * STYLES FOR THE CHOROPLETH
- */
+* STYLES FOR THE CHOROPLETH
+*/
 #choropleth {
   height: 100%;
   position: relative;
@@ -355,7 +356,6 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #choroplethTitle div.chartTitle {
   float: none;
   display: inline;
-  margin-top: 0;
   background-color: #fff;
 }
 #flowButtons {
@@ -415,8 +415,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- * STYLES FOR LINE AND BAR CHARTS
- */
+* STYLES FOR LINE AND BAR CHARTS
+*/
 .chartTitle {
   display: block;
   color: #054D82;
@@ -454,8 +454,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- * STYLES FOR TOOLTIP
- */
+* STYLES FOR TOOLTIP
+*/
 .d3-tip {
   line-height: 1;
   font-size: 11px;
@@ -471,7 +471,6 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   box-sizing: border-box;
   display: inline;
   font-size: 10px;
-  width: 100%;
   line-height: 1;
   color: rgba(0, 0, 0, 0.8);
   position: absolute;
@@ -506,8 +505,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- *  ADJUSTMENTS FOR EMBEDDED CHARTS
- */
+*  ADJUSTMENTS FOR EMBEDDED CHARTS
+*/
 .embed #main {
   padding-top: 0;
   margin-top: 0;
@@ -574,8 +573,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- *  Intro.js styles
- */
+*  Intro.js styles
+*/
 .introjs-helperNumberLayer {
   line-height: 15px;
   padding: 0;
@@ -603,8 +602,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 
 
 /*
- *  Cookies policy styles
- */
+*  Cookies policy styles
+*/
 .cookies table th,
 .cookies table td {
   vertical-align: top;
