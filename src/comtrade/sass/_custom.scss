@@ -189,7 +189,16 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #switchPartners {
   position: relative;
   font-size: 14px;
-  z-index: 1;
+  z-index: 10000000;
+}
+#selectTypeContainer {
+  z-index: 9999999;
+}
+#selectCommodityContainer {
+  z-index: 9999999;
+}
+#selectReporterContainer {
+  z-index: 9999999;
 }
 #selectPartnerContainer {
   padding-left: 38px;
@@ -197,7 +206,7 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 0;
+  z-index: 9999999;
 }
 #s2id_selectPartner .select2-chosen::before {
   font-size: 0.9em;
@@ -599,6 +608,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 .introjs-button.introjs-nextbutton.introjs-disabled {
   display: none;
 }
+.introjs-bottom-left-aligned {
+  margin-left: 35px;
+}
+// Fix z-index issue. See https://github.com/usablica/intro.js/issues/109
+.introjs-fixParent{position: absolute !important;}
 
 
 /*

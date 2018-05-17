@@ -80,9 +80,7 @@ const steps = [
   },
   // 12. Feeback
   {
-    element: document.querySelector('#feedback-tab'),
-    intro: "When you're done we'd really appreciate your thoughts on the visualization.",
-    position: 'left'
+    intro: "When you're done we'd really appreciate your thoughts on the visualization."
   },
   // 13. Goodbye
   {
