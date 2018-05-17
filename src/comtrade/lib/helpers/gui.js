@@ -25,9 +25,9 @@ export default {
     // ADD CHEVRON BUTTON BEHAVIOURS (As well as go to footer)
     $('#goToCharts a, #goToMap a').tooltip();
     $('.titleDropdown button').tooltip();
-    $('#goToCharts a, #goToMap a, #goToFooter').on('click', (e) => {
-      e.preventDefault();
-      const { hash } = this;
+    $('#goToCharts a, #goToMap a, #goToFooter').on('click', (event) => {
+      event.preventDefault();
+      const { hash } = event.currentTarget;
       $('html, body').animate({
         scrollTop: $(hash).offset().top
       }, 1000);
