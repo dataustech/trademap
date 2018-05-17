@@ -1,11 +1,13 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const packageJson = require('./package.json');
 const child = require('child_process');
+
+const devMode = process.env.NODE_ENV !== 'production';
 
 let commitHash = 'Unknown commit';
 try {
@@ -43,33 +45,31 @@ module.exports = {
       },
       {
         test: /\.(scss)$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-                plugins() {
-                  return [precss, autoprefixer];
-                }
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true
+        use: [
+          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: true,
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              plugins() {
+                return [precss, autoprefixer];
               }
             }
-          ]
-        })
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
       },
       {
         test: /\.html$/,
@@ -83,6 +83,7 @@ module.exports = {
           },
           {
             loader: 'extract-loader',
+            options: { publicPath: '' }
           },
           {
             loader: 'html-loader',
@@ -144,7 +145,10 @@ module.exports = {
     }
   },
   plugins: [
-    new ExtractTextPlugin('styles.css'),
+    new MiniCssExtractPlugin({
+      filename: devMode ? '[name].css' : '[name].[hash].css',
+      chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
