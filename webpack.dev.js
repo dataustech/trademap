@@ -41,6 +41,7 @@ module.exports = merge(common, {
   },
   devServer: {
     compress: true,
+    disableHostCheck: true,
     port: 9000
   }
 }, projectConfigs[project]);

@@ -5,9 +5,14 @@ const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const packageJson = require('./package.json');
-const commitHash = require('child_process')
-  .execSync('git rev-parse HEAD')
-  .toString();
+const child = require('child_process');
+
+let commitHash = 'Unknown commit';
+try {
+  commitHash = child.execSync('git rev-parse HEAD').toString();
+} catch (err) {
+  console.log(`Could not get commit hash. Got error: ${err}`);
+}
 
 const commitLink = `${packageJson.homepage}/commit/${commitHash}`;
 
