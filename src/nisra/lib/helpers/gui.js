@@ -25,9 +25,9 @@ export default {
     // ADD CHEVRON BUTTON BEHAVIOURS (As well as go to footer)
     $('#goToCharts a, #goToMap a').tooltip();
     $('.titleDropdown button').tooltip();
-    $('#goToCharts a, #goToMap a, #goToFooter').on('click', (e) => {
-      e.preventDefault();
-      const { hash } = this;
+    $('#goToCharts a, #goToMap a, #goToFooter').on('click', (event) => {
+      event.preventDefault();
+      const { hash } = event.currentTarget;
       $('html, body').animate({
         scrollTop: $(hash).offset().top
       }, 1000);
@@ -165,7 +165,7 @@ export default {
     }
 
     // ADD EMBED GRAPH BUTTON BEHAVIOURS
-    $('a.embedSvg').on('click', (e) => {
+    $('a.embedSvg').on('click', function embed(e) {
       e.preventDefault();
       $('#myModal #myModalLabel').html('Embed this chart');
       $('#myModal .modal-body').html(`${'<p>Copy and paste the following code:</p>'
@@ -179,7 +179,7 @@ export default {
 
 
     // BEHAVIOUR TO CLEAN MODAL CONTENTS ON HIDE
-    $('body').on('hidden.bs.modal', '.modal', () => {
+    $('body').on('hidden.bs.modal', '.modal', function cleanup() {
       $(this).removeData('bs.modal');
     });
   },

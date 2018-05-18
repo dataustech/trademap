@@ -171,9 +171,9 @@ const box = {
           `(${details.exportPc.toFixed(1)}% of ${reporterName} exports) `,
           `and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName} `,
           `(${details.importPc.toFixed(1)}% of ${reporterName} imports)`
-        ].join();
+        ].join('');
       } catch (err) {
-        ranking = [`${partnerName} was the ${data.numOrdinal(details.exportRank)} largest export market for ${reporterName}  and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName}.`].join();
+        ranking = [`${partnerName} was the ${data.numOrdinal(details.exportRank)} largest export market for ${reporterName} and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName}.`].join();
       }
       if (details.commodity && details.commodity !== 'TOTAL') {
         ranking += ` for ${data.commodityName(details.commodity, details.type)}`;

@@ -25,9 +25,9 @@ const svg = d3.select('#yearChart .chart')
 const margin = {
   top: 25, right: 15, bottom: 75, left: 70
 };
-const height = $chart.height();
+let height = $chart.height();
 let width = $chart.width();
-const innerHeight = height - margin.top - margin.bottom;
+let innerHeight = height - margin.top - margin.bottom;
 let innerWidth = width - margin.left - margin.right;
 
 // Chart main objects
@@ -89,6 +89,9 @@ const chart = {
 
 
   refresh(event, filters) {
+    // force resize on refresh
+    chart.resizeSvg();
+
     // CASE 1: reporter = null
     if (!filters.reporter) {
       $container.slideUp();
@@ -185,7 +188,6 @@ const chart = {
     }
     svg.selectAll('.nodata').remove();
 
-
     // Prepare data
     const nestedData = d3.nest()
       .key(d => d.flow)
@@ -264,9 +266,9 @@ const chart = {
       .attr('class', 'flow')
       .style('stroke', d => chart.colors[0][d.key - 1])
       .style('fill', 'none')
-      .style('stroke-width', '1.5px');
-    // Transition to new path layout
-    lines.transition()
+      .style('stroke-width', '1.5px')
+      .merge(lines)
+      .transition()
       .attr('d', d => line(d.values));
 
     // Add dots in groups
@@ -275,12 +277,16 @@ const chart = {
     dotGroups.enter()
       .append('g')
       .attr('class', 'flow');
-    const dots = dotGroups.selectAll('circle.dot')
+    dotGroups.exit().remove();
+    const dots = plotGraph.selectAll('g.flow').selectAll('circle.dot')
       .data(d => d.values);
+
     dots.enter()
       .append('circle')
       .attr('class', 'dot')
       .attr('r', '3')
+      .attr('cx', d => xScale(d.year))
+      .attr('cy', d => yScale(d.value))
       .style('fill', d => chart.colors[0][d.flow - 1])
       .style('stroke-width', '0')
       .on('mouseover', (d) => {
@@ -298,6 +304,7 @@ const chart = {
     dots.transition()
       .attr('cx', d => xScale(d.year))
       .attr('cy', d => yScale(d.value));
+
     // Remove unneeded dots
     dots.exit().remove();
 
@@ -308,25 +315,36 @@ const chart = {
 
   resizeSvg() {
     // Get new size & set new size to svg element
-    width = $chart.width();
-    svg.attr('width', width);
-    // Update xScale
+    width = $chart.width() || $container.width();
+    height = $chart.height();
+    svg.attr('width', width)
+      .attr('height', height);
+    // Update scales
     innerWidth = width - margin.left - margin.right;
+    innerHeight = height - margin.top - margin.bottom;
     xScale.range([0, innerWidth]);
+    yScale.range([innerHeight, 0]);
     xAxis.scale(xScale);
-    // Redraw x axis
+    yAxis.scale(yScale);
+    // Redraw axises
     svg.select('.x.axis') // change the x axis
       .transition()
+      .attr('transform', `translate(${margin.left},${margin.top + innerHeight})`)
       .call(xAxis);
+    svg.select('.y.axis') // change the x axis
+      .transition()
+      .call(yAxis);
     // Move legend
     svg.select('g.legend')
       .attr('transform', `translate(${innerWidth + margin.left - (chart.colors[0].length * 120)},0)`);
     // Move dots
     svg.selectAll('circle.dot')
       .transition()
-      .attr('cx', d => xScale(d.year));
+      .attr('cx', d => xScale(d.year))
+      .attr('cy', d => yScale(d.value));
     // Update line paths
     line.x(d => xScale(d.year));
+    line.y(d => yScale(d.value));
     svg.selectAll('path.flow')
       .transition()
       .attr('d', d => line(d.values));

@@ -189,7 +189,16 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #switchPartners {
   position: relative;
   font-size: 14px;
-  z-index: 1;
+  z-index: 10000000;
+}
+#selectTypeContainer {
+  z-index: 9999999;
+}
+#selectCommodityContainer {
+  z-index: 9999999;
+}
+#selectReporterContainer {
+  z-index: 9999999;
 }
 #selectPartnerContainer {
   padding-left: 38px;
@@ -197,7 +206,7 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 0;
+  z-index: 9999999;
 }
 #s2id_selectPartner .select2-chosen::before {
   font-size: 0.9em;
@@ -334,8 +343,15 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 */
 #choropleth {
   height: 100%;
+  max-height: 100%;
+  overflow: hidden;
   position: relative;
   top: 0;
+  div.chart {
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
 }
 #choroplethTitle {
   position: absolute;
@@ -441,6 +457,7 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   margin-top: 0;
 }
 #yearChart .chart {
+  width: 100%;
   height: 19em;
 }
 #topExportCommodities,
@@ -471,9 +488,12 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   box-sizing: border-box;
   display: inline;
   font-size: 10px;
+  width: 100%;
   line-height: 1;
   color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
   position: absolute;
+  text-align: center;
   pointer-events: none;
 }
 .d3-tip.n:after {
@@ -599,6 +619,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 .introjs-button.introjs-nextbutton.introjs-disabled {
   display: none;
 }
+.introjs-bottom-left-aligned {
+  margin-left: 35px;
+}
+// Fix z-index issue. See https://github.com/usablica/intro.js/issues/109
+.introjs-fixParent{position: absolute !important;}
 
 
 /*
