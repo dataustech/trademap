@@ -277,8 +277,10 @@ const chart = {
     dotGroups.enter()
       .append('g')
       .attr('class', 'flow');
-    const dots = dotGroups.enter().merge(dotGroups).selectAll('circle.dot')
+    dotGroups.exit().remove();
+    const dots = plotGraph.selectAll('g.flow').selectAll('circle.dot')
       .data(d => d.values);
+
     dots.enter()
       .append('circle')
       .attr('class', 'dot')
@@ -302,6 +304,7 @@ const chart = {
     dots.transition()
       .attr('cx', d => xScale(d.year))
       .attr('cy', d => yScale(d.value));
+
     // Remove unneeded dots
     dots.exit().remove();
 
