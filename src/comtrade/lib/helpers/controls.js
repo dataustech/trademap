@@ -250,17 +250,19 @@ const controls = {
   },
 
   decodeURL() {
+    let queryString;
+    const filters = {};
     try {
-      const filters = {};
       const state = window.history.getState();
-      state.hash.split('?', 2)[1].split('&').forEach((param) => {
-        const p = param.replace(/%20|\+/g, ' ').split('=');
-        filters[decodeURIComponent(p[0])] = (p[1] ? decodeURIComponent(p[1]) : undefined);
-      });
-      if (filters.year) { filters.year = +filters.year; } return filters;
+      [, queryString] = state.hash.split('?', 2);
     } catch (err) {
-      return {};
+      queryString = window.location.search.substring(1);
     }
+    queryString.split('&').forEach((param) => {
+      const p = param.replace(/%20|\+/g, ' ').split('=');
+      filters[decodeURIComponent(p[0])] = (p[1] ? decodeURIComponent(p[1]) : undefined);
+    });
+    if (filters.year) { filters.year = +filters.year; } return filters;
   },
 
   updateURL(filters) {

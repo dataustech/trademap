@@ -188,7 +188,6 @@ const chart = {
     }
     svg.selectAll('.nodata').remove();
 
-
     // Prepare data
     const nestedData = d3.nest()
       .key(d => d.flow)
@@ -267,9 +266,9 @@ const chart = {
       .attr('class', 'flow')
       .style('stroke', d => chart.colors[0][d.key - 1])
       .style('fill', 'none')
-      .style('stroke-width', '1.5px');
-    // Transition to new path layout
-    lines.transition()
+      .style('stroke-width', '1.5px')
+      .merge(lines)
+      .transition()
       .attr('d', d => line(d.values));
 
     // Add dots in groups
@@ -278,7 +277,7 @@ const chart = {
     dotGroups.enter()
       .append('g')
       .attr('class', 'flow');
-    const dots = dotGroups.selectAll('circle.dot')
+    const dots = dotGroups.enter().merge(dotGroups).selectAll('circle.dot')
       .data(d => d.values);
     dots.enter()
       .append('circle')

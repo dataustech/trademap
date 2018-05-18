@@ -165,7 +165,7 @@ export default {
     }
 
     // ADD EMBED GRAPH BUTTON BEHAVIOURS
-    $('a.embedSvg').on('click', (e) => {
+    $('a.embedSvg').on('click', function embed(e) {
       e.preventDefault();
       $('#myModal #myModalLabel').html('Embed this chart');
       $('#myModal .modal-body').html(`${'<p>Copy and paste the following code:</p>'
@@ -179,7 +179,7 @@ export default {
 
 
     // BEHAVIOUR TO CLEAN MODAL CONTENTS ON HIDE
-    $('body').on('hidden.bs.modal', '.modal', () => {
+    $('body').on('hidden.bs.modal', '.modal', function cleanup() {
       $(this).removeData('bs.modal');
     });
   },
