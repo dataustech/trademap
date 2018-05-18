@@ -174,9 +174,6 @@ const chart = {
 
 
   draw(newData) {
-    // force resize on drawing
-    chart.resizeSvg();
-
     // If no data is available display a "No data available" message.
     if (newData.length === 0) {
       svg.append('text')
@@ -287,6 +284,8 @@ const chart = {
       .append('circle')
       .attr('class', 'dot')
       .attr('r', '3')
+      .attr('cx', d => xScale(d.year))
+      .attr('cy', d => yScale(d.value))
       .style('fill', d => chart.colors[0][d.flow - 1])
       .style('stroke-width', '0')
       .on('mouseover', (d) => {
@@ -314,11 +313,11 @@ const chart = {
 
   resizeSvg() {
     // Get new size & set new size to svg element
-    width = $chart.width();
+    width = $chart.width() || $container.width();
     height = $chart.height();
     svg.attr('width', width)
       .attr('height', height);
-    // Update xScale
+    // Update scales
     innerWidth = width - margin.left - margin.right;
     innerHeight = height - margin.top - margin.bottom;
     xScale.range([0, innerWidth]);
