@@ -183,7 +183,7 @@ const controls = {
     }
 
     // If partner was unselected and is now selected then scroll down to the charts.
-    if (!controls.filters.partner && newfilters.partner) {
+    if (!controls.filters.partner && !!parseInt(newfilters.partner, 10)) {
       $('html, body').animate({
         scrollTop: $('#charts').offset().top
       }, 2000);
