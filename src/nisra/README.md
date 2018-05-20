@@ -85,6 +85,16 @@ Values can be:
 
 **_NOTE:_** wide queries (e.g. `/api/EA/all/all/all/data.csv`) are supporded but will return larger files.
 
+### Generating the static API
+
+The [`src/nisra/api/utilities/api-preprocessor.js`](src/nisra/api/utilities/api-preprocessor.js) script will read the HMRC txt files and generate a folder structure with generated CSV files. It can be run from command line from the root of the project with:
+
+```
+npm run preprocess:nisra
+```
+
+The script may take a few minutes to complete and will generate a large aount amount of files and folers in `dist/nisra/api`.
+
 ### Data dictionaries
 
 Data dictionaries for [`reporters`](data/reporters.json), [`partners`](data/partners.json), [`years`](data/years.json), [`commodities`](data/commodities.json) are stored in the [`data`](data) sub-folder.
