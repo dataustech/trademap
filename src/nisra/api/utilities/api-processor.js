@@ -21,10 +21,10 @@ const Promise = require('bluebird');
 const { toCsv, extractRows, addRecordToData, computeRanksAndPercentages, printProgress } = require('./helpers');
 
 // data_dictionaries
-const reporters = require('../../src/nisra/data/reporters.json');
-const partners = require('../../src/nisra/data/partners.json');
-const commodities = require('../../src/nisra/data/commodities.json');
-const years = require('../../src/nisra/data/years.json');
+const reporters = require('../../data/reporters.json');
+const partners = require('../../data/partners.json');
+const commodities = require('../../data/commodities.json');
+const years = require('../../data/years.json');
 
 const sitc1codes = Object.keys(commodities).filter(key => commodities[key].type === 'sitc1');
 const sitc2codes = Object.keys(commodities).filter(key => commodities[key].type === 'sitc2');
@@ -32,8 +32,8 @@ const labareacodes = Object.keys(partners).filter(key => partners[key].type === 
 const codalphacodes = Object.keys(partners).filter(key => partners[key].type === 'codalpha');
 
 // config
-const srcDir = path.join(__dirname, '../../src/nisra/api');
-const destDir = path.join(__dirname, '../../dist/nisra/api');
+const srcDir = path.join(__dirname, '../');
+const destDir = path.join(__dirname, '../../../../dist/nisra/api');
 const outputFields = ['year', 'reporter', 'partner', 'commodity', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc'];
 
 // data structure preparation
