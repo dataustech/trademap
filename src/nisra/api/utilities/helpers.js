@@ -8,10 +8,10 @@
 /* eslint prefer-const: 0 */
 
 // data_dictionaries
-const reporters = require('../../src/nisra/data/reporters.json');
-const partners = require('../../src/nisra/data/partners.json');
-const commodities = require('../../src/nisra/data/commodities.json');
-const years = require('../../src/nisra/data/years.json');
+const reporters = require('../../data/reporters.json');
+const partners = require('../../data/partners.json');
+const commodities = require('../../data/commodities.json');
+const years = require('../../data/years.json');
 
 const codalphaBlacklist = ['#1', '#2', '#3', '#4', '#5', '#6', '#7', 'QS', 'QR'];
 const rowRegex = /^([1-4])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
