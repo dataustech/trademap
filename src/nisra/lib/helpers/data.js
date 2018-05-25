@@ -8,17 +8,15 @@ import $ from 'jquery';
 import crossfilter from 'crossfilter';
 
 // data imports
-import reporterAreasSelectOptions from '../../data/reporterAreas.json';
-import partnerAreasSelectOptions from '../../data/partnerAreas.json';
-import yearsSelectOptions from '../../data/years.json';
-import commodityCodesSelectOptions from '../../data/classificationHS_AG2.json';
-import serviceCodesSelectOptions from '../../data/classificationEB02.topLevel.json';
-import isoCodes from '../../data/isoCodes.json';
+import reporters from '../../data/reporters.json';
+import partners from '../../data/partners.json';
+import years from '../../data/years.json';
+import commodities from '../../data/commodities.json';
 import worldJson from '../../data/world-110m.json';
 
-const countryByISONumMap = d3.map(isoCodes, d => d.isoNumerical);
-const countryByUnNumMap = d3.map(isoCodes, d => d.unCode);
-const areasByISONum = isoNum => isoCodes.filter(el => +el.isoNumerical === +isoNum);
+const countryByISONumMap = d3.map(Object.values(partners), d => d.mapNumerical);
+// const countryByUnNumMap = d3.map(isoCodes, d => d.unCode);
+// const areasByISONum = isoNum => isoCodes.filter(el => +el.isoNumerical === +isoNum);
 
 const xFilter = crossfilter();
 
@@ -37,11 +35,11 @@ const data = {
   timestamp: 0,
 
   // Reporter, partner and classification arrays for select2 widgets
-  reporterAreasSelectOptions,
-  partnerAreasSelectOptions,
-  commodityCodesSelectOptions,
-  serviceCodesSelectOptions,
-  yearsSelectOptions,
+  reporters,
+  partners,
+  commodities,
+  // serviceCodesSelectOptions,
+  years,
   typeCodesSelectOptions: [{
     id: 'C',
     text: 'Goods',
@@ -51,14 +49,14 @@ const data = {
     text: 'Services',
     parent: '#'
   }],
-  serviceCodesMap: d3.map(serviceCodesSelectOptions, d => d.id),
-  reporterAreasMap: d3.map(reporterAreasSelectOptions, d => d.id),
-  partnerAreasMap: d3.map(partnerAreasSelectOptions, d => d.id),
+  // serviceCodesMap: d3.map(serviceCodesSelectOptions, d => d.id),
+  reporterAreasMap: d3.map(reporters, d => d.id),
+  partnerAreasMap: d3.map(partners, d => d.id),
   flowByCodeMap: d3.map([{ id: '1', text: 'imports' }, { id: '2', text: 'exports' }, { id: '0', text: 'balance' }], d => d.id),
-  commodityCodesMap: d3.map(commodityCodesSelectOptions, d => d.id),
-  countryByUnNumMap,
+  commodityCodesMap: d3.map(commodities, d => d.id),
+  // countryByUnNumMap,
   countryByISONumMap,
-  areasByISONum,
+  // areasByISONum,
 
   worldJson,
 
