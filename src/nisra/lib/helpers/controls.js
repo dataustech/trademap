@@ -23,6 +23,8 @@ const controls = {
   filters: {},
 
   setup() {
+    $('#loadingDiv').hide();
+
     // Display the navBar (which is otherwise hidden)
     $('#navbar').show();
     // SETUP SELECT2 DROPDOWN SELECTORS
@@ -32,8 +34,9 @@ const controls = {
         placeholder: 'Select a reporter',
         theme: 'classic',
         width: 'resolve',
-        allowClear: true,
-        data: data.reporterAreasSelectOptions
+        allowClear: false,
+        templateSelection: opt => $(`<span><strong>Reporter:</strong> ${opt.text}</span>`),
+        data: data.reporters
       })
       .on('change', controls.onFilterChange);
 
@@ -41,71 +44,38 @@ const controls = {
     controls.$selectPartner
       .select2({
         placeholder: 'Select a partner',
+        theme: 'classic',
+        width: 'resolve',
         allowClear: true,
-        disabled: true,
-        theme: 'classic',
-        width: 'resolve',
-        data: data.partnerAreasSelectOptions
-      })
-      .on('change', controls.onFilterChange);
-
-    // Setup the type dropdown
-    controls.$selectType
-      .select2({
-        minimumResultsForSearch: Infinity,
-        data: data.typeCodesSelectOptions,
-        theme: 'classic',
-        width: 'resolve',
+        templateSelection: opt => $(`<span><strong>Partner:</strong> ${opt.text}</span>`),
+        data: data.partners,
         disabled: true
       })
       .on('change', controls.onFilterChange);
 
     // Setup the commodities dropdown
-
     controls.$selectCommodity
       .select2({
         placeholder: 'Select a commodity',
-        allowClear: true,
         theme: 'classic',
         width: 'resolve',
-        disabled: true,
-        ajax: {
-          transport(params, success, failure) {
-            // Check if services or commodities are selected in
-            // controls.filters and return options based on this
-            let options = { text: 'undefined', results: [] };
-            if (controls.filters.type === 'S') options = { text: 'services', results: data.serviceCodesSelectOptions };
-            if (controls.filters.type === 'C') options = { text: 'goods', results: data.commodityCodesSelectOptions };
-            const promise = new Promise(resolve => resolve(options));
-            promise.then(success);
-            promise.catch(failure);
-          }
-        }
+        allowClear: false,
+        templateSelection: opt => $(`<span><strong>Commodity:</strong> ${opt.text}</span>`),
+        data: data.commodities,
+        disabled: false
       })
       .on('change', controls.onFilterChange);
 
     // Setup the year selector
     controls.$selectYear
       .select2({
-        allowClear: false,
         theme: 'classic',
         width: 'resolve',
-        minimumResultsForSearch: Infinity,
-        disabled: true,
-        data: data.yearsSelectOptions
+        allowClear: false,
+        data: data.years,
+        disabled: true
       })
       .on('change', controls.onFilterChange);
-
-    // ADD REPORTER<->PARTNER SWITCH BUTTON BEHAVIOUR
-    $('#switchPartners').on('click', () => {
-      const currentFilters = controls.getFilters();
-      controls.changeFilters({
-        reporter: currentFilters.partner,
-        partner: currentFilters.reporter,
-        year: currentFilters.year,
-        flow: currentFilters.flow
-      });
-    });
 
     // ADD IMPORT/EXPORT/BALANCE BUTTON BEHAVIOURS
     controls.$flowButtons.on('click', (event) => {
@@ -226,7 +196,6 @@ const controls = {
     }
     if (filters.year && filters.year !== controls.$selectYear.val()) {
       // Add the current and the requested years temporarily to the list
-      controls.updateYears([+controls.$selectYear.val(), filters.year]);
       controls.$selectYear.val(filters.year);
     }
 
@@ -278,23 +247,6 @@ const controls = {
     window.history.replaceState(null, 'International Trade in Goods and Services by Country and Commodity', query);
   },
 
-  updateYears(yearList) {
-    if (yearList.length > 0) {
-      const current = +controls.$selectYear.val();
-      controls.$selectYear.html('');
-      yearList
-        .sort((a, b) => b - a)
-        .forEach((d) => {
-          controls.$selectYear.append(`<option value="${d}">${d}</option>`);
-        });
-      if (yearList.indexOf(current) >= 0) {
-        controls.$selectYear.val(+current);
-      } else {
-        controls.$selectYear.val(d3.max(yearList)).trigger('change');
-      }
-    }
-  },
-
   fadeControls(filters) {
     if (!filters.reporter) {
       $('#selectReporter, #selectPartner, #selectCommodity')
@@ -302,21 +254,14 @@ const controls = {
         .val(null)
         .trigger('change')
         .on('change', controls.onFilterChange);
-      $('#selectType').select2({ disabled: true });
-      $('#selectCommodity').select2({ disabled: true });
-      $('#selectPartner').select2({ disabled: true });
-      $('#selectYear').select2({ disabled: true });
-      $('#switchPartners').prop('disabled', true);
+      $('#selectCommodity').prop('disabled', true);
+      $('#selectPartner').prop('disabled', true);
+      $('#selectYear').prop('disabled', true);
+
     } else {
-      $('#selectType').select2('enable');
-      $('#selectCommodity').select2('enable');
-      $('#selectPartner').select2('enable');
-      $('#selectYear').select2('enable');
-      if (filters.partner && data.lookup(filters.partner, 'reporterAreas', 'id') !== 'unknown') {
-        $('#switchPartners').prop('disabled', false);
-      } else {
-        $('#switchPartners').prop('disabled', true);
-      }
+      $('#selectCommodity').prop('disabled', false);
+      $('#selectPartner').prop('disabled', false);
+      $('#selectYear').prop('disabled', false);
     }
   },
 
