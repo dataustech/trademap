@@ -8,10 +8,14 @@
 /* eslint prefer-const: 0 */
 
 // data_dictionaries
-const reporters = require('../../data/reporters.json');
-const partners = require('../../data/partners.json');
-const commodities = require('../../data/commodities.json');
-const years = require('../../data/years.json');
+const reducer = (map, option) => {
+  map[option.id] = option;
+  return map;
+}
+const reporters = require('../../data/reporters.json').reduce(reducer, {});
+const partners = require('../../data/partners.json').reduce(reducer, {});
+const commodities = require('../../data/commodities.json').reduce(reducer, {});
+const years = require('../../data/years.json').reduce(reducer, {});
 
 const codalphaBlacklist = ['#1', '#2', '#3', '#4', '#5', '#6', '#7', 'QS', 'QR'];
 const rowRegex = /^([1-4])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
@@ -29,7 +33,7 @@ function toCsv(collection, fields) {
 
 function validateRowRecord(record) {
   const { year, nuts1, labarea, codalpha } = record;
-  if (years.indexOf(parseInt(year, 10)) < 0) throw new Error(`Invalid year used in record: ${year}`);
+  if (!years[parseInt(year, 10)]) throw new Error(`Invalid year used in record: ${year}`);
   if (!reporters[nuts1]) throw new Error(`Invalid reporter used in record: ${nuts1}`);
   if (!partners[labarea]) throw new Error(`Invalid labarea used in record: ${labarea}`);
   if (!partners[codalpha]) throw new Error(`Invalid codalpha used in record: ${codalpha}`);

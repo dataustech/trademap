@@ -21,10 +21,15 @@ const Promise = require('bluebird');
 const { toCsv, extractRows, addRecordToData, computeRanksAndPercentages, printProgress } = require('./helpers');
 
 // data_dictionaries
-const reporters = require('../../data/reporters.json');
-const partners = require('../../data/partners.json');
-const commodities = require('../../data/commodities.json');
-const years = require('../../data/years.json');
+const reducer = (map, option) => {
+  map[option.id] = option;
+  return map;
+}
+const reporters = require('../../data/reporters.json').reduce(reducer, {});
+const partners = require('../../data/partners.json').reduce(reducer, {});
+const commodities = require('../../data/commodities.json').reduce(reducer, {});
+const years = require('../../data/years.json').reduce(reducer, {});
+
 
 const sitc1codes = Object.keys(commodities).filter(key => commodities[key].type === 'sitc1');
 const sitc2codes = Object.keys(commodities).filter(key => commodities[key].type === 'sitc2');
@@ -40,13 +45,15 @@ const outputFields = ['year', 'reporter', 'partner', 'commodity', 'importVal', '
 console.log('Preparing data structure');
 partners.all = {};
 commodities.all = {};
-years.push('all');
+years['all'] = {
+  id: 'all', text: 'all'
+};
 const data = {};
 Object.keys(reporters).forEach((reporter) => {
   data[reporter] = {};
   Object.keys(partners).forEach((partner) => {
     data[reporter][partner] = {};
-    years.forEach((year) => {
+    Object.keys(years).forEach((year) => {
       data[reporter][partner][year] = {};
       Object.keys(commodities).forEach((commodity) => {
         data[reporter][partner][year][commodity] = {}; // will be keyed by hash to properly sum
@@ -103,7 +110,7 @@ fs.readdir(srcDir)
   .then(() => {
     console.log('Computing percentages and rankings');
 
-    years.forEach((year) => {
+    Object.keys(years).forEach((year) => {
       Object.keys(reporters).forEach((reporter) => {
         labareacodes.forEach((labarea) => {
           computeRanksAndPercentages(data[reporter][labarea][year]['all'], 'sitc1');
