@@ -3,7 +3,6 @@
 /*
  * THIS FILE SETS UP THE CONTROLS ON THE PAGE
  * */
-import * as d3 from 'd3';
 
 import $ from 'jquery';
 import 'select2';
@@ -121,7 +120,6 @@ const controls = {
     const newFilters = {};
     if (controls.$selectReporter.val() !== '') { newFilters.reporter = controls.$selectReporter.val(); }
     if (controls.$selectPartner.val() !== '') { newFilters.partner = controls.$selectPartner.val(); }
-    if (controls.$selectType.val() !== '') { newFilters.type = controls.$selectType.val(); }
     if (controls.$selectCommodity.val() !== '') { newFilters.commodity = controls.$selectCommodity.val(); }
     if (controls.$selectYear.val() !== '') { newFilters.year = controls.$selectYear.val(); }
     if ($('#flowButtons .btn-primary').attr('data-value') !== '') { newFilters.flow = $('#flowButtons .btn-primary').attr('data-value'); }
@@ -136,20 +134,9 @@ const controls = {
     if (controls.filters.reporter === newfilters.reporter &&
       controls.filters.partner === newfilters.partner &&
       controls.filters.commodity === newfilters.commodity &&
-      controls.filters.type === newfilters.type &&
       controls.filters.year === newfilters.year &&
       controls.filters.flow === newfilters.flow) {
       return;
-    }
-
-    // If the type was changed then deselect the commodity (the commodity dropdown autopopulates)
-    if (controls.filters.type !== newfilters.type) {
-      newfilters.commodity = undefined;
-      // Update placeholder
-      if (newfilters.type === 'S') controls.$selectCommodity.data('select2').selection.placeholder.text = 'Select service type';
-      if (newfilters.type === 'C') controls.$selectCommodity.data('select2').selection.placeholder.text = 'Select commodity';
-      // Purge the displayed value in the commodity dropdown
-      controls.$selectCommodity.select2('val', '');
     }
 
     // If partner was unselected and is now selected then scroll down to the charts.
@@ -185,14 +172,11 @@ const controls = {
     if (filters.reporter && filters.reporter !== controls.$selectReporter.val()) {
       controls.$selectReporter.val(filters.reporter);
     }
-    if (filters.type && filters.type !== controls.$selectType.val()) {
-      controls.$selectType.val(filters.type);
+    if (filters.partner && filters.partner !== controls.$selectPartner.val()) {
+      controls.$selectPartner.val(filters.partner);
     }
     if (filters.commodity && filters.commodity !== controls.$selectCommodity.val()) {
       controls.$selectCommodity.val(filters.commodity);
-    }
-    if (filters.partner && filters.partner !== controls.$selectPartner.val()) {
-      controls.$selectPartner.val(filters.partner);
     }
     if (filters.year && filters.year !== controls.$selectYear.val()) {
       // Add the current and the requested years temporarily to the list
@@ -206,15 +190,15 @@ const controls = {
 
   initializeFilters() {
     const URLfilters = controls.decodeURL();
-    if (URLfilters && URLfilters.reporter && URLfilters.type) {
+    if (URLfilters && URLfilters.reporter) {
       // Set the filters from the URL
       controls.changeFilters(URLfilters);
     } else {
       const today = new Date();
       const initYear = today.getMonth() < 7 ? today.getFullYear() - 2 : today.getFullYear() - 1;
-      // Then initialize filters to reporter=UK, year is estimate
-      // of most recent year where there is data, and type Goods
-      controls.changeFilters({ reporter: 826, year: initYear, type: 'C' });
+      // Then initialize filters to reporter=NI, year is estimate
+      // of most recent year where there is data
+      controls.changeFilters({ reporter: 'NI', year: initYear });
     }
   },
 
@@ -257,7 +241,6 @@ const controls = {
       $('#selectCommodity').prop('disabled', true);
       $('#selectPartner').prop('disabled', true);
       $('#selectYear').prop('disabled', true);
-
     } else {
       $('#selectCommodity').prop('disabled', false);
       $('#selectPartner').prop('disabled', false);
@@ -270,12 +253,10 @@ const controls = {
       // Empty viz: hide switch, chevrons and graphs and charts container
       $('#goToCharts, #goToMap, #flowButtons').hide();
       $('#charts').slideUp();
-      $('#contextMenu .setPartner').addClass('disabled');
     } else {
       // Show switch, chevrons and graphs
       $('#goToCharts, #goToMap, #flowButtons').show();
       $('#charts').slideDown();
-      $('#contextMenu .setPartner').removeClass('disabled');
     }
   },
 
