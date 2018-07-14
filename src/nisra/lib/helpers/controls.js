@@ -58,7 +58,7 @@ const controls = {
         placeholder: 'Select a commodity',
         theme: 'classic',
         width: 'resolve',
-        allowClear: false,
+        allowClear: true,
         templateSelection: opt => $(`<span><strong>Commodity:</strong> ${opt.text}</span>`),
         data: data.commodities,
         disabled: false
@@ -91,28 +91,6 @@ const controls = {
         .trigger('change')
         .on('change', controls.onFilterChange);
       controls.onFilterChange();
-    });
-
-    // ADD CONTEXTUAL MENU BEHAVIOURS
-    $('#closeContextMenu').on('click', (e) => {
-      e.preventDefault();
-      $('#contextMenu').hide();
-    });
-
-    $('#contextMenu .setReporter').on('click', (e) => {
-      e.preventDefault();
-      if (!$(e.target.parentNode).hasClass('disabled')) {
-        controls.changeFilters({ reporter: $(e.target).attr('data-uncode') });
-      }
-      $('#contextMenu').hide();
-    });
-
-    $('#contextMenu .setPartner').on('click', (e) => {
-      e.preventDefault();
-      if (!$(e.target.parentNode).hasClass('disabled')) {
-        controls.changeFilters({ partner: $(e.target).attr('data-uncode') });
-      }
-      $('#contextMenu').hide();
     });
   },
 
@@ -162,25 +140,25 @@ const controls = {
     controls.filters = newfilters;
   },
 
-  changeFilters(filters) {
+  changeFilters(newFilters) {
     // If reporter is not currently selected nor being set, don't allow any other updates
-    if (!filters.reporter && controls.$selectReporter.val() === '') {
+    if (!newFilters.reporter && controls.$selectReporter.val() === '') {
       return;
     }
 
     // Update the other fields
-    if (filters.reporter && filters.reporter !== controls.$selectReporter.val()) {
-      controls.$selectReporter.val(filters.reporter);
+    if (newFilters.reporter && newFilters.reporter !== controls.$selectReporter.val()) {
+      controls.$selectReporter.val(newFilters.reporter);
     }
-    if (filters.partner && filters.partner !== controls.$selectPartner.val()) {
-      controls.$selectPartner.val(filters.partner);
+    if (newFilters.partner && newFilters.partner !== controls.$selectPartner.val()) {
+      controls.$selectPartner.val(newFilters.partner);
     }
-    if (filters.commodity && filters.commodity !== controls.$selectCommodity.val()) {
-      controls.$selectCommodity.val(filters.commodity);
+    if (newFilters.commodity && newFilters.commodity !== controls.$selectCommodity.val()) {
+      controls.$selectCommodity.val(newFilters.commodity);
     }
-    if (filters.year && filters.year !== controls.$selectYear.val()) {
+    if (newFilters.year && newFilters.year !== controls.$selectYear.val()) {
       // Add the current and the requested years temporarily to the list
-      controls.$selectYear.val(filters.year);
+      controls.$selectYear.val(newFilters.year);
     }
 
     // And trigger a single change event
