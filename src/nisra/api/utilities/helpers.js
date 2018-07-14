@@ -6,12 +6,13 @@
 /* eslint no-unused-vars: 0 */
 /* eslint object-curly-newline: 0 */
 /* eslint prefer-const: 0 */
+/* eslint no-multi-spaces: 0 */
 
 // data_dictionaries
 const reducer = (map, option) => {
   map[option.id] = option;
   return map;
-}
+};
 const reporters = require('../../data/reporters.json').reduce(reducer, {});
 const partners = require('../../data/partners.json').reduce(reducer, {});
 const commodities = require('../../data/commodities.json').reduce(reducer, {});
@@ -21,6 +22,7 @@ const codalphaBlacklist = ['#1', '#2', '#3', '#4', '#5', '#6', '#7', 'QS', 'QR']
 const rowRegex = /^([1-4])Q(\d{4})([IE])([A-Z]{2})([A-J])([A-Z0-9 ]{3})([A-Z0-9#]{2})(\d)(\d{2})([ 0-9]{9})([ 0-9]{9})/;
 
 function toCsv(collection, fields) {
+  if (!collection.length) throw new Error('toCsv called with empty collection');
   let output = fields.join(',');
   output += '\n';
   output += collection.reduce((out, record) => {
@@ -63,49 +65,62 @@ function extractRows(txtRows) {
 }
 
 function makeHash(record) {
-  return `${record.year}_${record.reporter}_${record.partner}_${record.commodity}`;
+  if (typeof record.commodity !== 'string') throw new Error('commodity code is not a string');
+  if (record.commodityType === 'sitc1' && record.commodity.length !== 1) throw new Error('sitc1 not one digit long');
+  if (record.commodityType === 'sitc2' && record.commodity.length !== 2) throw new Error('sitc2 not two digit long');
+  return `${record.year}_${record.reporter}_${record.partner}_${record.partnerType}_${record.commodity}_${record.commodityType}`;
 }
 
 function addRecord(record, hashMap) {
   const hash = makeHash(record);
   if (!hashMap[hash]) {
-    hashMap[hash] = record;
+    hashMap[hash] = { ...record };
+    hashMap[hash].aggregated = 1;
   } else {
     hashMap[hash].importVal += record.importVal;
     hashMap[hash].exportVal += record.exportVal;
     hashMap[hash].balanceVal = hashMap[hash].exportVal - hashMap[hash].importVal;
     hashMap[hash].bilateralVal = hashMap[hash].exportVal + hashMap[hash].importVal;
+    hashMap[hash].aggregated += 1;
   }
 }
 
-function addRecordToData(rowRecord, data) {
-  const { year, nuts1: reporter, labarea, codseq, codalpha, sitc1, sitc2, importVal, exportVal, bilateralVal, balanceVal } = rowRecord;
-  const aggregationLevels = [
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc1, commodityType: 'sitc1', partner: codalpha },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc1, commodityType: 'sitc1', partner: labarea },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc2, commodityType: 'sitc2', partner: codalpha },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc2, commodityType: 'sitc2', partner: labarea },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all', partner: codalpha },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all', partner: labarea },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc2, commodityType: 'sitc2', partner: 'all' },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc1, commodityType: 'sitc1', partner: 'all' },
-    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all', partner: 'all' },
+function addRecordToData(yearlyRecord, data) {
+  const { year, nuts1: reporter, labarea, codalpha, sitc1, sitc2, importVal, exportVal, bilateralVal, balanceVal } = yearlyRecord;
+
+  // for each yearly record we generate 9 records for different aggregation levels
+  const aggregationRecords = [
+    // by sitc1/sitc2 and labarea/codalpha
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc1, commodityType: 'sitc1', partnerType: 'codealpha', partner: codalpha }, // 1
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc1, commodityType: 'sitc1', partnerType: 'labarea',   partner: labarea  }, // 2
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc2, commodityType: 'sitc2', partnerType: 'codealpha', partner: codalpha }, // 3
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc2, commodityType: 'sitc2', partnerType: 'labarea',   partner: labarea  }, // 4
+    // for commodity = all by labarea/codalpha
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all',   partnerType: 'codealpha', partner: codalpha }, // 5
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all',   partnerType: 'labarea',   partner: labarea  }, // 6
+    // for partner = all by sitc1/sitc2
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc2, commodityType: 'sitc2', partnerType: 'all',       partner: 'all'    }, // 7
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: sitc1, commodityType: 'sitc1', partnerType: 'all',       partner: 'all'    }, // 8
+    // for partner = all and commodity = all
+    { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all',   partnerType: 'all',       partner: 'all'    }, // 9
   ];
 
-  aggregationLevels.forEach((record) => {
-    const { reporter, partner, year, commodity, flow, value } = record;
+  // then each record is added to different parts of the data hash reflecting which file paths it should be output to
+  aggregationRecords.forEach((record) => {
+    const { reporter, partner, year, commodity } = record;
     if (partner !== 'all') {
       if (commodity !== 'all') {
-        // case 1 commodity & partner
+        // case 1 commodity != all & partner != all (#1-4)
         addRecord(record, data[reporter][partner][year][commodity]);
         addRecord(record, data[reporter][partner][year]['all']);
+        addRecord(record, data[reporter][partner]['all'][commodity]);
         addRecord(record, data[reporter][partner]['all']['all']);
         addRecord(record, data[reporter]['all'][year][commodity]);
-        addRecord(record, data[reporter]['all']['all'][commodity]);
         addRecord(record, data[reporter]['all'][year]['all']);
+        addRecord(record, data[reporter]['all']['all'][commodity]);
         addRecord(record, data[reporter]['all']['all']['all']);
       } else {
-        // case 2 !commodity & partner
+        // case 2 !commodity = all & partner != all (#5-6)
         addRecord(record, data[reporter][partner][year]['all']);
         addRecord(record, data[reporter][partner]['all']['all']);
         addRecord(record, data[reporter]['all'][year]['all']);
@@ -113,13 +128,13 @@ function addRecordToData(rowRecord, data) {
       }
     } else {
       if (commodity !== 'all') {
-        // case 3 commodity & !partner
+        // case 3 commodity != all & partner = all (#7-8)
         addRecord(record, data[reporter]['all'][year][commodity]);
         addRecord(record, data[reporter]['all']['all'][commodity]);
         addRecord(record, data[reporter]['all'][year]['all']);
         addRecord(record, data[reporter]['all']['all']['all']);
       } else {
-        // case 4 !commodity & !partner
+        // case 4 commodity = all & partner = all (#9)
         addRecord(record, data[reporter]['all'][year]['all']);
         addRecord(record, data[reporter]['all']['all']['all']);
       }

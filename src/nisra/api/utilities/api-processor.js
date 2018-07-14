@@ -24,7 +24,7 @@ const { toCsv, extractRows, addRecordToData, computeRanksAndPercentages, printPr
 const reducer = (map, option) => {
   map[option.id] = option;
   return map;
-}
+};
 const reporters = require('../../data/reporters.json').reduce(reducer, {});
 const partners = require('../../data/partners.json').reduce(reducer, {});
 const commodities = require('../../data/commodities.json').reduce(reducer, {});
@@ -39,7 +39,7 @@ const codalphacodes = Object.keys(partners).filter(key => partners[key].type ===
 // config
 const srcDir = path.join(__dirname, '../');
 const destDir = path.join(__dirname, '../../../../dist/nisra/api');
-const outputFields = ['year', 'reporter', 'partner', 'commodity', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc'];
+const outputFields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc', 'aggregated'];
 
 // data structure preparation
 console.log('Preparing data structure');
@@ -78,7 +78,7 @@ fs.readdir(srcDir)
 
   // Combine quarterly data into yearly data & combine flow values
   .then((quarterlyRecords) => {
-    console.log(`Selected ${quarterlyRecords.length} for processing. Consolidating quarterly data into yearly data`);
+    console.log(`Selected ${quarterlyRecords.length} quarterly records for processing. Consolidating quarterly data into yearly data...`);
 
     const yearlyRecords = quarterlyRecords.reduce((yearlyData, rowRecord) => {
       const { quarter, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass } = rowRecord;
@@ -102,8 +102,13 @@ fs.readdir(srcDir)
 
   // Add rows to individual aggregate levels & add to data structure
   .then((yearlyRecords) => {
-    console.log(`Aggregated ${yearlyRecords.length} yearly records, creating aggregated records.`);
-    yearlyRecords.forEach(record => addRecordToData(record, data));
+    console.log(`Aggregated quarterly data into ${yearlyRecords.length} yearly records, creating records at different aggregation levels`);
+
+    console.log('Saving yearly records for debug purposes');
+    const debugFile = path.join(destDir, 'debug.csv');
+    const fields = ['year', 'nuts1', 'labarea', 'codseq', 'codalpha', 'sitc1', 'sitc2', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal'];
+    return fs.outputFile(debugFile, toCsv(yearlyRecords, fields))
+      .then(() => yearlyRecords.forEach(record => addRecordToData(record, data)));
   })
 
   // Compute percentages and rankings
@@ -132,21 +137,23 @@ fs.readdir(srcDir)
       Object.keys(data[reporter]).forEach((partner) => {
         Object.keys(data[reporter][partner]).forEach((year) => {
           Object.keys(data[reporter][partner][year]).forEach((commodity) => {
-            dataPaths.push({ reporter, partner, year, commodity });
+            if (Object.keys(data[reporter][partner][year][commodity]).length) {
+              dataPaths.push({ reporter, partner, year, commodity });
+            }
           });
         });
       });
     });
     const totalFiles = dataPaths.length;
-    let filesWritten = 0;
     console.log(`${totalFiles} files need to be written`);
+    let filesWritten = 0;
     return Promise.map(
       dataPaths,
       (d) => {
         filesWritten++;
         const { reporter, partner, year, commodity } = d;
         const values = Object.values(data[reporter][partner][year][commodity]);
-        if (!values) return null;
+        if (!values.length) return null;
         const destFile = path.join(destDir, `${reporter}/${partner}/${year}/${commodity}/data.csv`);
         printProgress(`Writing file ${filesWritten} of ${totalFiles}`);
         return fs.outputFile(destFile, toCsv(values, outputFields));
@@ -154,4 +161,4 @@ fs.readdir(srcDir)
       { concurrency: 10 }
     );
   })
-  .then(() => console.log('All done!'));
+  .then(() => console.log('\nAll done!'));

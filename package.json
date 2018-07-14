@@ -17,7 +17,7 @@
     "clean:comtrade": "rimraf dist/comtrade*",
     "build:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack --progress --mode=production --display-error-details --config webpack.prod.js",
     "start:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack-dev-server --mode=development --config webpack.dev.js",
-    "preprocess:nisra": "node src/nisra/api/utilities/api-processor.js",
+    "preprocess:nisra": "npm run clean:nisra && node src/nisra/api/utilities/api-processor.js",
     "clean:nisra": "rimraf dist/nisra*",
     "build:nisra": "npm run clean:nisra && npm run preprocess:nisra && cross-env PROJECT=nisra webpack --progress --mode=production --display-error-details --config webpack.prod.js",
     "start:nisra": "cross-env PROJECT=nisra webpack-dev-server --mode=development --config webpack.dev.js",
