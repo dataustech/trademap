@@ -7,6 +7,7 @@
 import $ from 'jquery';
 import 'select2';
 import data from './data';
+import years from './../../data/years.json';
 
 const controls = {
   // Place some common jQuery objects so that we don't need to look for them each time.
@@ -22,8 +23,6 @@ const controls = {
   filters: {},
 
   setup() {
-    $('#loadingDiv').hide();
-
     // Display the navBar (which is otherwise hidden)
     $('#navbar').show();
     // SETUP SELECT2 DROPDOWN SELECTORS
@@ -151,10 +150,10 @@ const controls = {
       controls.$selectReporter.val(newFilters.reporter);
     }
     if (newFilters.partner && newFilters.partner !== controls.$selectPartner.val()) {
-      controls.$selectPartner.val(newFilters.partner);
+      controls.$selectPartner.val(newFilters.partner === 'all' ? '' : newFilters.partner);
     }
     if (newFilters.commodity && newFilters.commodity !== controls.$selectCommodity.val()) {
-      controls.$selectCommodity.val(newFilters.commodity);
+      controls.$selectCommodity.val(newFilters.commodity === 'all' ? '' : newFilters.commodity);
     }
     if (newFilters.year && newFilters.year !== controls.$selectYear.val()) {
       // Add the current and the requested years temporarily to the list
@@ -172,11 +171,15 @@ const controls = {
       // Set the filters from the URL
       controls.changeFilters(URLfilters);
     } else {
-      const today = new Date();
-      const initYear = today.getMonth() < 7 ? today.getFullYear() - 2 : today.getFullYear() - 1;
-      // Then initialize filters to reporter=NI, year is estimate
-      // of most recent year where there is data
-      controls.changeFilters({ reporter: 'NI', year: initYear });
+      // use latest available year
+      const initYear = years.reduce((acc, curr) => Math.max(acc, +curr.id), 2016);
+      // Then initialize filters to reporter=NI, and latest year available
+      controls.changeFilters({
+        reporter: 'NI',
+        year: initYear,
+        partner: 'all',
+        commodity: 'all'
+      });
     }
   },
 
@@ -189,11 +192,12 @@ const controls = {
     } catch (err) {
       queryString = window.location.search.substring(1);
     }
-    queryString.split('&').forEach((param) => {
-      const p = param.replace(/%20|\+/g, ' ').split('=');
-      filters[decodeURIComponent(p[0])] = (p[1] ? decodeURIComponent(p[1]) : undefined);
+    queryString.split('&').forEach((pair) => {
+      const [paramName, paramValue] = pair.replace(/%20|\+/g, ' ').split('=');
+      filters[decodeURIComponent(paramName)] = paramValue !== '' ? decodeURIComponent(paramValue) : null;
     });
-    if (filters.year) { filters.year = +filters.year; } return filters;
+    if (filters.year) { filters.year = +filters.year; }
+    return filters;
   },
 
   updateURL(filters) {

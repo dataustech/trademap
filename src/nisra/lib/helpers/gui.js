@@ -10,6 +10,8 @@ import { saveAs } from 'file-saver';
 export default {
 
   setup() {
+    $('#loadingDiv').hide();
+
     // DISABLE ZOOM FUNCTION ON SCROLL AND ON CTRL+ and CTRL-
     $(window).bind('mousewheel DOMMouseScroll keydown', (event) => {
       const code = event.keyCode || event.which;
@@ -191,7 +193,7 @@ export default {
     $('#myModal').modal({ show: true });
   },
 
-
+  // TODO fix function
   downloadCsv(title, newData) {
     let csvContent = 'data:text/csv;charset=utf-8,'
       + '\n'
