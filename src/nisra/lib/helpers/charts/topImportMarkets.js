@@ -109,7 +109,7 @@ const chart = {
         gui.downloadCsv(title, newData);
       });
       $container.slideDown(400, () => {
-        rowchart.draw(svg, newData, dataFilter, chart.colors[0][0]);
+        rowchart.draw(svg, newData, chart.colors[0][0], 'importVal', 'partner');
       });
     });
   }

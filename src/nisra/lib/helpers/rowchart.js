@@ -50,18 +50,15 @@ export default {
   },
 
 
-  draw(svg, newData, filters, color, valueName) {
-
+  draw(svg, newData, color, valueName, displayProp) {
     if (!newData || newData.length === 0) {
       // Display a "No data" text
-      if (groups.size() === 0) {
-        svg.append('text')
-          .text('No data available for this chart.')
-          .classed('nodata', true)
-          .classed('label', true)
-          .attr('x', (this.innerWidth / 2) + this.margin.left - 75)
-          .attr('y', (this.innerHeight / 2) + this.margin.top - 75);
-      }
+      svg.append('text')
+        .text('No data available for this chart.')
+        .classed('nodata', true)
+        .classed('label', true)
+        .attr('x', (this.innerWidth / 2) + this.margin.left - 75)
+        .attr('y', (this.innerHeight / 2) + this.margin.top - 75);
     }
 
     // Remove no data text
@@ -110,9 +107,12 @@ export default {
     newGroups.selectAll('text').remove();
     const bars = newGroups.select('rect')
       .on('click', (d) => {
-        if (filters.partner === 'all') { // top partner chart: select partner
+        if (displayProp === 'partner') {
+          // top partner chart: select partner
           controls.changeFilters({ partner: d.partner });
-        } else { // top commodities chart: select commodity
+        }
+        if (displayProp === 'commodity') {
+          // top commodities chart: select commodity
           controls.changeFilters({ commodity: d.commodity });
         }
       });
@@ -130,10 +130,14 @@ export default {
       .attr('x', '3')
       .attr('y', this.yScale(1) - this.barHeight - 8)
       .text((d) => {
-        if (filters.partner === 'all') { // top partner chart: select partner
+        if (displayProp === 'partner') {
+          // top partner chart: select partner
           return data.lookup(d.partner, 'partners', 'text');
-        } // top commodities chart: select commodity
-        return data.lookup(d.commodity, 'commodities', 'text');
+        }
+        if (displayProp === 'commodity') {
+          // top commodities chart: select commodity
+          return data.lookup(d.commodity, 'commodities', 'text');
+        }
       });
     values
       .attr('x', d => this.xScale(+d[valueName]) + 3)
@@ -142,7 +146,6 @@ export default {
 
     // Exit groups
     groups.exit().remove();
-
   },
 
 

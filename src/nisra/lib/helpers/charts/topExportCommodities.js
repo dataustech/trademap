@@ -56,14 +56,11 @@ const chart = {
     const queryFilter = {
       reporter,
       partner: 'all',
-      commodity: null,
       initiator: 'topExportCommodities'
     };
     const dataFilter = {
       reporter,
-      partner: 'all',
       year,
-      commodity: null,
       // TODO see https://github.com/mjs2020/trademap/issues/25
       commodityType: 'sitc2',
       initiator: 'topExportCommodities'
@@ -73,6 +70,7 @@ const chart = {
     if (partner === null) {
       // CASE 2: commodity = null        partner = null
       title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 exports to the world in ${year}`;
+      dataFilter.partner = 'all';
     } else {
       // CASE 3: commodity = null        partner = selected
       title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 exports to ${data.lookup(partner, 'partners', 'text')} in ${year}`;
@@ -95,7 +93,7 @@ const chart = {
       });
 
       $container.slideDown(400, () => {
-        rowchart.draw(svg, newData, dataFilter, chart.colors[0][1], 'exportVal');
+        rowchart.draw(svg, newData, chart.colors[0][1], 'exportVal', 'commodity');
       });
     });
   }
