@@ -39,7 +39,7 @@ const codalphacodes = Object.keys(partners).filter(key => partners[key].type ===
 // config
 const srcDir = path.join(__dirname, '../');
 const destDir = path.join(__dirname, '../../../../dist/nisra/api');
-const outputFields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc', 'aggregated'];
+const outputFields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc'];
 
 // data structure preparation
 console.log('Preparing data structure');
@@ -66,7 +66,7 @@ Object.keys(reporters).forEach((reporter) => {
 // data[reporter][partner][year][commodity]
 
 // Read directory listing
-console.log('Reading directory lising');
+console.log('Reading directory listing');
 fs.readdir(srcDir)
 
   // Filter to only .txt files & read from each file & extract valid rows as objects

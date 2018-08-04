@@ -98,7 +98,7 @@ const controls = {
     if (controls.$selectReporter.val() !== '') { newFilters.reporter = controls.$selectReporter.val(); }
     if (controls.$selectPartner.val() !== '') { newFilters.partner = controls.$selectPartner.val(); }
     if (controls.$selectCommodity.val() !== '') { newFilters.commodity = controls.$selectCommodity.val(); }
-    if (controls.$selectYear.val() !== '') { newFilters.year = controls.$selectYear.val(); }
+    if (controls.$selectYear.val() !== '') { newFilters.year = +controls.$selectYear.val(); }
     if ($('#flowButtons .btn-primary').attr('data-value') !== '') { newFilters.flow = $('#flowButtons .btn-primary').attr('data-value'); }
     return newFilters;
   },

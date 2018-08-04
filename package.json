@@ -23,32 +23,48 @@
     "start:nisra": "cross-env PROJECT=nisra webpack-dev-server --mode=development --config webpack.dev.js",
     "start": "npm run start:comtrade"
   },
-  "devDependencies": {
-    "@babel/core": "^7.0.0-beta.40",
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.56",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.56",
     "@babel/preset-env": "^7.0.0-beta.40",
     "autoprefixer": "^8.0.0",
     "babel-loader": "^8.0.0-beta.0",
     "bluebird": "^3.5.1",
+    "bootstrap": "^3.3.7",
     "cross-env": "^5.1.4",
+    "crossfilter": "^1.3.12",
     "css-loader": "^0.28.10",
+    "d3": "^4.13.0",
+    "d3-geo": "^1.9.1",
+    "d3-geo-projection": "^2.3.2",
+    "d3-tip": "^0.7.1",
     "eslint": "^4.9.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.7.0",
     "extract-loader": "^1.0.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.7",
+    "file-saver": "^1.3.3",
+    "fs-extra": "^5.0.0",
     "html-loader": "^0.5.5",
+    "intro.js": "git+https://github.com/usablica/intro.js.git#5fe318653267b9738a2a185402b566cc90aa37ac",
+    "jquery": "^3.3.1",
     "json-loader": "^0.5.7",
     "json-to-csv": "^1.0.0",
     "mini-css-extract-plugin": "^0.4.0",
     "mkdirp": "^0.5.1",
+    "modernizr": "^3.6.0",
     "modernizr-loader": "^1.0.1",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.2",
+    "popper.js": "^1.12.9",
     "postcss-loader": "^2.1.0",
     "precss": "^3.1.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
+    "select2": "^4.0.5",
+    "select2-bootstrap-theme": "0.1.0-beta.10",
     "style-loader": "^0.20.2",
+    "topojson-client": "^3.0.0",
     "uglifyjs-webpack-plugin": "^1.2.0",
     "webpack": "^4.8.3",
     "webpack-clear-console": "^1.0.3",
@@ -56,21 +72,12 @@
     "webpack-dev-server": "^3.1.4",
     "webpack-merge": "^4.1.1"
   },
-  "dependencies": {
-    "bootstrap": "^3.3.7",
-    "crossfilter": "^1.3.12",
-    "d3": "^4.13.0",
-    "d3-geo": "^1.9.1",
-    "d3-geo-projection": "^2.3.2",
-    "d3-tip": "^0.7.1",
-    "file-saver": "^1.3.3",
-    "fs-extra": "^5.0.0",
-    "intro.js": "git+https://github.com/usablica/intro.js.git#5fe318653267b9738a2a185402b566cc90aa37ac",
-    "jquery": "^3.3.1",
-    "modernizr": "^3.6.0",
-    "popper.js": "^1.12.9",
-    "select2": "^4.0.5",
-    "select2-bootstrap-theme": "0.1.0-beta.10",
-    "topojson-client": "^3.0.0"
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-object-rest-spread"
+    ]
   }
 }

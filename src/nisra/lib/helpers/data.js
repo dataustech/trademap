@@ -1,5 +1,6 @@
 /* global window document */
 /* eslint no-restricted-syntax: 0 */
+/* eslint object-curly-newline: 0 */
 /*
  * THIS FILE MANAGES API QUERIES AND CROSSFILTER SETUP
  * */
@@ -14,6 +15,7 @@ import partners from '../../data/partners.json';
 import years from '../../data/years.json';
 import commodities from '../../data/commodities.json';
 import worldJson from '../../data/world-110m.json';
+import { toTitleCase } from './utils';
 
 // privates
 
@@ -24,77 +26,89 @@ const runningQueries = {};
 
 // xfilter
 const xFilter = crossfilter();
-const xFilterByReporter = xFilter.dimension(d => d.reporter);
-const xFilterByPartner = xFilter.dimension(d => d.partner);
-const xFilterByYear = xFilter.dimension(d => +d.year);
-const xFilterByCommodity = xFilter.dimension(d => d.commodity);
-const xFilterByImportValue = xFilter.dimension(d => +d.importValue);
+const dimensions = {
+  byReporter: xFilter.dimension(d => d.reporter),
+  byPartner: xFilter.dimension(d => d.partner),
+  byPartnerType: xFilter.dimension(d => d.partnerType),
+  byYear: xFilter.dimension(d => +d.year),
+  byCommodity: xFilter.dimension(d => d.commodity),
+  byCommodityType: xFilter.dimension(d => d.commodityType),
+  byImportValue: xFilter.dimension(d => +d.importVal),
+  byExportValue: xFilter.dimension(d => +d.exportVal)
+};
 
 // private utility methods
 const buildUrl = (filters) => {
-  let requestUrl = `${baseQueryUrl}/${filters.reporter}`;
-  requestUrl += (filters.partner !== null) ? `/${filters.partner}` : '/all';
-  requestUrl += `/${filters.year}`;
-  requestUrl += (filters.commodity !== null) ? `/${filters.commodity}` : '/all';
+  const { reporter, partner = null, year = null, commodity = null } = filters;
+  let requestUrl = `${baseQueryUrl}/${reporter}`;
+  requestUrl += (partner !== null) ? `/${partner}` : '/all';
+  requestUrl += (year !== null) ? `/${year}` : '/all';
+  requestUrl += (commodity !== null) ? `/${commodity}` : '/all';
   requestUrl += '/data.csv';
   return requestUrl;
 };
 
 const equals = (a, b) => {
-  const props = ['year', 'reporter', 'partner', 'commodity', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc'];
+  const props = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal'];
   for (const prop of props) {
     if (a[prop] !== b[prop]) return false;
   }
   return true;
 };
 
-/*
- * Get a dataset for display
- * filters argument should be an object in the following form:
- * {
- *   reporter: 'NI',    // Reporter code
- *   partner:  'IT',    // Partner code or 'all'
- *   year:     'all',   // Specific year or 'all'
- *   commodity: '72'    // SITC1 or 2 code OR 'all'
- * }
- * limit will be used to return the top x number of records
- */
-const getData = (filters, limit) => {
-  // Clear all filters on the xFilter
-  xFilterByReporter.filterAll();
-  xFilterByPartner.filterAll();
-  xFilterByYear.filterAll();
-  xFilterByCommodity.filterAll();
-  xFilterByImportValue.filterAll();
+const getData = (filters, limit, flow) => {
+  const {
+    reporter,
+    year = null,
+    partner = null,
+    partnerType = null,
+    commodity = null,
+    commodityType = null
+  } = filters;
+  if (typeof reporter === 'undefined') throw new Error(`Reporter must be defined when calling getData (reporter: ${reporter}`);
 
-  // Add filteexporteach dimension
-  if (typeof filters.reporter === 'undefined' || typeof filters.year === 'undefined') throw new Error('reporter and year must be defined when calling getData');
-  xFilterByReporter.filter(filters.reporter);
-  xFilterByYear.filter(+filters.year);
-  xFilterByPartner.filter((filters.partner !== null) ? filters.partner : 'all');
-  xFilterByCommodity.filter((filters.commodity !== null) ? filters.commodity : 'all');
+  // Clear all existing filters
+  Object.keys(dimensions).forEach(dimensionName => dimensions[dimensionName].filterAll());
 
-  // Get the data from xFilter
-  const lim = limit || Infinity;
-  const newData = xFilterByImportValue.top(lim);
+  // Apply new filters
+  dimensions.byReporter.filter(reporter);
+  dimensions.byYear.filter(year);
+  dimensions.byPartner.filter(partner);
+  dimensions.byPartnerType.filter(partnerType);
+  dimensions.byCommodity.filter(commodity);
+  dimensions.byCommodityType.filter(commodityType);
 
-  // Return resulting records
-  return newData;
+  // Return filtered results
+  const dimensionName = flow ? `by${toTitleCase(flow)}Value` : 'byImportValue';
+  return dimensions[dimensionName].top(limit || Infinity);
 };
 
 const addData = (csvData, filters) => {
-  const newData = d3.csvParse(csvData).map((record) => {
-    const newRecord = Object.assign({}, record);
-    newRecord.importVal = +record.importVal * 1000;
-    newRecord.exportVal = +record.exportVal * 1000;
-    return newRecord;
+  const newData = d3.csvParse(csvData)
+    .map(record => ({
+      ...record,
+      year: +record.year,
+      exportPc: +record.exportPc,
+      exportRank: +record.exportRank,
+      importPc: +record.importPc,
+      importRank: +record.importRank,
+      importVal: +record.importVal * 1000,
+      exportVal: +record.exportVal * 1000,
+      balanceVal: +record.balanceVal * 1000,
+      bilateralVal: +record.bilateralVal * 1000
+    }));
+  const existingData = getData({
+    ...filters,
+    partner: filters.partner !== 'all' ? filters.partner : null,
+    commodity: filters.commodity !== 'all' ? filters.commodity : null,
+    year: filters.year !== 'all' ? filters.year : null
   });
-  const existingData = getData(filters);
   const dedupedData = newData
-    .filter(newRec => existingData.reduce(existingRec => !equals(existingRec, newRec), true));
+    .filter(newRec => existingData
+      .reduce((acc, existingRec) => acc && !equals(existingRec, newRec), true));
   xFilter.add(dedupedData);
 
-  console.groupCollapsed('API QUERY SUCCESS from %s', filters.initiator);
+  console.groupCollapsed('API QUERY SUCCESS from %s: %s', filters.initiator, buildUrl(filters));
   console.log('filters: %o', filters);
   console.log(
     'Added %d new records. Retrieved %d records. Checked %d possible matches and discarded %d duplicates. New xFilter size: %d',
@@ -111,6 +125,49 @@ const fireQueryQueueUpdateEvent = () => {
   window.dispatchEvent(event);
 };
 
+const query = (filters, callback) => {
+  // Build URL & check if it has already been run or if it's presently running
+  const requestUrl = buildUrl(filters);
+  const isQueryCompleted = queryHistory.indexOf(requestUrl) > -1;
+  const isQueryRunning = Object.keys(runningQueries).indexOf(requestUrl) > -1;
+  if (isQueryCompleted) return callback();
+  if (isQueryRunning) return runningQueries[requestUrl].push(callback);
+  runningQueries[requestUrl] = [callback];
+  fireQueryQueueUpdateEvent();
+
+  // Make the ajax call
+  return $.ajax({
+    url: requestUrl,
+    timeout: 75000,
+    beforeSend(xhr) {
+      $('#loadingDiv #cancelRequest').on('click', () => {
+        xhr.abort();
+        $('#loadingDiv').fadeOut();
+      });
+      $('#loadingDiv').fadeIn();
+    },
+    success(result) {
+      // Add data to crossfilter, the query to the history
+      addData(result, filters);
+      queryHistory.push(requestUrl);
+    },
+    error(xhr, status, err) {
+      console.log('API Error:', err);
+      runningQueries[requestUrl].forEach(cb => cb(`${status} ${err} ${xhr.responseText}`));
+    },
+    complete() {
+      runningQueries[requestUrl].forEach(cb => cb());
+      delete runningQueries[requestUrl];
+      fireQueryQueueUpdateEvent();
+      // If finished then hide the loadingDiv
+      if (Object.keys(runningQueries).length === 0) {
+        $('#loadingDiv').fadeOut();
+        $('#loadingDiv #cancelRequest').off('click');
+      }
+    }
+  });
+};
+
 // exported object
 const data = {
 
@@ -121,13 +178,14 @@ const data = {
   years,
   worldJson,
 
+  getData,
+  query,
+
   // lookup hashes/maps
   reportersMap: d3.map(reporters, d => d.id),
   partnersMap: d3.map(partners, d => d.id),
   partnersByMapNumericalMap: d3.map(partners, d => d.mapNumerical),
   commoditiesMap: d3.map(commodities, d => d.id),
-
-  getData,
 
   // lookup function with error handling
   lookup: (lookupVal, mapName, propertyName) => {
@@ -137,62 +195,6 @@ const data = {
       console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
       return 'unknown';
     }
-  },
-
-  /*
-   * Run an API query
-   * filters argument should be an object in the following form:
-   * {
-   *   reporter: 'NI',    // Reporter code (NUTS1)
-   *   partner:  'IT',    // Partner code (codalpha or labarea) or 'all'
-   *   year:     'all',   // Specific year or 'all'
-   *   commodity: '34'    // SITC1 or 2 code OR 'all'
-   * }
-   * Callback is called with callback(error, ready)
-   * ready will be true if new data was received and added to crossfilter or false otherwise.
-   */
-  query(filters, callback) {
-    // Build URL & check if it has already been run or if it's presently running
-    const requestUrl = buildUrl(filters);
-    const isQueryCompleted = queryHistory.indexOf(requestUrl) > -1;
-    const isQueryRunning = Object.keys(runningQueries).indexOf(requestUrl) > -1;
-    if (isQueryCompleted) return callback();
-    if (isQueryRunning) return runningQueries[requestUrl].push(callback);
-    runningQueries[requestUrl] = [callback];
-    fireQueryQueueUpdateEvent();
-
-    // Make the ajax call
-    $.ajax({
-      url: requestUrl,
-      timeout: 75000,
-      beforeSend(xhr) {
-        $('#loadingDiv #cancelRequest').on('click', () => {
-          xhr.abort();
-          $('#loadingDiv').fadeOut();
-        });
-        $('#loadingDiv').fadeIn();
-      },
-      success(result) {
-        // Add data to crossfilter, the query to the history
-        addData(result, filters);
-        queryHistory.push(requestUrl);
-      },
-      error(xhr, status, err) {
-        console.log('Unknown API error');
-        runningQueries[requestUrl].forEach(cb => cb(`${status} ${err} ${xhr.responseText}`));
-      },
-      complete() {
-        runningQueries[requestUrl].forEach(cb => cb());
-        delete runningQueries[requestUrl];
-        fireQueryQueueUpdateEvent();
-        // If finished then hide the loadingDiv
-        if (Object.keys(runningQueries).length === 0) {
-          $('#loadingDiv').fadeOut();
-          $('#loadingDiv #cancelRequest').off('click');
-        }
-      }
-    });
-    return null;
   }
 
 };

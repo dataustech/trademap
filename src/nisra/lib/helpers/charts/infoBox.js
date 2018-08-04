@@ -7,6 +7,7 @@ import * as d3 from 'd3';
 
 import data from '../data';
 import gui from '../gui';
+import { numFormat, numOrdinal } from '../utils';
 
 const $infoBox = $('#infoBox');
 const $defaultPanel = $('#defaultPanel');
@@ -70,18 +71,16 @@ const box = {
     // We build a queryFilter and a dataFilter object to make
     // API queries more generic than data queries
     const queryFilter = {
-      reporter: +filters.reporter,
-      partner: 0,
+      reporter: filters.reporter,
+      partner: 'all',
       year: +filters.year,
-      commodity: 'AG2',
-      initiator: 'infoBox',
-      type: filters.type
+      commodity: 'all',
+      initiator: 'infoBox'
     };
     const dataFilter = {
-      reporter: +filters.reporter,
+      reporter: filters.reporter,
       year: +filters.year,
-      commodity: 'TOTAL',
-      type: filters.type
+      commodity: 'all'
     };
 
     // NOTE that we leave dataFilter.partner undefined when a partner is selected
@@ -93,14 +92,14 @@ const box = {
 
     // CASE 2: reporter = selected    commodity = null        partner = null
     if (filters.reporter && !filters.commodity && !filters.partner) {
-      queryFilter.commodity = 'TOTAL';
+      queryFilter.commodity = 'all';
       queryFilter.year = 'all';
     }
 
     // CASE 3: reporter = selected    commodity = null        partner = selected
     if (filters.reporter && !filters.commodity && filters.partner) {
       queryFilter.partner = 'all';
-      queryFilter.commodity = 'TOTAL';
+      queryFilter.commodity = 'all';
       queryFilter.year = +filters.year;
     }
 
@@ -124,10 +123,8 @@ const box = {
       if (err) { gui.showError(err); }
       if (err || !ready) { return; }
 
-      // Query xFilter and then use the combineData to get single object per partner.
       const newData = data.getData(dataFilter);
-      const newDataCombined = data.combineData(newData);
-      const newDataByPartner = d3.map(newDataCombined, d => d.partner);
+      const newDataByPartner = d3.map(newData, d => d.partner);
       box.populateBox($defaultPanel, newDataByPartner.get(filters.partner || 0), filters.partner);
     });
   },
@@ -142,41 +139,41 @@ const box = {
 
     // If no details then display no data and stop.
     if (!details) {
-      $panel.find('.subtitle').html(`<p class="text-center"><strong>No data available for ${data.lookup(countryUnNum, 'countryByUnNum', 'name')}.</strong></p>`);
+      $panel.find('.subtitle').html(`<p class="text-center"><strong>No data available for ${data.lookup(countryUnNum, 'partnersByMapNumerical', 'text')}.</strong></p>`);
       $panel.find('.value, .ranking').html('');
       $panel.find('dt').hide();
       return;
     }
 
-    const reporterName = data.lookup(details.reporter, 'reporterAreas', 'text');
-    const partnerName = data.lookup(details.partner, 'partnerAreas', 'text');
-    let subtitle = `<strong>${reporterName}</strong> trade in ${({ S: 'services', C: 'goods' })[details.type]} with <strong>${partnerName}</strong> in <strong>${details.year}</strong><br />`;
-    if (details.commodity && details.commodity !== 'TOTAL') {
-      subtitle += `<strong>${data.commodityName(details.commodity, details.type)}</strong>`;
+    const reporterName = data.lookup(details.reporter, 'reporters', 'text');
+    const partnerName = data.lookup(details.partner, 'partners', 'text');
+    let subtitle = `<strong>${reporterName}</strong> trade in goods with <strong>${partnerName}</strong> in <strong>${details.year}</strong><br />`;
+    if (details.commodity && details.commodity !== 'all') {
+      subtitle += `<strong>${data.lookup(details.commodity, 'commodities', 'text')}</strong>`;
     }
     $panel.find('.subtitle').html(subtitle);
 
     // Populate panel
-    $panel.find('.value.exports').html(data.numFormat(details.exportVal, null, 1));
-    $panel.find('.value.imports').html(data.numFormat(details.importVal, null, 1));
-    $panel.find('.value.balance').html(data.numFormat(details.balanceVal, null, 1));
-    $panel.find('.value.bilateral').html(data.numFormat(details.bilateralVal, null, 1));
+    $panel.find('.value.exports').html(numFormat(details.exportVal, null, 1));
+    $panel.find('.value.imports').html(numFormat(details.importVal, null, 1));
+    $panel.find('.value.balance').html(numFormat(details.balanceVal, null, 1));
+    $panel.find('.value.bilateral').html(numFormat(details.bilateralVal, null, 1));
 
     // Show ranking only if partner and rankings are given
     if (details.partner && details.partner !== 0 && details.importRank && details.exportRank) {
       let ranking;
       try {
         ranking = [
-          `${partnerName} was the ${data.numOrdinal(details.exportRank)} largest export market for ${reporterName} `,
+          `${partnerName} was the ${numOrdinal(details.exportRank)} largest export market for ${reporterName} `,
           `(${details.exportPc.toFixed(1)}% of ${reporterName} exports) `,
-          `and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName} `,
+          `and the ${numOrdinal(details.importRank)} largest import market for ${reporterName} `,
           `(${details.importPc.toFixed(1)}% of ${reporterName} imports)`
         ].join('');
       } catch (err) {
-        ranking = [`${partnerName} was the ${data.numOrdinal(details.exportRank)} largest export market for ${reporterName} and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName}.`].join();
+        ranking = [`${partnerName} was the ${numOrdinal(details.exportRank)} largest export market for ${reporterName} and the ${numOrdinal(details.importRank)} largest import market for ${reporterName}.`].join();
       }
-      if (details.commodity && details.commodity !== 'TOTAL') {
-        ranking += ` for ${data.commodityName(details.commodity, details.type)}`;
+      if (details.commodity && details.commodity !== 'all') {
+        ranking += ` for ${data.lookup(details.commodity, 'commodities', 'text')}`;
       }
       ranking += ` in ${details.year}.`;
       $panel.find('.ranking').html(ranking);

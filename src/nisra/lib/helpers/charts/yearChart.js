@@ -90,11 +90,12 @@ const chart = {
 
 
   refresh(event, filters) {
+    const { reporter, partner, commodity } = filters;
     // force resize on refresh
     chart.resizeSvg();
 
     // CASE 1: reporter = null
-    if (!filters.reporter) {
+    if (!reporter) {
       $container.slideUp();
       return;
     }
@@ -102,19 +103,17 @@ const chart = {
     // We build a queryFilter and a dataFilter object to make API
     // queries more generic than data queries (see case 2 and 5 below)
     const queryFilter = {
-      reporter: filters.reporter,
-      year: 'all',
+      reporter,
       initiator: 'yearChart'
     };
     const dataFilter = {
-      reporter: filters.reporter,
-      year: 'all'
+      reporter
     };
     let title = '';
 
     // CASE 2: reporter = selected    commodity = null        partner = null
-    if (filters.reporter && filters.commodity === null && filters.partner === null) {
-      title = `${data.lookup(filters.reporter, 'reporters', 'text')} trade in goods with the world`;
+    if (reporter && commodity === null && partner === null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with the world`;
       queryFilter.partner = 'all';
       queryFilter.commodity = 'all';
       dataFilter.partner = 'all';
@@ -122,32 +121,32 @@ const chart = {
     }
 
     // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && filters.commodity === null && filters.partner !== null) {
-      title = `${data.lookup(filters.reporter, 'reporters', 'text')} trade in goods with ${data.lookup(filters.partner, 'partners', 'text')}`;
-      queryFilter.partner = filters.partner;
+    if (reporter && commodity === null && partner !== null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with ${data.lookup(partner, 'partners', 'text')}`;
+      queryFilter.partner = partner;
       queryFilter.commodity = 'all';
-      dataFilter.partner = filters.partner;
+      dataFilter.partner = partner;
       dataFilter.commodity = 'all';
     }
 
     // CASE 4: reporter = selected    commodity = selected    partner = selected
     // NOTE This is already covered by the data in CASE 3 so we don't
     // specify the commodity in the query to avoid duplicate data
-    if (filters.reporter && filters.commodity !== null && filters.partner !== null) {
-      title = `${data.lookup(filters.reporter, 'reporters', 'text')} trade in ${data.lookup(filters.commodity, 'commodities', 'text')} with ${data.lookup(filters.partner, 'partners', 'text')}`;
-      queryFilter.partner = filters.partner;
-      queryFilter.commodity = filters.commodity;
-      dataFilter.partner = filters.partner;
-      dataFilter.commodity = filters.commodity;
+    if (reporter && commodity !== null && partner !== null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in ${data.lookup(commodity, 'commodities', 'text')} with ${data.lookup(partner, 'partners', 'text')}`;
+      queryFilter.partner = partner;
+      queryFilter.commodity = commodity;
+      dataFilter.partner = partner;
+      dataFilter.commodity = commodity;
     }
 
     // CASE 5: reporter = selected    commodity = selected    partner = null
-    if (filters.reporter && filters.commodity !== null && filters.partner === null) {
-      title = `${data.lookup(filters.reporter, 'reporters', 'text')} trade in ${data.lookup(filters.commodity, 'commodities', 'text')} with the world`;
+    if (reporter && commodity !== null && partner === null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in ${data.lookup(commodity, 'commodities', 'text')} with the world`;
       queryFilter.partner = 'all';
-      queryFilter.commodity = filters.commodity;
+      queryFilter.commodity = commodity;
       dataFilter.partner = 'all';
-      dataFilter.commodity = filters.commodity;
+      dataFilter.commodity = commodity;
     }
 
     // Run the query, display the panel and redraw the chart

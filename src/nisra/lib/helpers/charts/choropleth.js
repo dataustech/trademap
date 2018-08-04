@@ -11,6 +11,8 @@ import { feature } from 'topojson-client';
 import data from '../data';
 import gui from '../gui';
 import infoBox from './infoBox';
+import controls from '../controls';
+import { numFormat } from '../utils';
 
 const $chart = $('#choropleth');
 const $chartTitle = $('#choroplethTitle .chartTitle');
@@ -87,19 +89,8 @@ const chart = {
       .attr('d', path)
       .attr('id', d => `iso${d.id}`)
       .on('click', (d) => {
-        // Show context menu
         d3.event.preventDefault();
-        $('#contextMenu .country').html(data.lookup(d.id, 'countryByISONum', 'name'));
-        $('#contextMenu .setReporter a, #contextMenu .setPartner a').attr('data-uncode', data.lookup(d.id, 'countryByISONum', 'unCode'));
-        $('#closeContextMenu').on('click', (e) => {
-          e.preventDefault();
-          infoBox.hideHover();
-        });
-        $('#contextMenu').css({
-          display: 'block',
-          left: d3.event.pageX,
-          top: d3.event.pageY
-        });
+        controls.changeFilters({ partner: data.lookup(d.id.toString(), 'partnersByMapNumerical', 'id') });
       });
 
     if (callback) { callback(); }
@@ -110,13 +101,13 @@ const chart = {
     resizeSvg();
 
     const queryFilter = {
-      reporter: +filters.reporter,
+      reporter: filters.reporter,
       partner: 'all',
       year: +filters.year,
       initiator: 'choropleth'
     };
     const dataFilter = {
-      reporter: +filters.reporter,
+      reporter: filters.reporter,
       partner: 'all',
       year: +filters.year,
       flow: +filters.flow
@@ -134,14 +125,13 @@ const chart = {
 
     // CASE 2&3: reporter = selected    commodity = null
     if (filters.reporter && !filters.commodity) {
-      // Set query and data retrieval filters (forcing commodity to total)
-      queryFilter.commodity = 'TOTAL';
-      queryFilter.type = filters.type;
-      dataFilter.commodity = 'TOTAL';
+      // Set query and data retrieval filters (forcing commodity to all)
+      queryFilter.commodity = 'all';
+      dataFilter.commodity = 'all';
       dataFilter.type = filters.type;
       title = '';
       title = [
-        data.lookup(filters.reporter, 'countryByUnNum', 'name'),
+        data.lookup(filters.reporter, 'reporters', 'text'),
         [
           [' trade in ', ({ S: 'services', C: 'goods' })[filters.type], ' balance '].join(''),
           [' imports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join(''),
@@ -156,15 +146,14 @@ const chart = {
     if (filters.reporter && filters.commodity) {
       // Set query and data retrieval filters
       queryFilter.commodity = filters.commodity;
-      queryFilter.type = filters.type;
       dataFilter.commodity = filters.commodity;
       dataFilter.type = filters.type;
       title = [
-        data.lookup(filters.reporter, 'countryByUnNum', 'name'),
+        data.lookup(filters.reporter, 'reporters', 'text'),
         [
-          [' trade in ', data.commodityName(filters.commodity, filters.type), ' balance '].join(),
-          [' imports of ', data.commodityName(filters.commodity, filters.type), ' '].join(),
-          [' exports of ', data.commodityName(filters.commodity, filters.type), ' '].join()
+          [' trade in ', data.lookup(filters.commodity, 'commodities', 'text'), ' balance '].join(),
+          [' imports of ', data.lookup(filters.commodity, 'commodities', 'text'), ' '].join(),
+          [' exports of ', data.lookup(filters.commodity, 'commodities', 'text'), ' '].join()
         ][filters.flow],
         ' in ',
         filters.year
@@ -202,7 +191,6 @@ const chart = {
       commodity: filters.commodity,
       year: +filters.year
     });
-    newData = data.combineData(newData);
 
     // Filter out records that relate to partner: 0 (world) which would distort the scale
     // as well as records that don't have data for the current flow
@@ -244,7 +232,7 @@ const chart = {
       // Assign behaviours to hover over country
       .on('mouseenter', (d) => {
         try {
-          const partner = data.countryByISONumMap.get(d.id).unCode;
+          const partner = data.lookup(d.id, 'partnersByMapNumerical', 'id');
           const partnerDetails = newDataByPartner.get(partner);
           if (partnerDetails) {
             infoBox.displayHover(partnerDetails);
@@ -267,7 +255,7 @@ const chart = {
       .transition()
       .duration(1000)
       .style('fill', (d) => {
-        const unCodes = data.areasByISONum(d.id);
+        const unCodes = data.partnersByMapNumericalMap.get(d.id);
         const countryData = [];
         let bucket = 0;
         try {
@@ -275,9 +263,9 @@ const chart = {
             const datum = newDataByPartner.get(el.unCode);
             if (datum) { countryData.push(newDataByPartner.get(el.unCode)); }
           });
-          if (countryData.length === 0) { throw new Error(`No data points for ${data.lookup(d.id, 'countryByUnNum', 'name')}`); }
-          if (countryData.length > 1) { throw new Error(`Multiple data points for ${data.lookup(d.id, 'countryByUnNum', 'name')}`); }
-          if (countryData[0][flowRank] === null) { throw new Error(`'Incomplete data for ${data.lookup(d.id, 'countryByUnNum', 'name')}`); }
+          if (countryData.length === 0) { throw new Error(`No data points for ${data.lookup(d.id, 'partners', 'text')}`); }
+          if (countryData.length > 1) { throw new Error(`Multiple data points for ${data.lookup(d.id, 'partners', 'text')}`); }
+          if (countryData[0][flowRank] === null) { throw new Error(`'Incomplete data for ${data.lookup(d.id, 'partners', 'text')}`); }
           bucket = colorScale(countryData[0][flowRank]);
           return chart.colors[filters.flow][bucket];
         } catch (exception) {
@@ -295,9 +283,6 @@ const chart = {
       }))
       .entries(newData);
     chart.drawLegend(legendData, filters.flow);
-
-    // Highlight reporter on map
-    svg.select(`#iso${data.lookup(filters.reporter, 'countryByUnNum', 'isoNumerical')}`).classed('highlighted', true);
   },
 
   drawLegend(legendData, flow) {
@@ -370,7 +355,7 @@ const chart = {
       .attr('x', 12)
       .text((d, i) => {
         if (+flow > 0) {
-          return `${data.numFormat(legendData[i].value.min, null, 1)} - ${data.numFormat(legendData[i].value.max, null, 1)} (${legendData[i].value.count} partners)`;
+          return `${numFormat(legendData[i].value.min, null, 1)} - ${numFormat(legendData[i].value.max, null, 1)} (${legendData[i].value.count} partners)`;
         }
         return '';
       });

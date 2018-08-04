@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 
 import data from './data';
 import controls from './controls';
+import { numFormat } from './utils';
 
 export default {
 
@@ -33,7 +34,7 @@ export default {
     this.yScale.range([0, this.innerHeight])
       .clamp(true);
     this.xAxis.scale(this.xScale)
-      .tickFormat(data.numFormat);
+      .tickFormat(numFormat);
     this.yAxis.scale(this.yScale);
     svg.append('g')
       .attr('class', 'bars')
@@ -49,22 +50,34 @@ export default {
   },
 
 
-  draw(svg, newData, filters, color) {
-    if (newData.length === 0) { console.warn('no new data', filters); }
+  draw(svg, newData, filters, color, valueName) {
+
+    if (!newData || newData.length === 0) {
+      // Display a "No data" text
+      if (groups.size() === 0) {
+        svg.append('text')
+          .text('No data available for this chart.')
+          .classed('nodata', true)
+          .classed('label', true)
+          .attr('x', (this.innerWidth / 2) + this.margin.left - 75)
+          .attr('y', (this.innerHeight / 2) + this.margin.top - 75);
+      }
+    }
+
+    // Remove no data text
+    svg.select('text.nodata').remove();
+
     // Setup scales & axises
-    this.xScale.domain([0, d3.max(newData, d => d.value)])
+    this.xScale.domain([0, d3.max(newData, d => d[valueName])])
       .nice();
     this.yScale.domain([0, d3.max([10, newData.length])])
       .clamp(true)
       .nice();
     this.xAxis.scale(this.xScale)
       .tickSize(6, 0)
-      .tickFormat(data.numFormat);
+      .tickFormat(numFormat);
     this.yAxis.scale(this.yScale).ticks(0);
     this.barHeight = (this.yScale(1) - 20);
-
-    // Remove no data text
-    svg.select('text.nodata').remove();
 
     // Update axises
     svg.select('.x.axis')
@@ -112,37 +125,28 @@ export default {
       .attr('y', this.yScale(1) - this.barHeight - 5)
       .style('fill', color)
       .attr('height', this.barHeight)
-      .attr('width', d => d3.max([0, this.xScale(+d.value)]));
+      .attr('width', d => d3.max([0, this.xScale(+d[valueName])]));
     labels
       .attr('x', '3')
       .attr('y', this.yScale(1) - this.barHeight - 8)
       .text((d) => {
         if (filters.partner === 'all') { // top partner chart: select partner
-          return data.lookup(d.partner, 'partnerAreas', 'text');
+          return data.lookup(d.partner, 'partners', 'text');
         } // top commodities chart: select commodity
-        return data.commodityName(d.commodity, filters.type);
+        return data.lookup(d.commodity, 'commodities', 'text');
       });
     values
-      .attr('x', d => this.xScale(+d.value) + 3)
+      .attr('x', d => this.xScale(+d[valueName]) + 3)
       .attr('y', this.yScale(1) - 5)
-      .text(d => data.numFormat(d.value, null, 1));
+      .text(d => numFormat(d[valueName], null, 1));
 
     // Exit groups
     groups.exit().remove();
 
-    // Display a "No data" text
-    if (groups.size() === 0) {
-      svg.append('text')
-        .text('No data available for this chart.')
-        .classed('nodata', true)
-        .classed('label', true)
-        .attr('x', (this.innerWidth / 2) + this.margin.left - 75)
-        .attr('y', (this.innerHeight / 2) + this.margin.top - 75);
-    }
   },
 
 
-  resizeSvg(svg, newWidth) {
+  resizeSvg(svg, newWidth, valueName) {
     svg.attr('width', newWidth);
     this.innerWidth = svg.attr('width') - this.margin.left - this.margin.right;
     // Update xScale and xAxis
@@ -154,8 +158,8 @@ export default {
     // Update bars & text
     const groups = svg.selectAll('g.item');
     groups.selectAll('rect')
-      .attr('width', d => this.xScale(+d.value) || 1);
+      .attr('width', d => this.xScale(+d[valueName]) || 1);
     groups.selectAll('text.value')
-      .attr('x', d => this.xScale(+d.value) + 3);
+      .attr('x', d => this.xScale(+d[valueName]) + 3);
   }
 };

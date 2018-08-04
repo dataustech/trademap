@@ -38,6 +38,8 @@ npm run start:comtrade
 npm run start:nisra
 ```
 
+The server runs on port 9000 so you can then open http://localhost:9000
+
 To build the projects for development:
 
 ```

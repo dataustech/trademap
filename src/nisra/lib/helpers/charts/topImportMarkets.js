@@ -49,41 +49,38 @@ const chart = {
     // We build a queryFilter and a dataFilter object to make
     // API queries more generic than data queries
     const queryFilter = {
-      reporter: +filters.reporter,
+      reporter: filters.reporter,
       partner: 'all',
       year: filters.year,
-      commodity: 'AG2',
+      commodity: 'all',
       initiator: 'topImportMarkets',
       type: filters.type
     };
     const dataFilter = {
-      reporter: +filters.reporter,
+      reporter: filters.reporter,
       partner: 'all',
       year: filters.year,
-      commodity: 'AG2',
+      commodity: 'all',
       type: filters.type
     };
     let title = '';
 
-    // Define flow
-    dataFilter.flow = 1;
-
     // CASE 2: reporter = selected    commodity = null        partner = null or 0
-    if (filters.reporter && !filters.commodity && (!filters.partner || +filters.partner === 0)) {
-      queryFilter.commodity = 'TOTAL';
-      dataFilter.commodity = 'TOTAL';
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} - Top-10 import markets for ${({ S: 'services', C: 'goods' })[filters.type]} in ${filters.year}`;
+    if (filters.reporter && !filters.commodity && (!filters.partner || filters.partner === 0)) {
+      queryFilter.commodity = 'all';
+      dataFilter.commodity = 'all';
+      title = `${data.lookup(filters.reporter, 'reporters', 'text')} - Top-10 import markets for ${({ S: 'services', C: 'goods' })[filters.type]} in ${filters.year}`;
     }
 
     // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && !filters.commodity && filters.partner && +filters.partner !== 0) {
+    if (filters.reporter && !filters.commodity && filters.partner && filters.partner !== 0) {
       $chartTitle.html('');
       $container.slideUp();
       return;
     }
 
     // CASE 4: reporter = selected    commodity = selected    partner = selected
-    if (filters.reporter && filters.commodity && filters.partner && +filters.partner !== 0) {
+    if (filters.reporter && filters.commodity && filters.partner && filters.partner !== 0) {
       $chartTitle.html('');
       $container.slideUp();
       return;
@@ -92,10 +89,10 @@ const chart = {
     // CASE 5: reporter = selected    commodity = selected    partner = null
     // This is already covered by the data in CASE 2 so we don't specify
     // the commodity in the query to avoid duplicate data
-    if (filters.reporter && filters.commodity && (!filters.partner || +filters.partner === 0)) {
+    if (filters.reporter && filters.commodity && (!filters.partner || filters.partner === 0)) {
       queryFilter.commodity = filters.commodity;
       dataFilter.commodity = filters.commodity;
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} - Top-10 import markets for ${data.commodityName(filters.commodity, filters.type)} in ${filters.year}`;
+      title = `${data.lookup(filters.reporter, 'reporters', 'text')} - Top-10 import markets for ${data.lookup(filters.commodity, 'commodities', 'text')} in ${filters.year}`;
     }
 
     // Run API query
