@@ -108,7 +108,7 @@ const addData = (csvData, filters) => {
       .reduce((acc, existingRec) => acc && !equals(existingRec, newRec), true));
   xFilter.add(dedupedData);
 
-  console.groupCollapsed('API QUERY SUCCESS from %s: %s', filters.initiator, buildUrl(filters));
+  console.groupCollapsed('API QUERY SUCCESS from %s: %s (%d records)', filters.initiator, buildUrl(filters), newData.length);
   console.log('filters: %o', filters);
   console.log(
     'Added %d new records. Retrieved %d records. Checked %d possible matches and discarded %d duplicates. New xFilter size: %d',

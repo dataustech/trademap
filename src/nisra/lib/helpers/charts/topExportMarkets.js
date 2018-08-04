@@ -1,4 +1,5 @@
 /* global window */
+/* eslint object-curly-newline: 0 */
 /*
  * THIS FILE SETS UP THE topExportMarkets chart
  * */
@@ -31,7 +32,7 @@ const chart = {
     $chart.on('refreshFilters', chart.refresh);
     // Bind the resize function to the window resize event
     $(window).on('resize', () => {
-      rowchart.resizeSvg(svg, $chart.width());
+      rowchart.resizeSvg(svg, $chart.width(), 'exportVal');
     });
     // Setup the svg
     rowchart.setup(svg);
@@ -40,73 +41,59 @@ const chart = {
   },
 
   refresh(event, filters) {
-    // CASE 1: reporter = null
-    if (!filters.reporter) {
-      $container.slideUp();
-      return;
-    }
+    const { reporter, partner, commodity, year } = filters;
 
-    // We build a queryFilter and a dataFilter object to make
-    // API queries more generic than data queries
+    // CASE 1: reporter = null
+    // CASE 3: commodity = null        partner = selected
+    // CASE 4: commodity = selected    partner = selected
+    if (
+      reporter === null ||
+      typeof reporter === 'undefined' ||
+      partner !== null
+    ) return $container.slideUp();
+
+    // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
-      reporter: filters.reporter,
-      partner: 'all',
-      year: +filters.year,
+      reporter,
       commodity: 'all',
-      initiator: 'topExportMarkets',
-      type: filters.type
+      initiator: 'topExportMarkets'
     };
     const dataFilter = {
-      reporter: filters.reporter,
-      partner: 'all',
-      year: filters.year,
-      commodity: 'all',
-      type: filters.type
+      reporter,
+      year,
+      // TODO see https://github.com/mjs2020/trademap/issues/25
+      partnerType: 'codealpha',
+      initiator: 'topExportMarkets'
     };
     let title = '';
 
-    // CASE 2: reporter = selected    commodity = null        partner = null or 0
-    if (filters.reporter && !filters.commodity && (!filters.partner || filters.partner === 0)) {
-      title = `${data.lookup(filters.reporter, 'reporters', 'text')} - Top-10 export markets for ${({ S: 'services', C: 'goods' })[filters.type]} in ${filters.year}`;
+    if (commodity === null) {
+      // CASE 2: commodity = null        partner = null or 0
+      title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 export markets in ${year}`;
       queryFilter.commodity = 'all';
       dataFilter.commodity = 'all';
+    } else {
+      // CASE 5: commodity = selected    partner = null
+      // This is already covered by the data in CASE 2 so we don't specify the
+      // commodity in the api query to avoid duplicate data and requests
+      title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 export markets for ${data.lookup(commodity, 'commodities', 'text')} in ${year}`;
+      queryFilter.commodity = commodity;
+      dataFilter.commodity = commodity;
     }
 
-    // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && !filters.commodity && filters.partner && filters.partner !== 0) {
-      $chartTitle.html('');
-      $container.slideUp();
-      return;
-    }
+    $chartTitle.html(title);
 
-    // CASE 4: reporter = selected    commodity = selected    partner = selected
-    if (filters.reporter && filters.commodity && filters.partner && filters.partner !== 0) {
-      $chartTitle.html('');
-      $container.slideUp();
-      return;
-    }
-
-    // CASE 5: reporter = selected    commodity = selected    partner = null
-    // This is already covered by the data in CASE 2 so we don't specify the
-    // commodity in the api query to avoid duplicate data and requests
-    if (filters.reporter && filters.commodity && (!filters.partner || filters.partner === 0)) {
-      title = `${data.lookup(filters.reporter, 'reporters', 'text')} - Top-10 export markets for ${data.lookup(filters.commodity, 'commodities', 'text')} in ${filters.year}`;
-      queryFilter.commodity = filters.commodity;
-      dataFilter.commodity = filters.commodity;
-    }
-
-    data.query(queryFilter, (err, ready) => {
+    return data.query(queryFilter, (err) => {
       if (err) { gui.showError(err); }
-      if (err || !ready) { return; }
-      // Get the data, update title, display panel and update chart
-      const newData = data.getData(dataFilter, numEntries);
-      // Set chart title
-      $chartTitle.html(title);
+
+      const newData = data.getData(dataFilter, numEntries, 'export');
+
       // Set download link
       $container.find('.downloadData').unbind('click').on('click', (e) => {
         e.preventDefault();
         gui.downloadCsv(title, newData);
       });
+
       $container.slideDown(400, () => {
         rowchart.draw(svg, newData, chart.colors[0][1], 'exportVal', 'partner');
       });
