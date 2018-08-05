@@ -196,7 +196,7 @@ export default {
   downloadCsv(title, newData) {
     const fields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal'];
     const csvHeader = `data:text/csv;charset=utf-8,\n${fields.join(',')}\n`;
-    const csvContent = newData.reduce((out, record) => `${fields.reduce((row,field) => `${row}${record[field]},`, out)}\n`, csvHeader);
+    const csvContent = newData.reduce((out, record) => `${fields.reduce((row, field) => `${row}${record[field]},`, out)}\n`, csvHeader);
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);

@@ -2,10 +2,11 @@ TODO:
 
 - [ ] Fixes
     - [x] Year chart
-    - [ ] Top i/e markets
-    - [ ] Top i/e commodities
+    - [x] Top i/e markets
+    - [x] Top i/e commodities
     - [ ] Infobox
     - [ ] Choropleth
+    - [x] Clear button should not clear reporter
 
 - API:
   - [x] remove aggregated

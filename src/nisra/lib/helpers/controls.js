@@ -84,7 +84,7 @@ const controls = {
 
     // ADD CLEARFILTERS BUTTON BEHAVIOR
     controls.$clearFilters.on('click', () => {
-      $('#selectReporter, #selectPartner, #selectCommodity')
+      $('#selectPartner, #selectCommodity')
         .off('change', controls.onFilterChange)
         .val(null)
         .trigger('change')
