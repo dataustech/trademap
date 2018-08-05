@@ -14,7 +14,6 @@ import reporters from '../../data/reporters.json';
 import partners from '../../data/partners.json';
 import years from '../../data/years.json';
 import commodities from '../../data/commodities.json';
-import worldJson from '../../data/world-110m.json';
 import { toTitleCase } from './utils';
 
 // privates
@@ -176,7 +175,6 @@ const data = {
   partners,
   commodities,
   years,
-  worldJson,
 
   getData,
   query,
@@ -192,8 +190,8 @@ const data = {
     try {
       return data[`${mapName}Map`].get(lookupVal)[propertyName];
     } catch (err) {
-      console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
-      return 'unknown';
+      // console.log(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
+      return null;
     }
   }
 

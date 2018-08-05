@@ -107,20 +107,20 @@ const box = {
   },
 
 
-  populateBox($panel, details, partnerId) {
+  populateBox($panel, record) {
     const {
       year, reporter, partner, commodity,
       importVal, exportVal, balanceVal, bilateralVal,
       importRank = null, exportRank = null,
       importPc = null, exportPc = null
-    } = details;
+    } = record;
     // Clear data previously in box
     $panel.find('.subtitle, .value, .ranking').html('');
     $panel.find('dt').show();
 
     // If no details then display no data and stop.
-    if (!details) {
-      $panel.find('.subtitle').html(`<p class="text-center"><strong>No data available for ${data.lookup(partnerId, 'partners', 'text')}.</strong></p>`);
+    if (!record) {
+      $panel.find('.subtitle').html(`<p class="text-center"><strong>No data available for ${data.lookup(partner, 'partners', 'text')}.</strong></p>`);
       $panel.find('.value, .ranking').html('');
       $panel.find('dt').hide();
       return;
@@ -152,22 +152,12 @@ const box = {
     }
   },
 
-
-  /*
-    * The hover display is coupled with the choropleth
-    * The data to be displayed comes from the choropleth which
-    * in turn gets it from the data module and processes with the combine
-    * function.
-    * This is different from the default panel generated on filter change
-    * by the populateDefault function above
-    */
-  displayHover(partnerDetails, countryUnNum) {
-    box.populateBox($hoverPanel, partnerDetails, countryUnNum);
+  displayHover(record) {
+    box.populateBox($hoverPanel, record);
     // Animate display of hover panel
     $defaultPanel.stop().slideUp();
     $hoverPanel.stop().slideDown();
   },
-
 
   hideHover() {
     // Animate display of default panel
