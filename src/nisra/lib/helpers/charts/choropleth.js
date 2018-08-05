@@ -104,6 +104,7 @@ const chart = {
     // force a resize on refresh
     resizeSvg();
 
+    // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
       reporter,
       initiator: 'choropleth'
