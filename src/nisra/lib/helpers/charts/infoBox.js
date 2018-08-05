@@ -1,4 +1,5 @@
 /* global document window */
+/* eslint object-curly-newline: 0 */
 /*
  * THIS FILE SETS UP THE information box
  * */
@@ -14,6 +15,7 @@ const $defaultPanel = $('#defaultPanel');
 const $hoverPanel = $('#hoverPanel');
 
 const bottomMargin = 10;
+
 const getPositionFromTop = () => {
   if ($(document).width() > 992) {
     return `${Math.min(
@@ -23,7 +25,9 @@ const getPositionFromTop = () => {
   }
   return $('#infoBoxPlaceholder').offset().top;
 };
+
 const getWidth = () => `${$('#infoBoxPlaceholder').width() - 20}px`;
+
 const repositionBox = () => {
   $infoBox
     .css({
@@ -31,6 +35,7 @@ const repositionBox = () => {
       width: getWidth()
     });
 };
+
 const box = {
 
   setup() {
@@ -60,72 +65,57 @@ const box = {
 
 
   refresh(event, filters) {
-    // CASE 1: reporter = null
-    if (!filters.reporter) {
-      $infoBox.slideUp();
-      return;
-    }
-    $infoBox.slideDown();
+    const { reporter, partner, commodity, year } = filters;
 
+    // CASE 1: reporter = null
+    if (
+      reporter === null
+    ) return $infoBox.slideUp();
+
+    $infoBox.slideDown();
 
     // We build a queryFilter and a dataFilter object to make
     // API queries more generic than data queries
     const queryFilter = {
-      reporter: filters.reporter,
-      partner: 'all',
-      year: +filters.year,
-      commodity: 'all',
+      reporter,
+      // year,
       initiator: 'infoBox'
     };
     const dataFilter = {
-      reporter: filters.reporter,
-      year: +filters.year,
+      reporter,
+      year,
       commodity: 'all'
     };
 
     // NOTE that we leave dataFilter.partner undefined when a partner is selected
     // rather than equal to 'all' or to the specific partner so that the returned
     // dataset will include also world as partner which we need for calculations.
-    if (!filters.partner || filters.partner === 0) {
-      dataFilter.partner = 0;
+    if (!partner) {
+      dataFilter.partner = 'all';
     }
 
     // CASE 2: reporter = selected    commodity = null        partner = null
-    if (filters.reporter && !filters.commodity && !filters.partner) {
-      queryFilter.commodity = 'all';
-      queryFilter.year = 'all';
-    }
 
     // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && !filters.commodity && filters.partner) {
-      queryFilter.partner = 'all';
-      queryFilter.commodity = 'all';
-      queryFilter.year = +filters.year;
-    }
 
     // CASE 4: reporter = selected    commodity = selected    partner = selected
-    if (filters.reporter && filters.commodity && filters.partner) {
-      queryFilter.partner = 'all';
-      queryFilter.commodity = filters.commodity;
-      dataFilter.commodity = filters.commodity;
+    if (reporter && commodity && partner) {
+      dataFilter.commodity = commodity;
     }
 
     // CASE 5: reporter = selected    commodity = selected    partner = null
-    if (filters.reporter && filters.commodity && !filters.partner) {
-      queryFilter.partner = 'all';
-      queryFilter.commodity = filters.commodity;
-      dataFilter.commodity = filters.commodity;
+    if (reporter && commodity && !partner) {
+      dataFilter.commodity = commodity;
     }
 
 
     // Run query if necessary
-    data.query(queryFilter, (err, ready) => {
+    return data.query(queryFilter, (err) => {
       if (err) { gui.showError(err); }
-      if (err || !ready) { return; }
 
       const newData = data.getData(dataFilter);
       const newDataByPartner = d3.map(newData, d => d.partner);
-      box.populateBox($defaultPanel, newDataByPartner.get(filters.partner || 0), filters.partner);
+      box.populateBox($defaultPanel, newDataByPartner.get(partner || 0), partner);
     });
   },
 

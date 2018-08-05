@@ -10,6 +10,7 @@ TODO:
 - API:
   - [x] remove aggregated
   - [ ] fix missing pc and ranks
+  - [ ] maybe we should just export {reporter}.csv
 
 - more es6
 - remove ; & fix eslint

@@ -55,7 +55,6 @@ const chart = {
     // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
       reporter,
-      partner: 'all',
       initiator: 'topExportCommodities'
     };
     const dataFilter = {
@@ -74,7 +73,6 @@ const chart = {
     } else {
       // CASE 3: commodity = null        partner = selected
       title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 exports to ${data.lookup(partner, 'partners', 'text')} in ${year}`;
-      queryFilter.partner = partner;
       dataFilter.partner = partner;
       dataFilter.partnerType = data.lookup(partner, 'partners', 'type');
     }

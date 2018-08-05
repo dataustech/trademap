@@ -114,8 +114,6 @@ const chart = {
     // CASE 2: reporter = selected    commodity = null        partner = null
     if (reporter && commodity === null && partner === null) {
       title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with the world`;
-      queryFilter.partner = 'all';
-      queryFilter.commodity = 'all';
       dataFilter.partner = 'all';
       dataFilter.commodity = 'all';
     }
@@ -123,8 +121,6 @@ const chart = {
     // CASE 3: reporter = selected    commodity = null        partner = selected
     if (reporter && commodity === null && partner !== null) {
       title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with ${data.lookup(partner, 'partners', 'text')}`;
-      queryFilter.partner = partner;
-      queryFilter.commodity = 'all';
       dataFilter.partner = partner;
       dataFilter.commodity = 'all';
     }
@@ -134,8 +130,6 @@ const chart = {
     // specify the commodity in the query to avoid duplicate data
     if (reporter && commodity !== null && partner !== null) {
       title = `${data.lookup(reporter, 'reporters', 'text')} trade in ${data.lookup(commodity, 'commodities', 'text')} with ${data.lookup(partner, 'partners', 'text')}`;
-      queryFilter.partner = partner;
-      queryFilter.commodity = commodity;
       dataFilter.partner = partner;
       dataFilter.commodity = commodity;
     }
@@ -143,8 +137,6 @@ const chart = {
     // CASE 5: reporter = selected    commodity = selected    partner = null
     if (reporter && commodity !== null && partner === null) {
       title = `${data.lookup(reporter, 'reporters', 'text')} trade in ${data.lookup(commodity, 'commodities', 'text')} with the world`;
-      queryFilter.partner = 'all';
-      queryFilter.commodity = commodity;
       dataFilter.partner = 'all';
       dataFilter.commodity = commodity;
     }

@@ -1,4 +1,5 @@
 /* global window */
+/* eslint object-curly-newline: 0 */
 
 /*
  * THIS FILE MANAGES THE CHOROPLETH
@@ -97,26 +98,27 @@ const chart = {
   },
 
   refresh(event, filters) {
+    // TODO where will flow come from?
+    const { reporter, flow, commodity, year } = filters;
+
     // force a resize on refresh
     resizeSvg();
 
     const queryFilter = {
-      reporter: filters.reporter,
-      partner: 'all',
-      year: +filters.year,
+      reporter,
       initiator: 'choropleth'
     };
     const dataFilter = {
-      reporter: filters.reporter,
+      reporter,
       partner: 'all',
-      year: +filters.year,
-      flow: +filters.flow
+      year,
     };
+
     let title = '';
 
     // CASE 1: reporter = null
     // Blank choropleth, no countries selected and no fills and no title
-    if (!filters.reporter) {
+    if (!reporter) {
       svg.selectAll('.country').style('fill', '#fff');
       svg.selectAll('.highlighted').classed('highlighted', false);
       $chartTitle.html('');
@@ -124,39 +126,35 @@ const chart = {
     }
 
     // CASE 2&3: reporter = selected    commodity = null
-    if (filters.reporter && !filters.commodity) {
+    if (reporter && !commodity) {
       // Set query and data retrieval filters (forcing commodity to all)
-      queryFilter.commodity = 'all';
       dataFilter.commodity = 'all';
-      dataFilter.type = filters.type;
       title = '';
       title = [
-        data.lookup(filters.reporter, 'reporters', 'text'),
+        data.lookup(reporter, 'reporters', 'text'),
         [
-          [' trade in ', ({ S: 'services', C: 'goods' })[filters.type], ' balance '].join(''),
-          [' imports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join(''),
-          [' exports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join('')
-        ][filters.flow],
+          ' trade balance ',
+          ' imports of ',
+          ' exports of '
+        ][flow],
         ' in ',
-        filters.year
+        year
       ].join('');
     }
 
     // CASE 4&5: reporter = selected    commodity = selected
-    if (filters.reporter && filters.commodity) {
+    if (reporter && commodity) {
       // Set query and data retrieval filters
-      queryFilter.commodity = filters.commodity;
-      dataFilter.commodity = filters.commodity;
-      dataFilter.type = filters.type;
+      dataFilter.commodity = commodity;
       title = [
-        data.lookup(filters.reporter, 'reporters', 'text'),
+        data.lookup(reporter, 'reporters', 'text'),
         [
-          [' trade in ', data.lookup(filters.commodity, 'commodities', 'text'), ' balance '].join(),
-          [' imports of ', data.lookup(filters.commodity, 'commodities', 'text'), ' '].join(),
-          [' exports of ', data.lookup(filters.commodity, 'commodities', 'text'), ' '].join()
-        ][filters.flow],
+          [' trade in ', data.lookup(commodity, 'commodities', 'text'), ' balance '].join(),
+          [' imports of ', data.lookup(commodity, 'commodities', 'text'), ' '].join(),
+          [' exports of ', data.lookup(commodity, 'commodities', 'text'), ' '].join()
+        ][flow],
         ' in ',
-        filters.year
+        year
       ].join();
     }
 
@@ -177,19 +175,19 @@ const chart = {
   },
 
   redrawMap(filters) {
+    const { reporter, flow, commodity, year } = filters;
     // Based on user selected flow predefine value accessor
     let flowRank;
     let flowVal;
-    if (+filters.flow === 1) { flowRank = 'importRank'; flowVal = 'importVal'; }
-    if (+filters.flow === 2) { flowRank = 'exportRank'; flowVal = 'exportVal'; }
-    if (+filters.flow === 0) { flowRank = 'balanceVal'; flowVal = 'balanceVal'; }
+    if (+flow === 1) { flowRank = 'importRank'; flowVal = 'importVal'; }
+    if (+flow === 2) { flowRank = 'exportRank'; flowVal = 'exportVal'; }
+    if (+flow === 0) { flowRank = 'balanceVal'; flowVal = 'balanceVal'; }
 
     // Get the relevant data for both flows and then combine the data
     let newData = data.getData({
-      reporter: filters.reporter,
-      type: filters.type,
-      commodity: filters.commodity,
-      year: +filters.year
+      reporter,
+      commodity,
+      year
     });
 
     // Filter out records that relate to partner: 0 (world) which would distort the scale
@@ -204,7 +202,7 @@ const chart = {
     let colorScale = d3.scaleThreshold();
     let domain;
     let range;
-    if (+filters.flow === 0) {
+    if (+flow === 0) {
       // If flow is balance we create a threshold scale which has only
       // two cases positive (above 0 threshold) and negative (below 0 threshold)
       colorScale.domain([0]).range([0, 1]);
@@ -267,7 +265,7 @@ const chart = {
           if (countryData.length > 1) { throw new Error(`Multiple data points for ${data.lookup(d.id, 'partners', 'text')}`); }
           if (countryData[0][flowRank] === null) { throw new Error(`'Incomplete data for ${data.lookup(d.id, 'partners', 'text')}`); }
           bucket = colorScale(countryData[0][flowRank]);
-          return chart.colors[filters.flow][bucket];
+          return chart.colors[flow][bucket];
         } catch (exception) {
           return '#818181';
         }
@@ -282,7 +280,7 @@ const chart = {
         count: values.length
       }))
       .entries(newData);
-    chart.drawLegend(legendData, filters.flow);
+    chart.drawLegend(legendData, flow);
   },
 
   drawLegend(legendData, flow) {

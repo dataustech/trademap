@@ -55,7 +55,6 @@ const chart = {
     // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
       reporter,
-      commodity: 'all',
       initiator: 'topExportMarkets'
     };
     const dataFilter = {
@@ -68,16 +67,14 @@ const chart = {
     let title = '';
 
     if (commodity === null) {
-      // CASE 2: commodity = null        partner = null or 0
+      // CASE 2: commodity = null        partner = null
       title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 export markets in ${year}`;
-      queryFilter.commodity = 'all';
       dataFilter.commodity = 'all';
     } else {
       // CASE 5: commodity = selected    partner = null
       // This is already covered by the data in CASE 2 so we don't specify the
       // commodity in the api query to avoid duplicate data and requests
       title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 export markets for ${data.lookup(commodity, 'commodities', 'text')} in ${year}`;
-      queryFilter.commodity = commodity;
       dataFilter.commodity = commodity;
     }
 
