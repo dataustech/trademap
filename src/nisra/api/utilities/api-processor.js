@@ -13,7 +13,7 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 
 // Debug mode
-const DEBUG = true;
+const DEBUG = false;
 
 // libraries
 const fs = require('fs-extra');
