@@ -37,15 +37,7 @@ const dimensions = {
 };
 
 // private utility methods
-const buildUrl = (filters) => {
-  const { reporter, partner = null, year = null, commodity = null } = filters;
-  let requestUrl = `${baseQueryUrl}/${reporter}`;
-  requestUrl += (partner !== null) ? `/${partner}` : '/all';
-  requestUrl += (year !== null) ? `/${year}` : '/all';
-  requestUrl += (commodity !== null) ? `/${commodity}` : '/all';
-  requestUrl += '/data.csv';
-  return requestUrl;
-};
+const buildUrl = filters => `${baseQueryUrl}/${filters.reporter}.csv`;
 
 const equals = (a, b) => {
   const props = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal'];

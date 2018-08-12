@@ -105,73 +105,76 @@ function addRecordToData(yearlyRecord, data) {
     { year, importVal, exportVal, bilateralVal, balanceVal, reporter, commodity: 'all', commodityType: 'all',   partnerType: 'all',       partner: 'all'    }, // 9
   ];
 
-  // then each record is added to different parts of the data hash reflecting which file paths it should be output to
   aggregationRecords.forEach((record) => {
     const { reporter, partner, year, commodity } = record;
-    if (partner !== 'all') {
-      if (commodity !== 'all') {
-        // case 1 commodity != all & partner != all (#1-4)
-        addRecord(record, data[reporter][partner][year][commodity]);
-        addRecord(record, data[reporter][partner][year]['all']);
-        addRecord(record, data[reporter][partner]['all'][commodity]);
-        addRecord(record, data[reporter][partner]['all']['all']);
-        addRecord(record, data[reporter]['all'][year][commodity]);
-        addRecord(record, data[reporter]['all'][year]['all']);
-        addRecord(record, data[reporter]['all']['all'][commodity]);
-        addRecord(record, data[reporter]['all']['all']['all']);
-      } else {
-        // case 2 !commodity = all & partner != all (#5-6)
-        addRecord(record, data[reporter][partner][year]['all']);
-        addRecord(record, data[reporter][partner]['all']['all']);
-        addRecord(record, data[reporter]['all'][year]['all']);
-        addRecord(record, data[reporter]['all']['all']['all']);
-      }
-    } else {
-      if (commodity !== 'all') {
-        // case 3 commodity != all & partner = all (#7-8)
-        addRecord(record, data[reporter]['all'][year][commodity]);
-        addRecord(record, data[reporter]['all']['all'][commodity]);
-        addRecord(record, data[reporter]['all'][year]['all']);
-        addRecord(record, data[reporter]['all']['all']['all']);
-      } else {
-        // case 4 commodity = all & partner = all (#9)
-        addRecord(record, data[reporter]['all'][year]['all']);
-        addRecord(record, data[reporter]['all']['all']['all']);
-      }
-    }
+    addRecord(record, data[reporter]);
   });
 }
 
-function computeRanksAndPercentages(records, commodityType) {
-  // get rep->labarea->year->all SITC1s
-  let totalImport = 0;
-  let totalExport = 0;
-  Object.values(records)
-    // only include sitc1 records and capture total values
-    .filter((r) => {
-      if (r.commodityType === commodityType) {
-        return true;
-      }
-      if (r.commodityType === 'all') {
-        totalExport = r.exportVal;
-        totalImport = r.importVal;
-      }
-      return false;
-    })
-    // sort descending by importval & set rank and %
-    .sort((a, b) => b.importVal - a.importVal)
-    .map((r, i) => {
-      r.importRank = i;
-      r.importPc = (r.importVal / totalImport).toFixed(2);
-      return r;
-    })
-    // sort descending by exportval & set rank and %
-    .sort((a, b) => b.exportVal - a.exportVal)
-    .map((r, i) => {
-      r.exportRank = i;
-      r.exportPc = (r.exportVal / totalExport).toFixed(2);
-      return r;
+function computeRanksAndPercentages(recordsHashmap, commodityType, partnerType) {
+  console.log(`Computing percentages and rankings for ${commodityType} and ${partnerType}`);
+  const pivot = {};
+  Object.values(recordsHashmap)
+    .forEach((record) => {
+      // Only add to pivot if record matches types
+      if (record.commodityType !== commodityType || record.partnerType !== partnerType) return;
+      const { year, partner, commodity, importVal, exportVal } = record;
+
+      // initialize if pivot paths if undefined
+      pivot[year] = pivot[year] || { importTotal: 0, exportTotal: 0, partners: {}};
+      pivot[year]['partners'][partner] = pivot[year]['partners'][partner] || { importTotal: 0, exportTotal: 0, commodities: {} };
+      pivot[year]['partners'][partner]['commodities'][commodity] = pivot[year]['partners'][partner]['commodities'][commodity] || [];
+      // add to pivot and add to totals
+      pivot[year].importTotal += importVal;
+      pivot[year].exportTotal += exportVal;
+      pivot[year]['partners'][partner].importTotal += importVal;
+      pivot[year]['partners'][partner].exportTotal += exportVal;
+      pivot[year]['partners'][partner]['commodities'][commodity].push(record);
     });
+
+  Object.keys(pivot).forEach((year) => {
+    Object.keys(pivot[year]['partners']).forEach((partner) => {
+      if (commodityType === 'all') {
+        const { importTotal, exportTotal } = pivot[year];
+        const recordsForPartner = Object.values(pivot[year]['partners']).reduce((out, partnerObj) => out.concat([...partnerObj['commodities']['all']]), []);
+        recordsForPartner
+          .sort((a, b) => b.importVal - a.importVal)
+          .map((record, i) => {
+            // we modify the record directly (byreference)
+            record.importRank = i + 1;
+            record.importPc = (record.importVal / importTotal).toFixed(2);
+            return record;
+          })
+          // sort descending by exportval & set rank and %
+          .sort((a, b) => b.exportVal - a.exportVal)
+          .map((record, i) => {
+            record.exportRank = i + 1;
+            record.exportPc = (record.exportVal / exportTotal).toFixed(2);
+            return record;
+          });
+      } else {
+        const { importTotal, exportTotal } = pivot[year]['partners'][partner];
+        Object.keys(pivot[year]['partners'][partner]['commodities']).forEach((commodity) => {
+          const recordsForCommodity = [].concat(...Object.values(pivot[year]['partners'][partner]['commodities']));
+          recordsForCommodity
+            .sort((a, b) => b.importVal - a.importVal)
+            .map((record, i) => {
+              // we modify the record directly (byreference)
+              record.importRank = i + 1;
+              record.importPc = (record.importVal / importTotal).toFixed(2);
+              return record;
+            })
+            // sort descending by exportval & set rank and %
+            .sort((a, b) => b.exportVal - a.exportVal)
+            .map((record, i) => {
+              record.exportRank = i + 1;
+              record.exportPc = (record.exportVal / exportTotal).toFixed(2);
+              return record;
+            });
+        });
+      }
+    });
+  });
 }
 
 function printProgress(message) {

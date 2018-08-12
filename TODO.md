@@ -4,16 +4,16 @@ TODO:
     - [x] Year chart
     - [x] Top i/e markets
     - [x] Top i/e commodities
-    - [ ] Infobox
+    - [x] Infobox
       - [x] basic
-      - [ ] hover
-    - [ ] Choropleth
+      - [x] hover
+    - [x] Choropleth
     - [x] Clear button should not clear reporter
 
 - API:
   - [x] remove aggregated
-  - [ ] fix missing pc and ranks
-  - [ ] maybe we should just export {reporter}.csv
+  - [x] fix missing pc and ranks
+  - [x] maybe we should just export {reporter}.csv
 
 - more es6
 - remove ; & fix eslint
@@ -24,3 +24,47 @@ TODO:
 
 
 calling filter with all = getting totals
+
+
+
+
+
+
+
+for each yearly record => add records for other aggregation levels to a new hashmap
+dump new hashmap values to debug file
+
+
+
+// data[reporter][partner][year][commodity]
+const data = {
+    LO: {
+        IT: {
+            2014: {
+                1: {
+                    'hashedrec': {
+                        ...record
+                    }
+                }
+            }
+        }
+    },
+    NI: {}
+}
+
+
+
+
+
+// what if we just add records
+const data = {
+    LO: {
+        'hashedrec1': { ...record },
+        'hashedrec3': { ...record },
+        'hashedrec4': { ...record },
+        'hashedrec5': { ...record }
+    },
+    NI: {}
+}
+
+
