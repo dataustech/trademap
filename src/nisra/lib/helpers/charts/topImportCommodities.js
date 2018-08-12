@@ -1,4 +1,5 @@
 /* global window */
+/* eslint object-curly-newline: 0 */
 /*
  * THIS FILE SETS UP THE topImportCommodities chart
  * */
@@ -31,7 +32,7 @@ const chart = {
     $chart.on('refreshFilters', chart.refresh);
     // Bind the resize function to the window resize event
     $(window).on('resize', () => {
-      rowchart.resizeSvg(svg, $chart.width());
+      rowchart.resizeSvg(svg, $chart.width(), 'IMPORTVal');
     });
     // Setup the svg
     rowchart.setup(svg);
@@ -40,74 +41,57 @@ const chart = {
   },
 
   refresh(event, filters) {
-    // CASE 1: reporter = null
-    if (!filters.reporter) {
-      $container.slideUp();
-      return;
-    }
+    const { reporter, partner, commodity, year } = filters;
 
-    // We build a queryFilter and a dataFilter object to make
-    // API queries more generic than data queries
+    // CASE 1: reporter = null
+    // CASE 4: commodity = selected    partner = selected
+    // CASE 5: commodity = selected    partner = null
+    if (
+      reporter === null ||
+      typeof reporter === 'undefined' ||
+      commodity !== null
+    ) return $container.slideUp();
+
+    // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
-      reporter: +filters.reporter,
-      partner: 0,
-      year: +filters.year,
-      commodity: 'AG2',
-      initiator: 'topImportCommodities',
-      type: filters.type
+      reporter,
+      initiator: 'topImportCommodities'
     };
     const dataFilter = {
-      reporter: +filters.reporter,
-      partner: 0,
-      year: +filters.year,
-      commodity: 'AG2',
-      type: filters.type
+      reporter,
+      year,
+      // TODO see https://github.com/mjs2020/trademap/issues/25
+      commodityType: 'sitc2',
+      initiator: 'topImportCommodities'
     };
     let title = '';
 
-    // Define flow
-    dataFilter.flow = 1;
-
-    // CASE 2: reporter = selected    commodity = null        partner = null
-    if (filters.reporter && (!filters.commodity || filters.commodity === 'TOTAL') && !filters.partner) {
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} - Top-10 imports of ${({ S: 'services', C: 'goods' })[filters.type]} from the world in ${filters.year}`;
+    if (partner === null) {
+      // CASE 2: reporter = selected    commodity = null        partner = null
+      title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 imports from the world in ${year}`;
+      dataFilter.partner = 'all';
+    } else {
+      // CASE 3: reporter = selected    commodity = null        partner = selected
+      title = `${data.lookup(reporter, 'reporters', 'text')} - Top-10 imports from ${data.lookup(partner, 'partners', 'text')} in ${year}`;
+      dataFilter.partner = partner;
+      dataFilter.partnerType = data.lookup(partner, 'partners', 'type');
     }
 
-    // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && (!filters.commodity || filters.commodity === 'TOTAL') && filters.partner) {
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} - Top-10 imports of ${({ S: 'services', C: 'goods' })[filters.type]} from ${data.lookup(filters.partner, 'partnerAreas', 'text')} in ${filters.year}`;
-      queryFilter.partner = +filters.partner;
-      dataFilter.partner = +filters.partner;
-    }
+    $chartTitle.html(title);
 
-    // CASE 4: reporter = selected    commodity = selected    partner = selected
-    if (filters.reporter && filters.commodity && filters.commodity !== 'TOTAL' && filters.partner) {
-      $chartTitle.html('');
-      $container.slideUp();
-      return;
-    }
-
-    // CASE 5: reporter = selected    commodity = selected    partner = null
-    if (filters.reporter && filters.commodity && filters.commodity !== 'TOTAL' && !filters.partner) {
-      $chartTitle.html('');
-      $container.slideUp();
-      return;
-    }
-
-    data.query(queryFilter, (err, ready) => {
+    return data.query(queryFilter, (err) => {
       if (err) { gui.showError(err); }
-      if (err || !ready) { return; }
-      // Get the data, update title, display panel and update chart
-      const newData = data.getData(dataFilter, numEntries);
-      // Set chart title
-      $chartTitle.html(title);
+
+      const newData = data.getData(dataFilter, numEntries, 'import');
+
       // Set download link
       $container.find('.downloadData').unbind('click').on('click', (e) => {
         e.preventDefault();
         gui.downloadCsv(title, newData);
       });
+
       $container.slideDown(400, () => {
-        rowchart.draw(svg, newData, dataFilter, chart.colors[0][0]);
+        rowchart.draw(svg, newData, chart.colors[0][0], 'importVal', 'commodity');
       });
     });
   }

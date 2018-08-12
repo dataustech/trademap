@@ -1,310 +1,387 @@
-{
-  "0": {
+[
+  {
+    "id": "0",
     "type": "sitc1",
-    "name": "Food & live animals"
+    "text": "Food & live animals"
   },
-  "1": {
+  {
+    "id": "1",
     "type": "sitc1",
-    "name": "Beverages & tobacco"
+    "text": "Beverages & tobacco"
   },
-  "2": {
+  {
+    "id": "2",
     "type": "sitc1",
-    "name": "Crude materials"
+    "text": "Crude materials"
   },
-  "3": {
+  {
+    "id": "3",
     "type": "sitc1",
-    "name": "Mineral fuels"
+    "text": "Mineral fuels"
   },
-  "4": {
+  {
+    "id": "4",
     "type": "sitc1",
-    "name": "Animal & vegetable oils"
+    "text": "Animal & vegetable oils"
   },
-  "5": {
+  {
+    "id": "5",
     "type": "sitc1",
-    "name": "Chemicals & related products"
+    "text": "Chemicals & related products"
   },
-  "6": {
+  {
+    "id": "6",
     "type": "sitc1",
-    "name": "Manufactured goods classified chiefly by material"
+    "text": "Manufactured goods classified chiefly by material"
   },
-  "7": {
+  {
+    "id": "7",
     "type": "sitc1",
-    "name": "Machinery & transport equipment"
+    "text": "Machinery & transport equipment"
   },
-  "8": {
+  {
+    "id": "8",
     "type": "sitc1",
-    "name": "Miscellaneous manufactured articles"
+    "text": "Miscellaneous manufactured articles"
   },
-  "9": {
+  {
+    "id": "9",
     "type": "sitc1",
-    "name": "Commodities/transactions not class'd elsewhere in SITC"
+    "text": "Commodities/transactions not class'd elsewhere in SITC"
   },
-  "11": {
+  {
+    "id": "11",
     "type": "sitc2",
-    "name": "Beverages"
+    "text": "Beverages"
   },
-  "12": {
+  {
+    "id": "12",
     "type": "sitc2",
-    "name": "Tobacco & tobacco manufactures"
+    "text": "Tobacco & tobacco manufactures"
   },
-  "21": {
+  {
+    "id": "21",
     "type": "sitc2",
-    "name": "Hides"
+    "text": "Hides"
   },
-  "22": {
+  {
+    "id": "22",
     "type": "sitc2",
-    "name": "Oil seeds & oleaginous fruits"
+    "text": "Oil seeds & oleaginous fruits"
   },
-  "23": {
+  {
+    "id": "23",
     "type": "sitc2",
-    "name": "Crude rubber (including synthetic & reclaimed)"
+    "text": "Crude rubber (including synthetic & reclaimed)"
   },
-  "24": {
+  {
+    "id": "24",
     "type": "sitc2",
-    "name": "Cork & wood"
+    "text": "Cork & wood"
   },
-  "25": {
+  {
+    "id": "25",
     "type": "sitc2",
-    "name": "Pulp & waste paper"
+    "text": "Pulp & waste paper"
   },
-  "26": {
+  {
+    "id": "26",
     "type": "sitc2",
-    "name": "Textile fibres not manufactured & their waste etc"
+    "text": "Textile fibres not manufactured & their waste etc"
   },
-  "27": {
+  {
+    "id": "27",
     "type": "sitc2",
-    "name": "Crude fertilizers & crude minerals (exc fuels etc)"
+    "text": "Crude fertilizers & crude minerals (exc fuels etc)"
   },
-  "28": {
+  {
+    "id": "28",
     "type": "sitc2",
-    "name": "Metalliferous ores & metal scrap"
+    "text": "Metalliferous ores & metal scrap"
   },
-  "29": {
+  {
+    "id": "29",
     "type": "sitc2",
-    "name": "Crude animal & vegetable materials n.e.s."
+    "text": "Crude animal & vegetable materials n.e.s."
   },
-  "32": {
+  {
+    "id": "32",
     "type": "sitc2",
-    "name": "Coal"
+    "text": "Coal"
   },
-  "33": {
+  {
+    "id": "33",
     "type": "sitc2",
-    "name": "Petroleum"
+    "text": "Petroleum"
   },
-  "34": {
+  {
+    "id": "34",
     "type": "sitc2",
-    "name": "Gas"
+    "text": "Gas"
   },
-  "35": {
+  {
+    "id": "35",
     "type": "sitc2",
-    "name": "Electric current"
+    "text": "Electric current"
   },
-  "41": {
+  {
+    "id": "41",
     "type": "sitc2",
-    "name": "Animal oils & fats"
+    "text": "Animal oils & fats"
   },
-  "42": {
+  {
+    "id": "42",
     "type": "sitc2",
-    "name": "Fixed vegetable fats & oils"
+    "text": "Fixed vegetable fats & oils"
   },
-  "43": {
+  {
+    "id": "43",
     "type": "sitc2",
-    "name": "Animal or vegetable fats & oils"
+    "text": "Animal or vegetable fats & oils"
   },
-  "51": {
+  {
+    "id": "51",
     "type": "sitc2",
-    "name": "Organic chemicals"
+    "text": "Organic chemicals"
   },
-  "52": {
+  {
+    "id": "52",
     "type": "sitc2",
-    "name": "Inorganic chemicals"
+    "text": "Inorganic chemicals"
   },
-  "53": {
+  {
+    "id": "53",
     "type": "sitc2",
-    "name": "Dyeing"
+    "text": "Dyeing"
   },
-  "54": {
+  {
+    "id": "54",
     "type": "sitc2",
-    "name": "Medicinal & pharmaceutical products"
+    "text": "Medicinal & pharmaceutical products"
   },
-  "55": {
+  {
+    "id": "55",
     "type": "sitc2",
-    "name": "Essential oils & perfume materials; toilet preps etc"
+    "text": "Essential oils & perfume materials; toilet preps etc"
   },
-  "56": {
+  {
+    "id": "56",
     "type": "sitc2",
-    "name": "Fertilizers (other than those of group 272)"
+    "text": "Fertilizers (other than those of group 272)"
   },
-  "57": {
+  {
+    "id": "57",
     "type": "sitc2",
-    "name": "Plastics in primary forms"
+    "text": "Plastics in primary forms"
   },
-  "58": {
+  {
+    "id": "58",
     "type": "sitc2",
-    "name": "Plastics in non-primary forms"
+    "text": "Plastics in non-primary forms"
   },
-  "59": {
+  {
+    "id": "59",
     "type": "sitc2",
-    "name": "Chemical materials & products n.e.s."
+    "text": "Chemical materials & products n.e.s."
   },
-  "61": {
+  {
+    "id": "61",
     "type": "sitc2",
-    "name": "Leather"
+    "text": "Leather"
   },
-  "62": {
+  {
+    "id": "62",
     "type": "sitc2",
-    "name": "Rubber manufactures n.e.s."
+    "text": "Rubber manufactures n.e.s."
   },
-  "63": {
+  {
+    "id": "63",
     "type": "sitc2",
-    "name": "Cork & wood manufactures (excluding furniture)"
+    "text": "Cork & wood manufactures (excluding furniture)"
   },
-  "64": {
+  {
+    "id": "64",
     "type": "sitc2",
-    "name": "Paper"
+    "text": "Paper"
   },
-  "65": {
+  {
+    "id": "65",
     "type": "sitc2",
-    "name": "Textile yarn"
+    "text": "Textile yarn"
   },
-  "66": {
+  {
+    "id": "66",
     "type": "sitc2",
-    "name": "Non-metallic mineral manufactures n.e.s."
+    "text": "Non-metallic mineral manufactures n.e.s."
   },
-  "67": {
+  {
+    "id": "67",
     "type": "sitc2",
-    "name": "Iron & steel"
+    "text": "Iron & steel"
   },
-  "68": {
+  {
+    "id": "68",
     "type": "sitc2",
-    "name": "Non-ferrous metals"
+    "text": "Non-ferrous metals"
   },
-  "69": {
+  {
+    "id": "69",
     "type": "sitc2",
-    "name": "Manufactures of metal n.e.s."
+    "text": "Manufactures of metal n.e.s."
   },
-  "71": {
+  {
+    "id": "71",
     "type": "sitc2",
-    "name": "Power generating machinery & equipment"
+    "text": "Power generating machinery & equipment"
   },
-  "72": {
+  {
+    "id": "72",
     "type": "sitc2",
-    "name": "Machinery specialized for particular industries"
+    "text": "Machinery specialized for particular industries"
   },
-  "73": {
+  {
+    "id": "73",
     "type": "sitc2",
-    "name": "Metalworking machinery"
+    "text": "Metalworking machinery"
   },
-  "74": {
+  {
+    "id": "74",
     "type": "sitc2",
-    "name": "General industrial machinery & eqp. & machine pt.n.e.s."
+    "text": "General industrial machinery & eqp. & machine pt.n.e.s."
   },
-  "75": {
+  {
+    "id": "75",
     "type": "sitc2",
-    "name": "Office machines & adp machines"
+    "text": "Office machines & adp machines"
   },
-  "76": {
+  {
+    "id": "76",
     "type": "sitc2",
-    "name": "Telecomms & sound recording & reproducing app. & eqp."
+    "text": "Telecomms & sound recording & reproducing app. & eqp."
   },
-  "77": {
+  {
+    "id": "77",
     "type": "sitc2",
-    "name": "Ele machinery"
+    "text": "Ele machinery"
   },
-  "78": {
+  {
+    "id": "78",
     "type": "sitc2",
-    "name": "Road vehicles (including air cushion vehicles)"
+    "text": "Road vehicles (including air cushion vehicles)"
   },
-  "79": {
+  {
+    "id": "79",
     "type": "sitc2",
-    "name": "Other transport equipment"
+    "text": "Other transport equipment"
   },
-  "81": {
+  {
+    "id": "81",
     "type": "sitc2",
-    "name": "P/fab buildings;sanit."
+    "text": "P/fab buildings;sanit."
   },
-  "82": {
+  {
+    "id": "82",
     "type": "sitc2",
-    "name": "Furniture & parts thereof; bedding"
+    "text": "Furniture & parts thereof; bedding"
   },
-  "83": {
+  {
+    "id": "83",
     "type": "sitc2",
-    "name": "Travel goods"
+    "text": "Travel goods"
   },
-  "84": {
+  {
+    "id": "84",
     "type": "sitc2",
-    "name": "Articles of apparel & clothing accessories"
+    "text": "Articles of apparel & clothing accessories"
   },
-  "85": {
+  {
+    "id": "85",
     "type": "sitc2",
-    "name": "Footwear"
+    "text": "Footwear"
   },
-  "87": {
+  {
+    "id": "87",
     "type": "sitc2",
-    "name": "Professional"
+    "text": "Professional"
   },
-  "88": {
+  {
+    "id": "88",
     "type": "sitc2",
-    "name": "Photographic & optical goods"
+    "text": "Photographic & optical goods"
   },
-  "89": {
+  {
+    "id": "89",
     "type": "sitc2",
-    "name": "Miscellaneous manufactured articles n.e.s."
+    "text": "Miscellaneous manufactured articles n.e.s."
   },
-  "91": {
+  {
+    "id": "91",
     "type": "sitc2",
-    "name": "Postal packages not classified according to kind"
+    "text": "Postal packages not classified according to kind"
   },
-  "93": {
+  {
+    "id": "93",
     "type": "sitc2",
-    "name": "Special transactions and commodities not classified according to kind"
+    "text": "Special transactions and commodities not classified according to kind"
   },
-  "96": {
+  {
+    "id": "96",
     "type": "sitc2",
-    "name": "Coin (other than gold coin)"
+    "text": "Coin (other than gold coin)"
   },
-  "98": {
+  {
+    "id": "98",
     "type": "sitc2",
-    "name": "Military arms and ammunition"
+    "text": "Military arms and ammunition"
   },
-  "00": {
+  {
+    "id": "00",
     "type": "sitc2",
-    "name": "Live animals other than animals of division 03"
+    "text": "Live animals other than animals of division 03"
   },
-  "01": {
+  {
+    "id": "01",
     "type": "sitc2",
-    "name": "Meat & meat preparations"
+    "text": "Meat & meat preparations"
   },
-  "02": {
+  {
+    "id": "02",
     "type": "sitc2",
-    "name": "Dairy products & birds' eggs"
+    "text": "Dairy products & birds' eggs"
   },
-  "03": {
+  {
+    "id": "03",
     "type": "sitc2",
-    "name": "Fish"
+    "text": "Fish"
   },
-  "04": {
+  {
+    "id": "04",
     "type": "sitc2",
-    "name": "Cereals & cereal preparations"
+    "text": "Cereals & cereal preparations"
   },
-  "05": {
+  {
+    "id": "05",
     "type": "sitc2",
-    "name": "Vegetables & fruit"
+    "text": "Vegetables & fruit"
   },
-  "06": {
+  {
+    "id": "06",
     "type": "sitc2",
-    "name": "Sugar"
+    "text": "Sugar"
   },
-  "07": {
+  {
+    "id": "07",
     "type": "sitc2",
-    "name": "Coffee"
+    "text": "Coffee"
   },
-  "08": {
+  {
+    "id": "08",
     "type": "sitc2",
-    "name": "Feeding stuff for animals (not inc.unmilled cereals)"
+    "text": "Feeding stuff for animals (not inc.unmilled cereals)"
   },
-  "09": {
+  {
+    "id": "09",
     "type": "sitc2",
-    "name": "Miscellaneous edible products & preparations"
+    "text": "Miscellaneous edible products & preparations"
   }
-}
+]

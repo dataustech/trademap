@@ -1,44 +1,58 @@
-{
-  "EA": {
-    "name": "East"
+[
+  {
+    "id": "EA",
+    "text": "East"
   },
-  "EM": {
-    "name": "East Midlands"
+  {
+    "id": "EM",
+    "text": "East Midlands"
   },
-  "LO": {
-    "name": "London"
+  {
+    "id": "LO",
+    "text": "London"
   },
-  "NE": {
-    "name": "North East"
+  {
+    "id": "NE",
+    "text": "North East"
   },
-  "NI": {
-    "name": "Northern Ireland"
+  {
+    "id": "NI",
+    "text": "Northern Ireland"
   },
-  "NW": {
-    "name": "North West"
+  {
+    "id": "NW",
+    "text": "North West"
   },
-  "SC": {
-    "name": "Scotland"
+  {
+    "id": "SC",
+    "text": "Scotland"
   },
-  "SE": {
-    "name": "South East"
+  {
+    "id": "SE",
+    "text": "South East"
   },
-  "SW": {
-    "name": "South West"
+  {
+    "id": "SW",
+    "text": "South West"
   },
-  "WA": {
-    "name": "Wales"
+  {
+    "id": "WA",
+    "text": "Wales"
   },
-  "WM": {
-    "name": "West Midlands"
+  {
+    "id": "WM",
+    "text": "West Midlands"
   },
-  "YH": {
-    "name": "Yorkshire and the Humber"
+  {
+    "id": "YH",
+    "text": "Yorkshire and the Humber"
   },
-  "ZA": {
-    "name": "Unallocated-Known"
+  {
+    "id": "ZA",
+    "text": "Unallocated-Known"
   },
-  "ZB": {
-    "name": "Unallocated-Unknown"
+  {
+    "id": "ZB",
+    "text": "Unallocated-Unknown"
   }
-}
+]

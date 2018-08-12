@@ -9,6 +9,7 @@ import d3Tip from 'd3-tip';
 import data from '../data';
 import gui from '../gui';
 import controls from '../controls';
+import { numFormat } from '../utils';
 
 d3.tip = d3Tip;
 
@@ -37,7 +38,7 @@ const xAxis = d3.axisBottom(xScale)
   .tickFormat(d3.format('.0f'));
 const yAxis = d3.axisLeft(yScale)
   .ticks(6)
-  .tickFormat(data.numFormat);
+  .tickFormat(numFormat);
 const line = d3.line()
   .curve(d3.curveLinear);
 
@@ -89,11 +90,12 @@ const chart = {
 
 
   refresh(event, filters) {
+    const { reporter, partner, commodity } = filters;
     // force resize on refresh
     chart.resizeSvg();
 
     // CASE 1: reporter = null
-    if (!filters.reporter) {
+    if (!reporter) {
       $container.slideUp();
       return;
     }
@@ -101,64 +103,52 @@ const chart = {
     // We build a queryFilter and a dataFilter object to make API
     // queries more generic than data queries (see case 2 and 5 below)
     const queryFilter = {
-      reporter: +filters.reporter,
-      year: 'all',
-      initiator: 'yearChart',
-      type: filters.type
+      reporter,
+      initiator: 'yearChart'
     };
-    let dataFilter = {
-      reporter: +filters.reporter,
-      year: 'all',
-      type: filters.type
+    const dataFilter = {
+      reporter
     };
     let title = '';
 
     // CASE 2: reporter = selected    commodity = null        partner = null
-    if (filters.reporter && !filters.commodity && !filters.partner) {
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} trade in ${({ S: 'services', C: 'goods' })[filters.type]} with the world`;
-      queryFilter.partner = 0;
-      queryFilter.commodity = 'TOTAL';
-      dataFilter = queryFilter;
+    if (reporter && commodity === null && partner === null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with the world`;
+      dataFilter.partner = 'all';
+      dataFilter.commodity = 'all';
     }
 
     // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && !filters.commodity && filters.partner) {
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} trade in ${({ S: 'services', C: 'goods' })[filters.type]} with ${data.lookup(filters.partner, 'partnerAreas', 'text')}`;
-      queryFilter.partner = filters.partner;
-      queryFilter.commodity = 'TOTAL';
-      dataFilter.partner = +filters.partner;
-      dataFilter.commodity = 'TOTAL';
+    if (reporter && commodity === null && partner !== null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with ${data.lookup(partner, 'partners', 'text')}`;
+      dataFilter.partner = partner;
+      dataFilter.commodity = 'all';
     }
 
     // CASE 4: reporter = selected    commodity = selected    partner = selected
     // NOTE This is already covered by the data in CASE 3 so we don't
     // specify the commodity in the query to avoid duplicate data
-    if (filters.reporter && filters.commodity && filters.partner) {
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} trade in ${data.commodityName(filters.commodity, filters.type)} with ${data.lookup(filters.partner, 'partnerAreas', 'text')}`;
-      queryFilter.partner = +filters.partner;
-      queryFilter.commodity = filters.commodity;
-      dataFilter.partner = +filters.partner;
-      dataFilter.commodity = filters.commodity;
+    if (reporter && commodity !== null && partner !== null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in ${data.lookup(commodity, 'commodities', 'text')} with ${data.lookup(partner, 'partners', 'text')}`;
+      dataFilter.partner = partner;
+      dataFilter.commodity = commodity;
     }
 
     // CASE 5: reporter = selected    commodity = selected    partner = null
-    if (filters.reporter && filters.commodity && !filters.partner) {
-      title = `${data.lookup(filters.reporter, 'reporterAreas', 'text')} trade in ${data.commodityName(filters.commodity, filters.type)} with the world`;
-      queryFilter.partner = 0;
-      queryFilter.commodity = filters.commodity;
-      dataFilter.partner = 0;
-      dataFilter.commodity = filters.commodity;
+    if (reporter && commodity !== null && partner === null) {
+      title = `${data.lookup(reporter, 'reporters', 'text')} trade in ${data.lookup(commodity, 'commodities', 'text')} with the world`;
+      dataFilter.partner = 'all';
+      dataFilter.commodity = commodity;
     }
 
     // Run the query, display the panel and redraw the chart
-    data.query(queryFilter, (err, ready) => {
+    data.query(queryFilter, (err) => {
       if (err) { gui.showError(err); }
-      if (err || !ready) { return; }
       // Get the data, display panel and update chart
       const newData = data.getData(dataFilter);
       // Get the start year of the data and append "since" part to title.
-      const startYear = d3.min(newData, d => d.year);
-      title += ` since ${startYear}`;
+      const firstYear = d3.min(newData, d => +d.year);
+      title += ` since ${firstYear}`;
       // Set chart title
       $chartTitle.html(title);
       // Set download link
@@ -166,9 +156,7 @@ const chart = {
         e.preventDefault();
         gui.downloadCsv(title, newData);
       });
-      $container.slideDown(400, () => {
-        chart.draw(newData);
-      });
+      $container.slideDown(400, () => chart.draw(newData));
     });
   },
 
@@ -188,30 +176,36 @@ const chart = {
     }
     svg.selectAll('.nodata').remove();
 
-    // Prepare data
-    const nestedData = d3.nest()
-      .key(d => d.flow)
-      .sortValues((a, b) => a.year - b.year)
-      .entries(newData);
-    const yearExtent = d3.extent(newData, d => d.year);
+    const yearExtent = d3.extent(newData, d => +d.year);
     const yearRange = d3.range(yearExtent[0], yearExtent[1] + 1);
     const tip = d3.tip()
       .attr('class', 'd3-tip')
       .offset([-10, 0])
-      .html(d => `${d.year}: ${data.numFormat(d.value, null, 1)} ${['imports', 'exports'][d.flow - 1]}`);
+      .html(d => `${d.year}: ${numFormat(d.value, null, 1)} ${['imports', 'exports'][d.flow - 1]}`);
 
-    // If there is data only for one flow direction add an empty nest.
-    if (nestedData.length < 2) {
-      if (+nestedData[0].key === 2) {
-        nestedData.unshift({ key: 1, values: [] });
-      } else {
-        nestedData.push({ key: 2, values: [] });
+    // Prepare data
+    const nestedData = [
+      {
+        key: 1, // imports
+        values: newData.map(d => ({
+          value: +d.importVal,
+          flow: 1,
+          year: d.year
+        })).sort((a, b) => a.year - b.year)
+      },
+      {
+        key: 2, // exports
+        values: newData.map(d => ({
+          value: +d.exportVal,
+          flow: 2,
+          year: d.year
+        })).sort((a, b) => a.year - b.year)
       }
-    }
+    ];
 
     // Update scale domains with newData values and the line generation function
     xScale.domain([yearExtent[0], yearExtent[1] + 1]);
-    yScale.domain([0, d3.max(newData, d => d.value)]);
+    yScale.domain([0, d3.max(newData, d => Math.max(d.importVal, d.exportVal))]);
     line.x(d => xScale(d.year))
       .y(d => yScale(d.value));
     xAxis.scale(xScale)
@@ -220,10 +214,7 @@ const chart = {
       .tickFormat(d3.format('.0f'));
     yAxis.scale(yScale)
       .tickSize(6, 0)
-      .tickFormat(data.numFormat);
-
-    // Update yearSelect dropdown with new year range
-    controls.updateYears(yearRange);
+      .tickFormat(numFormat);
 
     // Update axis
     svg.select('.x.axis') // change the x axis

@@ -12,54 +12,50 @@
 /* eslint prefer-const: 0 */
 /* eslint import/no-extraneous-dependencies: 0 */
 
+// Debug mode
+const DEBUG = false;
+
 // libraries
 const fs = require('fs-extra');
 const path = require('path');
-const Promise = require('bluebird');
 
 // helpers
 const { toCsv, extractRows, addRecordToData, computeRanksAndPercentages, printProgress } = require('./helpers');
 
 // data_dictionaries
-const reporters = require('../../data/reporters.json');
-const partners = require('../../data/partners.json');
-const commodities = require('../../data/commodities.json');
-const years = require('../../data/years.json');
+const reducer = (map, option) => {
+  map[option.id] = option;
+  return map;
+};
+const reporters = require('../../data/reporters.json').reduce(reducer, {});
+const partners = require('../../data/partners.json').reduce(reducer, {});
+const commodities = require('../../data/commodities.json').reduce(reducer, {});
+const years = require('../../data/years.json').reduce(reducer, {});
 
-const sitc1codes = Object.keys(commodities).filter(key => commodities[key].type === 'sitc1');
-const sitc2codes = Object.keys(commodities).filter(key => commodities[key].type === 'sitc2');
-const labareacodes = Object.keys(partners).filter(key => partners[key].type === 'labarea');
-const codalphacodes = Object.keys(partners).filter(key => partners[key].type === 'codalpha');
+const reportersList = Object.keys(reporters);
 
 // config
 const srcDir = path.join(__dirname, '../');
 const destDir = path.join(__dirname, '../../../../dist/nisra/api');
-const outputFields = ['year', 'reporter', 'partner', 'commodity', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc'];
+const outputFields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal', 'importRank', 'exportRank', 'importPc', 'exportPc'];
 
 // data structure preparation
 console.log('Preparing data structure');
 partners.all = {};
 commodities.all = {};
-years.push('all');
+years['all'] = {
+  id: 'all', text: 'all'
+};
 const data = {};
-Object.keys(reporters).forEach((reporter) => {
+reportersList.forEach((reporter) => {
   data[reporter] = {};
-  Object.keys(partners).forEach((partner) => {
-    data[reporter][partner] = {};
-    years.forEach((year) => {
-      data[reporter][partner][year] = {};
-      Object.keys(commodities).forEach((commodity) => {
-        data[reporter][partner][year][commodity] = {}; // will be keyed by hash to properly sum
-      });
-    });
-  });
 });
 
 // data structure:
 // data[reporter][partner][year][commodity]
 
 // Read directory listing
-console.log('Reading directory lising');
+console.log('Reading directory listing');
 fs.readdir(srcDir)
 
   // Filter to only .txt files & read from each file & extract valid rows as objects
@@ -71,7 +67,7 @@ fs.readdir(srcDir)
 
   // Combine quarterly data into yearly data & combine flow values
   .then((quarterlyRecords) => {
-    console.log(`Selected ${quarterlyRecords.length} for processing. Consolidating quarterly data into yearly data`);
+    console.log(`Selected ${quarterlyRecords.length} quarterly records for processing. Consolidating quarterly data into yearly data...`);
 
     const yearlyRecords = quarterlyRecords.reduce((yearlyData, rowRecord) => {
       const { quarter, year, flow, nuts1, labarea, codseq, codalpha, sitc1, sitc2, value, mass } = rowRecord;
@@ -93,58 +89,54 @@ fs.readdir(srcDir)
     return Object.values(yearlyRecords);
   })
 
+  .then((yearlyRecords) => {
+    console.log(`Aggregated quarterly data into ${yearlyRecords.length} yearly records`);
+    if (DEBUG) {
+      console.log('DEBUG: Saving yearly records');
+      const debugFile = path.join(destDir, 'debug.yearlyRecords.csv');
+      const fields = ['year', 'nuts1', 'labarea', 'codseq', 'codalpha', 'sitc1', 'sitc2', 'importVal', 'exportVal', 'bilateralVal', 'balanceVal'];
+      return fs.outputFile(debugFile, toCsv(yearlyRecords, fields))
+        .then(() => yearlyRecords);
+    }
+    return yearlyRecords;
+  })
+
   // Add rows to individual aggregate levels & add to data structure
   .then((yearlyRecords) => {
-    console.log(`Aggregated ${yearlyRecords.length} yearly records, creating aggregated records.`);
-    yearlyRecords.forEach(record => addRecordToData(record, data));
+    console.log('Creating records at different aggregation levels and adding to the data object');
+    return yearlyRecords.forEach(record => addRecordToData(record, data));
   })
 
   // Compute percentages and rankings
   .then(() => {
     console.log('Computing percentages and rankings');
-
-    years.forEach((year) => {
-      Object.keys(reporters).forEach((reporter) => {
-        labareacodes.forEach((labarea) => {
-          computeRanksAndPercentages(data[reporter][labarea][year]['all'], 'sitc1');
-          computeRanksAndPercentages(data[reporter][labarea][year]['all'], 'sitc2');
-        });
-        codalphacodes.forEach((codalpha) => {
-          computeRanksAndPercentages(data[reporter][codalpha][year]['all'], 'sitc1');
-          computeRanksAndPercentages(data[reporter][codalpha][year]['all'], 'sitc2');
-        });
-      });
+    reportersList.forEach((reporter) => {
+      console.log(`Computing percentages and rankings for ${reporter}`);
+      computeRanksAndPercentages(data[reporter], 'sitc1', 'codealpha');
+      computeRanksAndPercentages(data[reporter], 'sitc2', 'codealpha');
+      computeRanksAndPercentages(data[reporter], 'sitc1', 'labarea');
+      computeRanksAndPercentages(data[reporter], 'sitc2', 'labarea');
+      computeRanksAndPercentages(data[reporter], 'all', 'labarea');
+      computeRanksAndPercentages(data[reporter], 'all', 'codealpha');
     });
   })
 
   // Write output to files for byReporterYear
   .then(() => {
     console.log('Finished computing and sorting. Getting list of files to write.');
-    const dataPaths = [];
-    Object.keys(data).forEach((reporter) => {
-      Object.keys(data[reporter]).forEach((partner) => {
-        Object.keys(data[reporter][partner]).forEach((year) => {
-          Object.keys(data[reporter][partner][year]).forEach((commodity) => {
-            dataPaths.push({ reporter, partner, year, commodity });
-          });
-        });
-      });
-    });
+
+    const dataPaths = Object.keys(reporters);
     const totalFiles = dataPaths.length;
-    let filesWritten = 0;
     console.log(`${totalFiles} files need to be written`);
-    return Promise.map(
-      dataPaths,
-      (d) => {
-        filesWritten++;
-        const { reporter, partner, year, commodity } = d;
-        const values = Object.values(data[reporter][partner][year][commodity]);
-        if (!values) return null;
-        const destFile = path.join(destDir, `${reporter}/${partner}/${year}/${commodity}/data.csv`);
-        printProgress(`Writing file ${filesWritten} of ${totalFiles}`);
-        return fs.outputFile(destFile, toCsv(values, outputFields));
-      },
-      { concurrency: 10 }
-    );
+    let filesWritten = 0;
+    return Promise.all(dataPaths.map((dataPath) => {
+      filesWritten++;
+      const reporter = dataPath;
+      const values = Object.values(data[reporter]);
+      if (!values.length) return null;
+      const destFile = path.join(destDir, `${reporter}.csv`);
+      printProgress(`Writing file ${filesWritten} of ${totalFiles}`);
+      return fs.outputFile(destFile, toCsv(values, outputFields));
+    }));
   })
-  .then(() => console.log('All done!'));
+  .then(() => console.log('\nAll done!'));

@@ -1,18 +1,20 @@
 /* global document window */
+/* eslint object-curly-newline: 0 */
 /*
  * THIS FILE SETS UP THE information box
  * */
 import $ from 'jquery';
-import * as d3 from 'd3';
 
 import data from '../data';
 import gui from '../gui';
+import { numFormat, numOrdinal } from '../utils';
 
 const $infoBox = $('#infoBox');
 const $defaultPanel = $('#defaultPanel');
 const $hoverPanel = $('#hoverPanel');
 
 const bottomMargin = 10;
+
 const getPositionFromTop = () => {
   if ($(document).width() > 992) {
     return `${Math.min(
@@ -22,7 +24,9 @@ const getPositionFromTop = () => {
   }
   return $('#infoBoxPlaceholder').offset().top;
 };
+
 const getWidth = () => `${$('#infoBoxPlaceholder').width() - 20}px`;
+
 const repositionBox = () => {
   $infoBox
     .css({
@@ -30,6 +34,7 @@ const repositionBox = () => {
       width: getWidth()
     });
 };
+
 const box = {
 
   setup() {
@@ -59,146 +64,100 @@ const box = {
 
 
   refresh(event, filters) {
+    const { reporter, partner, commodity, year } = filters;
+
     // CASE 1: reporter = null
-    if (!filters.reporter) {
-      $infoBox.slideUp();
-      return;
-    }
+    if (
+      reporter === null
+    ) return $infoBox.slideUp();
+
     $infoBox.slideDown();
 
-
-    // We build a queryFilter and a dataFilter object to make
-    // API queries more generic than data queries
+    // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
-      reporter: +filters.reporter,
-      partner: 0,
-      year: +filters.year,
-      commodity: 'AG2',
-      initiator: 'infoBox',
-      type: filters.type
+      reporter,
+      initiator: 'infoBox'
     };
     const dataFilter = {
-      reporter: +filters.reporter,
-      year: +filters.year,
-      commodity: 'TOTAL',
-      type: filters.type
+      reporter,
+      year,
+      partner,
+      commodity
     };
 
-    // NOTE that we leave dataFilter.partner undefined when a partner is selected
-    // rather than equal to 'all' or to the specific partner so that the returned
-    // dataset will include also world as partner which we need for calculations.
-    if (!filters.partner || filters.partner === 0) {
-      dataFilter.partner = 0;
+    // CASE 2: commodity = null        partner = null
+    // CASE 3: commodity = null        partner = selected
+    // CASE 4: commodity = selected    partner = selected
+    // CASE 5: commodity = selected    partner = null
+    if (partner === null) {
+      dataFilter.partner = 'all';
     }
 
-    // CASE 2: reporter = selected    commodity = null        partner = null
-    if (filters.reporter && !filters.commodity && !filters.partner) {
-      queryFilter.commodity = 'TOTAL';
-      queryFilter.year = 'all';
+    if (commodity === null) {
+      dataFilter.commodity = 'all';
     }
 
-    // CASE 3: reporter = selected    commodity = null        partner = selected
-    if (filters.reporter && !filters.commodity && filters.partner) {
-      queryFilter.partner = 'all';
-      queryFilter.commodity = 'TOTAL';
-      queryFilter.year = +filters.year;
-    }
-
-    // CASE 4: reporter = selected    commodity = selected    partner = selected
-    if (filters.reporter && filters.commodity && filters.partner) {
-      queryFilter.partner = 'all';
-      queryFilter.commodity = filters.commodity;
-      dataFilter.commodity = filters.commodity;
-    }
-
-    // CASE 5: reporter = selected    commodity = selected    partner = null
-    if (filters.reporter && filters.commodity && !filters.partner) {
-      queryFilter.partner = 'all';
-      queryFilter.commodity = filters.commodity;
-      dataFilter.commodity = filters.commodity;
-    }
-
-
-    // Run query if necessary
-    data.query(queryFilter, (err, ready) => {
+    return data.query(queryFilter, (err) => {
       if (err) { gui.showError(err); }
-      if (err || !ready) { return; }
 
-      // Query xFilter and then use the combineData to get single object per partner.
       const newData = data.getData(dataFilter);
-      const newDataCombined = data.combineData(newData);
-      const newDataByPartner = d3.map(newDataCombined, d => d.partner);
-      box.populateBox($defaultPanel, newDataByPartner.get(filters.partner || 0), filters.partner);
+      if (newData.length > 1) throw new Error('Infobox retrived more than one record. Used %o filter and got %d results: %o', dataFilter, newData.length, newData);
+      box.populateBox($defaultPanel, newData[0], partner);
     });
   },
 
 
-  populateBox($panel, details, countryUnNum) {
+  populateBox($panel, record) {
+    const {
+      year, reporter, partner, commodity,
+      importVal, exportVal, balanceVal, bilateralVal,
+      importRank = null, exportRank = null,
+      importPc = null, exportPc = null
+    } = record;
     // Clear data previously in box
-    $panel.find('.subtitle').html('');
-    $panel.find('.value').html('');
-    $panel.find('.ranking').html('');
+    $panel.find('.subtitle, .value, .ranking').html('');
     $panel.find('dt').show();
 
     // If no details then display no data and stop.
-    if (!details) {
-      $panel.find('.subtitle').html(`<p class="text-center"><strong>No data available for ${data.lookup(countryUnNum, 'countryByUnNum', 'name')}.</strong></p>`);
+    if (!record) {
+      $panel.find('.subtitle').html(`<p class="text-center"><strong>No data available for ${data.lookup(partner, 'partners', 'text')}.</strong></p>`);
       $panel.find('.value, .ranking').html('');
       $panel.find('dt').hide();
       return;
     }
 
-    const reporterName = data.lookup(details.reporter, 'reporterAreas', 'text');
-    const partnerName = data.lookup(details.partner, 'partnerAreas', 'text');
-    let subtitle = `<strong>${reporterName}</strong> trade in ${({ S: 'services', C: 'goods' })[details.type]} with <strong>${partnerName}</strong> in <strong>${details.year}</strong><br />`;
-    if (details.commodity && details.commodity !== 'TOTAL') {
-      subtitle += `<strong>${data.commodityName(details.commodity, details.type)}</strong>`;
-    }
+    const reporterName = data.lookup(reporter, 'reporters', 'text');
+    const partnerName = partner !== 'all' ? data.lookup(partner, 'partners', 'text') : 'the world';
+    const commodityName = commodity !== 'all' ? data.lookup(commodity, 'commodities', 'text') : 'goods';
+    const subtitle = `<strong>${reporterName}</strong> trade of <strong>${commodityName}</strong> with <strong>${partnerName}</strong> in <strong>${year}</strong><br />`;
     $panel.find('.subtitle').html(subtitle);
 
     // Populate panel
-    $panel.find('.value.exports').html(data.numFormat(details.exportVal, null, 1));
-    $panel.find('.value.imports').html(data.numFormat(details.importVal, null, 1));
-    $panel.find('.value.balance').html(data.numFormat(details.balanceVal, null, 1));
-    $panel.find('.value.bilateral').html(data.numFormat(details.bilateralVal, null, 1));
+    $panel.find('.value.exports').html(numFormat(exportVal, null, 1));
+    $panel.find('.value.imports').html(numFormat(importVal, null, 1));
+    $panel.find('.value.balance').html(numFormat(balanceVal, null, 1));
+    $panel.find('.value.bilateral').html(numFormat(bilateralVal, null, 1));
 
     // Show ranking only if partner and rankings are given
-    if (details.partner && details.partner !== 0 && details.importRank && details.exportRank) {
-      let ranking;
-      try {
-        ranking = [
-          `${partnerName} was the ${data.numOrdinal(details.exportRank)} largest export market for ${reporterName} `,
-          `(${details.exportPc.toFixed(1)}% of ${reporterName} exports) `,
-          `and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName} `,
-          `(${details.importPc.toFixed(1)}% of ${reporterName} imports)`
-        ].join('');
-      } catch (err) {
-        ranking = [`${partnerName} was the ${data.numOrdinal(details.exportRank)} largest export market for ${reporterName} and the ${data.numOrdinal(details.importRank)} largest import market for ${reporterName}.`].join();
-      }
-      if (details.commodity && details.commodity !== 'TOTAL') {
-        ranking += ` for ${data.commodityName(details.commodity, details.type)}`;
-      }
-      ranking += ` in ${details.year}.`;
-      $panel.find('.ranking').html(ranking);
+    if (partner !== 'all' && importRank !== null && exportRank !== null) {
+      const rankingText = [
+        `${partnerName} was the ${numOrdinal(exportRank)} largest export market for ${reporterName} `,
+        `(${exportPc.toFixed(1)}% of ${reporterName} exports) `,
+        `and the ${numOrdinal(importRank)} largest import market for ${reporterName} `,
+        `(${importPc.toFixed(1)}% of ${reporterName} imports) `,
+        `for ${commodityName} `,
+        `in ${year}.`
+      ].join('');
+      $panel.find('.ranking').html(rankingText);
     }
   },
 
-
-  /*
-    * The hover display is coupled with the choropleth
-    * The data to be displayed comes from the choropleth which
-    * in turn gets it from the data module and processes with the combine
-    * function.
-    * This is different from the default panel generated on filter change
-    * by the populateDefault function above
-    */
-  displayHover(partnerDetails, countryUnNum) {
-    box.populateBox($hoverPanel, partnerDetails, countryUnNum);
+  displayHover(record) {
+    box.populateBox($hoverPanel, record);
     // Animate display of hover panel
     $defaultPanel.stop().slideUp();
     $hoverPanel.stop().slideDown();
   },
-
 
   hideHover() {
     // Animate display of default panel

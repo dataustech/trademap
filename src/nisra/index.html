@@ -9,15 +9,15 @@
   <link rel="author" href="humans.txt" />
   <meta name="author" content="Department for International Trade / Department for Business, Energy and Industrial Strategy (UK)">
   <meta name="Description" content="An interactive visualization of international trade based on UN COMTRADE data.">
-  <meta name="Keywords" content="trade, goods, services, comtrade, united nations, department for international trade, department for business, energy and industrial strategy">
+  <meta name="Keywords" content="trade, goods, services, united nations, department for international trade, department for business, energy and industrial strategy">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="shortcut icon" href="favicon.ico?v=2">
 
   <!-- Facebook tags -->
   <meta property="og:title" content="International Trade in Goods and Services based on UN Comtrade data" />
   <meta property="og:type" content="Website" />
-  <meta property="og:image" content="http://comtrade.un.org/labs/BIS-trade-in-goods/img/fbThumb.png" />
-  <meta property="og:url" content="http://comtrade.un.org/labs/BIS-trade-in-goods" />
+  <meta property="og:image" content="" />
+  <meta property="og:url" content="" />
   <meta property="og:description" content="An interactive data visualization made by the UK Department for International Trade / Department for Business, Energy and Industrial Strategy exploring UN COMTRADE data."
   />
 
@@ -105,27 +105,19 @@
           <br />
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12 column">
-          <!-- Switch reporter and partner button -->
-          <button type="button" class="btn btn-xs btn-default" id="switchPartners" data-toggle="tooltip" data-placement="bottom" title="Switch Reporter and Partner">
-            <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>
-          </button>
           <!-- Partner selection -->
           <div id="selectPartnerContainer">
             <select id="selectPartner" class="select2control selectPartner" style="width: 100%"></span>
           </div>
         </div>
-        <div class="col-md-1 col-sm-3 col-xs-3 column" id="selectTypeContainer">
-          <!-- Type selector -->
-          <select id="selectType" class="select2control selectType" style="width: 100%"></span>
-        </div>
-        <div class="col-md-3 col-sm-5 col-xs-9 column" id="selectCommodityContainer">
+        <div class="col-md-3 col-sm-8 col-xs-12 column" id="selectCommodityContainer">
           <!-- Commodity selection -->
           <select id="selectCommodity" class="select2control selectCommodity" style="width: 100%"></span>
         </div>
-        <div class="col-md-1 col-sm-2 col-xs-6 column">
+        <div class="col-md-2 col-sm-2 col-xs-6 column">
           <!-- Year selection -->
           <div class="selectYearWrapper">
-            <select id="selectYear" class="select2control" disabled style="width: 100%"></select>
+            <select id="selectYear" class="select2control" style="width: 100%"></select>
           </div>
         </div>
         <div class="col-md-1 col-sm-2 col-xs-6 column">
@@ -454,8 +446,7 @@
           alt="Department for Business, Energy and Industrial Strategy Logo">
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-        <p>Based on data from:</p>
-        <img class="logo" src="img/comtradelogo.png" width="450" height="85" alt="UN COMTRADE Logo" />
+        <p>Based on data from HMRC</p>
       </div>
       <div class="col-sm-6">
         <small>The designations employed and the presentation of material on UN Comtrade do not imply the expression of any opinion
@@ -506,34 +497,15 @@
 
   <!-- LOADING DIV TO DISPLAY DURING AJAX REQUESTS -->
   <div id="loadingDiv">
-    <p>Loading data from COMTRADE API. Please wait...</p>
+    <p>Loading data. Please wait...</p>
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="0" style="width: 50%;"></div>
     </div>
     <a class="btn btn-danger btn-xs" id="cancelRequest">Cancel requests</a>
   </div>
 
-  <!-- CONTEXT MENU -->
-  <div id="contextMenu">
-    <a id="closeContextMenu" href="javascript:;" class="btn btn-xs btn-default">
-      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-    </a>
-    <ul class="dropdown-menu" role="menu" style="display:block;position:static;margin-bottom:5px;">
-      <li class="dropdown-header">
-        <span class="country"></span>
-      </li>
-      <li class="divider"></li>
-      <li class="setReporter">
-        <a tabindex="-1" href="javascript:;">Set as reporter</a>
-      </li>
-      <li class="setPartner disabled">
-        <a tabindex="-1" href="javascript:;">Set as partner</a>
-      </li>
-    </ul>
-  </div>
-
   <!-- Load the viz application script at the end -->
-  <script type="text/javascript" src="bundle.js"></script>
+  <script type="text/javascript" src="main.bundle.js"></script>
 
   <!-- Github buttons behaviour -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

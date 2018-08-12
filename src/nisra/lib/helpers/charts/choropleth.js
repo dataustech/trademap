@@ -1,4 +1,5 @@
 /* global window */
+/* eslint object-curly-newline: 0 */
 
 /*
  * THIS FILE MANAGES THE CHOROPLETH
@@ -9,8 +10,11 @@ import { geoPath } from 'd3-geo';
 import { geoKavrayskiy7 } from 'd3-geo-projection';
 import { feature } from 'topojson-client';
 import data from '../data';
+import worldJson from '../../../data/world-110m.json';
 import gui from '../gui';
 import infoBox from './infoBox';
+import controls from '../controls';
+import { numFormat } from '../utils';
 
 const $chart = $('#choropleth');
 const $chartTitle = $('#choroplethTitle .chartTitle');
@@ -19,6 +23,8 @@ const $chartTitle = $('#choroplethTitle .chartTitle');
 const height = 720;
 const width = 1280;
 let svg;
+
+const noDataColor = '#818181';
 
 function resizeSvg() {
   svg.attr('width', $chart.width())
@@ -73,7 +79,7 @@ const chart = {
 
     // Genereate an array of countries with geometry and
     // IDs (IDs are according to ISO_3166-1_numeric numbering)
-    const countries = feature(data.worldJson, data.worldJson.objects.countries).features;
+    const countries = feature(worldJson, worldJson.objects.countries).features;
 
     // We place all countries inside a g.countries
     svg.append('g')
@@ -87,98 +93,79 @@ const chart = {
       .attr('d', path)
       .attr('id', d => `iso${d.id}`)
       .on('click', (d) => {
-        // Show context menu
         d3.event.preventDefault();
-        $('#contextMenu .country').html(data.lookup(d.id, 'countryByISONum', 'name'));
-        $('#contextMenu .setReporter a, #contextMenu .setPartner a').attr('data-uncode', data.lookup(d.id, 'countryByISONum', 'unCode'));
-        $('#closeContextMenu').on('click', (e) => {
-          e.preventDefault();
-          infoBox.hideHover();
-        });
-        $('#contextMenu').css({
-          display: 'block',
-          left: d3.event.pageX,
-          top: d3.event.pageY
-        });
+        controls.changeFilters({ partner: data.lookup(d.id.toString(), 'partnersByMapNumerical', 'id') });
       });
 
     if (callback) { callback(); }
   },
 
   refresh(event, filters) {
+    const { reporter, flow, commodity, year } = filters;
+
     // force a resize on refresh
     resizeSvg();
 
+    // We build queryFilter & dataFilter objects to make API queries more generic than data queries
     const queryFilter = {
-      reporter: +filters.reporter,
-      partner: 'all',
-      year: +filters.year,
+      reporter,
       initiator: 'choropleth'
     };
     const dataFilter = {
-      reporter: +filters.reporter,
-      partner: 'all',
-      year: +filters.year,
-      flow: +filters.flow
+      reporter,
+      year,
+      // TODO ideally we would select and visualize codealpha or labarea depending on
+      // what kind of partner the user selected in the filter (defaulting to codealpha)
+      partnerType: 'codealpha'
     };
+
     let title = '';
 
     // CASE 1: reporter = null
     // Blank choropleth, no countries selected and no fills and no title
-    if (!filters.reporter) {
+    if (reporter === null) {
       svg.selectAll('.country').style('fill', '#fff');
       svg.selectAll('.highlighted').classed('highlighted', false);
       $chartTitle.html('');
       return;
     }
 
-    // CASE 2&3: reporter = selected    commodity = null
-    if (filters.reporter && !filters.commodity) {
-      // Set query and data retrieval filters (forcing commodity to total)
-      queryFilter.commodity = 'TOTAL';
-      queryFilter.type = filters.type;
-      dataFilter.commodity = 'TOTAL';
-      dataFilter.type = filters.type;
-      title = '';
+    if (commodity === null) {
+      // CASE 2&3: commodity = null
+      dataFilter.commodity = 'all';
       title = [
-        data.lookup(filters.reporter, 'countryByUnNum', 'name'),
+        data.lookup(reporter, 'reporters', 'text'),
         [
-          [' trade in ', ({ S: 'services', C: 'goods' })[filters.type], ' balance '].join(''),
-          [' imports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join(''),
-          [' exports of ', ({ S: 'services', C: 'goods' })[filters.type], ' '].join('')
-        ][filters.flow],
+          ' trade balance ',
+          ' imports of goods ',
+          ' exports of goods '
+        ][flow],
         ' in ',
-        filters.year
+        year
+      ].join('');
+    } else {
+      // CASE 4&5: commodity = selected
+      dataFilter.commodity = commodity;
+      title = [
+        data.lookup(reporter, 'reporters', 'text'),
+        [
+          [' trade in ', data.lookup(commodity, 'commodities', 'text'), ' balance '].join(''),
+          [' imports of ', data.lookup(commodity, 'commodities', 'text'), ' '].join(''),
+          [' exports of ', data.lookup(commodity, 'commodities', 'text'), ' '].join('')
+        ][flow],
+        ' in ',
+        year
       ].join('');
     }
 
-    // CASE 4&5: reporter = selected    commodity = selected
-    if (filters.reporter && filters.commodity) {
-      // Set query and data retrieval filters
-      queryFilter.commodity = filters.commodity;
-      queryFilter.type = filters.type;
-      dataFilter.commodity = filters.commodity;
-      dataFilter.type = filters.type;
-      title = [
-        data.lookup(filters.reporter, 'countryByUnNum', 'name'),
-        [
-          [' trade in ', data.commodityName(filters.commodity, filters.type), ' balance '].join(),
-          [' imports of ', data.commodityName(filters.commodity, filters.type), ' '].join(),
-          [' exports of ', data.commodityName(filters.commodity, filters.type), ' '].join()
-        ][filters.flow],
-        ' in ',
-        filters.year
-      ].join();
-    }
-
-    data.query(queryFilter, (err, ready) => {
+    data.query(queryFilter, (err) => {
       if (err) { gui.showError(err); }
-      if (err || !ready) { return; }
-      // Redraw map and set title
-      chart.redrawMap(dataFilter);
-      // Set chart title
+
       $chartTitle.html(title);
+
       const newData = data.getData(dataFilter);
+      chart.redrawMap(+flow, newData);
+
       // Set download link
       $chart.find('.downloadData').unbind('click').on('click', (e) => {
         e.preventDefault();
@@ -187,27 +174,12 @@ const chart = {
     });
   },
 
-  redrawMap(filters) {
+  redrawMap(flow, newData) {
     // Based on user selected flow predefine value accessor
-    let flowRank;
-    let flowVal;
-    if (+filters.flow === 1) { flowRank = 'importRank'; flowVal = 'importVal'; }
-    if (+filters.flow === 2) { flowRank = 'exportRank'; flowVal = 'exportVal'; }
-    if (+filters.flow === 0) { flowRank = 'balanceVal'; flowVal = 'balanceVal'; }
+    const flowRank = ['balanceVal', 'importRank', 'exportRank'][flow];
+    const flowVal = ['balanceVal', 'importVal', 'exportVal'][flow];
 
-    // Get the relevant data for both flows and then combine the data
-    let newData = data.getData({
-      reporter: filters.reporter,
-      type: filters.type,
-      commodity: filters.commodity,
-      year: +filters.year
-    });
-    newData = data.combineData(newData);
-
-    // Filter out records that relate to partner: 0 (world) which would distort the scale
-    // as well as records that don't have data for the current flow
-    newData = newData.filter(d => d[flowRank] && d[flowVal] && d.partner !== 0);
-
+    // TODO: delete?
     // Create a lookup object to access by partner and also store count
     const newDataByPartner = d3.map(newData, d => d.partner);
     const count = newData.length;
@@ -216,7 +188,7 @@ const chart = {
     let colorScale = d3.scaleThreshold();
     let domain;
     let range;
-    if (+filters.flow === 0) {
+    if (flow === 0) {
       // If flow is balance we create a threshold scale which has only
       // two cases positive (above 0 threshold) and negative (below 0 threshold)
       colorScale.domain([0]).range([0, 1]);
@@ -243,22 +215,14 @@ const chart = {
       .classed('highlighted', false)
       // Assign behaviours to hover over country
       .on('mouseenter', (d) => {
-        try {
-          const partner = data.countryByISONumMap.get(d.id).unCode;
-          const partnerDetails = newDataByPartner.get(partner);
-          if (partnerDetails) {
-            infoBox.displayHover(partnerDetails);
-          } else {
-            // DisplayHover with no data but include country name
-            infoBox.displayHover(false, partner);
-          }
-          // Bring country path node to the front (to display border highlighting better)
-          svg.selectAll('.country').sort((a, b) => (a.id === d.id) - (b.id === d.id));
-        } catch (err) {
-          // DisplayHover with no data
-          infoBox.displayHover(false);
-          console.log(`No country in database by ${d.id} isoCode.`);
+        const partnerId = data.lookup(d.id.toString(), 'partnersByMapNumerical', 'id');
+        if (partnerId === null) return;
+        const partnerRecord = newDataByPartner.get(partnerId);
+        if (partnerRecord) {
+          infoBox.displayHover(partnerRecord);
         }
+        // Bring country path node to the front (to display border highlighting better)
+        svg.selectAll('.country').sort((a, b) => (a.id === d.id) - (b.id === d.id));
       })
       .on('mouseleave', () => {
         infoBox.hideHover();
@@ -267,21 +231,17 @@ const chart = {
       .transition()
       .duration(1000)
       .style('fill', (d) => {
-        const unCodes = data.areasByISONum(d.id);
-        const countryData = [];
-        let bucket = 0;
         try {
-          unCodes.forEach((el) => {
-            const datum = newDataByPartner.get(el.unCode);
-            if (datum) { countryData.push(newDataByPartner.get(el.unCode)); }
-          });
-          if (countryData.length === 0) { throw new Error(`No data points for ${data.lookup(d.id, 'countryByUnNum', 'name')}`); }
-          if (countryData.length > 1) { throw new Error(`Multiple data points for ${data.lookup(d.id, 'countryByUnNum', 'name')}`); }
-          if (countryData[0][flowRank] === null) { throw new Error(`'Incomplete data for ${data.lookup(d.id, 'countryByUnNum', 'name')}`); }
-          bucket = colorScale(countryData[0][flowRank]);
-          return chart.colors[filters.flow][bucket];
-        } catch (exception) {
-          return '#818181';
+          const partnerId = data.lookup(d.id.toString(), 'partnersByMapNumerical', 'id');
+          const partnerName = data.lookup(partnerId, 'partners', 'text');
+          if (partnerId === null) throw new Error(`Could not find partnerName for map id ${d.id}`);
+          const partnerRecord = newDataByPartner.get(partnerId);
+          if (partnerRecord[flowRank] === null) throw new Error(`'Incomplete data for ${partnerName}`);
+          const bucket = colorScale(partnerRecord[flowRank]);
+          return chart.colors[flow][bucket];
+        } catch (err) {
+          // console.log(err.message);
+          return noDataColor;
         }
       });
 
@@ -294,10 +254,7 @@ const chart = {
         count: values.length
       }))
       .entries(newData);
-    chart.drawLegend(legendData, filters.flow);
-
-    // Highlight reporter on map
-    svg.select(`#iso${data.lookup(filters.reporter, 'countryByUnNum', 'isoNumerical')}`).classed('highlighted', true);
+    chart.drawLegend(legendData, flow);
   },
 
   drawLegend(legendData, flow) {
@@ -370,7 +327,7 @@ const chart = {
       .attr('x', 12)
       .text((d, i) => {
         if (+flow > 0) {
-          return `${data.numFormat(legendData[i].value.min, null, 1)} - ${data.numFormat(legendData[i].value.max, null, 1)} (${legendData[i].value.count} partners)`;
+          return `${numFormat(legendData[i].value.min, null, 1)} - ${numFormat(legendData[i].value.max, null, 1)} (${legendData[i].value.count} partners)`;
         }
         return '';
       });

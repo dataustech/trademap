@@ -3,11 +3,11 @@
 /*
  * THIS FILE SETS UP THE CONTROLS ON THE PAGE
  * */
-import * as d3 from 'd3';
 
 import $ from 'jquery';
 import 'select2';
 import data from './data';
+import years from './../../data/years.json';
 
 const controls = {
   // Place some common jQuery objects so that we don't need to look for them each time.
@@ -32,8 +32,9 @@ const controls = {
         placeholder: 'Select a reporter',
         theme: 'classic',
         width: 'resolve',
-        allowClear: true,
-        data: data.reporterAreasSelectOptions
+        allowClear: false,
+        templateSelection: opt => $(`<span><strong>Reporter:</strong> ${opt.text}</span>`),
+        data: data.reporters
       })
       .on('change', controls.onFilterChange);
 
@@ -41,71 +42,38 @@ const controls = {
     controls.$selectPartner
       .select2({
         placeholder: 'Select a partner',
+        theme: 'classic',
+        width: 'resolve',
         allowClear: true,
-        disabled: true,
-        theme: 'classic',
-        width: 'resolve',
-        data: data.partnerAreasSelectOptions
-      })
-      .on('change', controls.onFilterChange);
-
-    // Setup the type dropdown
-    controls.$selectType
-      .select2({
-        minimumResultsForSearch: Infinity,
-        data: data.typeCodesSelectOptions,
-        theme: 'classic',
-        width: 'resolve',
+        templateSelection: opt => $(`<span><strong>Partner:</strong> ${opt.text}</span>`),
+        data: data.partners,
         disabled: true
       })
       .on('change', controls.onFilterChange);
 
     // Setup the commodities dropdown
-
     controls.$selectCommodity
       .select2({
         placeholder: 'Select a commodity',
-        allowClear: true,
         theme: 'classic',
         width: 'resolve',
-        disabled: true,
-        ajax: {
-          transport(params, success, failure) {
-            // Check if services or commodities are selected in
-            // controls.filters and return options based on this
-            let options = { text: 'undefined', results: [] };
-            if (controls.filters.type === 'S') options = { text: 'services', results: data.serviceCodesSelectOptions };
-            if (controls.filters.type === 'C') options = { text: 'goods', results: data.commodityCodesSelectOptions };
-            const promise = new Promise(resolve => resolve(options));
-            promise.then(success);
-            promise.catch(failure);
-          }
-        }
+        allowClear: true,
+        templateSelection: opt => $(`<span><strong>Commodity:</strong> ${opt.text}</span>`),
+        data: data.commodities,
+        disabled: false
       })
       .on('change', controls.onFilterChange);
 
     // Setup the year selector
     controls.$selectYear
       .select2({
-        allowClear: false,
         theme: 'classic',
         width: 'resolve',
-        minimumResultsForSearch: Infinity,
-        disabled: true,
-        data: data.yearsSelectOptions
+        allowClear: false,
+        data: data.years,
+        disabled: true
       })
       .on('change', controls.onFilterChange);
-
-    // ADD REPORTER<->PARTNER SWITCH BUTTON BEHAVIOUR
-    $('#switchPartners').on('click', () => {
-      const currentFilters = controls.getFilters();
-      controls.changeFilters({
-        reporter: currentFilters.partner,
-        partner: currentFilters.reporter,
-        year: currentFilters.year,
-        flow: currentFilters.flow
-      });
-    });
 
     // ADD IMPORT/EXPORT/BALANCE BUTTON BEHAVIOURS
     controls.$flowButtons.on('click', (event) => {
@@ -116,34 +84,12 @@ const controls = {
 
     // ADD CLEARFILTERS BUTTON BEHAVIOR
     controls.$clearFilters.on('click', () => {
-      $('#selectReporter, #selectPartner, #selectCommodity')
+      $('#selectPartner, #selectCommodity')
         .off('change', controls.onFilterChange)
         .val(null)
         .trigger('change')
         .on('change', controls.onFilterChange);
       controls.onFilterChange();
-    });
-
-    // ADD CONTEXTUAL MENU BEHAVIOURS
-    $('#closeContextMenu').on('click', (e) => {
-      e.preventDefault();
-      $('#contextMenu').hide();
-    });
-
-    $('#contextMenu .setReporter').on('click', (e) => {
-      e.preventDefault();
-      if (!$(e.target.parentNode).hasClass('disabled')) {
-        controls.changeFilters({ reporter: $(e.target).attr('data-uncode') });
-      }
-      $('#contextMenu').hide();
-    });
-
-    $('#contextMenu .setPartner').on('click', (e) => {
-      e.preventDefault();
-      if (!$(e.target.parentNode).hasClass('disabled')) {
-        controls.changeFilters({ partner: $(e.target).attr('data-uncode') });
-      }
-      $('#contextMenu').hide();
     });
   },
 
@@ -151,9 +97,8 @@ const controls = {
     const newFilters = {};
     if (controls.$selectReporter.val() !== '') { newFilters.reporter = controls.$selectReporter.val(); }
     if (controls.$selectPartner.val() !== '') { newFilters.partner = controls.$selectPartner.val(); }
-    if (controls.$selectType.val() !== '') { newFilters.type = controls.$selectType.val(); }
     if (controls.$selectCommodity.val() !== '') { newFilters.commodity = controls.$selectCommodity.val(); }
-    if (controls.$selectYear.val() !== '') { newFilters.year = controls.$selectYear.val(); }
+    if (controls.$selectYear.val() !== '') { newFilters.year = +controls.$selectYear.val(); }
     if ($('#flowButtons .btn-primary').attr('data-value') !== '') { newFilters.flow = $('#flowButtons .btn-primary').attr('data-value'); }
     return newFilters;
   },
@@ -166,20 +111,9 @@ const controls = {
     if (controls.filters.reporter === newfilters.reporter &&
       controls.filters.partner === newfilters.partner &&
       controls.filters.commodity === newfilters.commodity &&
-      controls.filters.type === newfilters.type &&
       controls.filters.year === newfilters.year &&
       controls.filters.flow === newfilters.flow) {
       return;
-    }
-
-    // If the type was changed then deselect the commodity (the commodity dropdown autopopulates)
-    if (controls.filters.type !== newfilters.type) {
-      newfilters.commodity = undefined;
-      // Update placeholder
-      if (newfilters.type === 'S') controls.$selectCommodity.data('select2').selection.placeholder.text = 'Select service type';
-      if (newfilters.type === 'C') controls.$selectCommodity.data('select2').selection.placeholder.text = 'Select commodity';
-      // Purge the displayed value in the commodity dropdown
-      controls.$selectCommodity.select2('val', '');
     }
 
     // If partner was unselected and is now selected then scroll down to the charts.
@@ -205,29 +139,25 @@ const controls = {
     controls.filters = newfilters;
   },
 
-  changeFilters(filters) {
+  changeFilters(newFilters) {
     // If reporter is not currently selected nor being set, don't allow any other updates
-    if (!filters.reporter && controls.$selectReporter.val() === '') {
+    if (!newFilters.reporter && controls.$selectReporter.val() === '') {
       return;
     }
 
     // Update the other fields
-    if (filters.reporter && filters.reporter !== controls.$selectReporter.val()) {
-      controls.$selectReporter.val(filters.reporter);
+    if (newFilters.reporter && newFilters.reporter !== controls.$selectReporter.val()) {
+      controls.$selectReporter.val(newFilters.reporter);
     }
-    if (filters.type && filters.type !== controls.$selectType.val()) {
-      controls.$selectType.val(filters.type);
+    if (newFilters.partner && newFilters.partner !== controls.$selectPartner.val()) {
+      controls.$selectPartner.val(newFilters.partner === 'all' ? '' : newFilters.partner);
     }
-    if (filters.commodity && filters.commodity !== controls.$selectCommodity.val()) {
-      controls.$selectCommodity.val(filters.commodity);
+    if (newFilters.commodity && newFilters.commodity !== controls.$selectCommodity.val()) {
+      controls.$selectCommodity.val(newFilters.commodity === 'all' ? '' : newFilters.commodity);
     }
-    if (filters.partner && filters.partner !== controls.$selectPartner.val()) {
-      controls.$selectPartner.val(filters.partner);
-    }
-    if (filters.year && filters.year !== controls.$selectYear.val()) {
+    if (newFilters.year && newFilters.year !== controls.$selectYear.val()) {
       // Add the current and the requested years temporarily to the list
-      controls.updateYears([+controls.$selectYear.val(), filters.year]);
-      controls.$selectYear.val(filters.year);
+      controls.$selectYear.val(newFilters.year);
     }
 
     // And trigger a single change event
@@ -237,15 +167,19 @@ const controls = {
 
   initializeFilters() {
     const URLfilters = controls.decodeURL();
-    if (URLfilters && URLfilters.reporter && URLfilters.type) {
+    if (URLfilters && URLfilters.reporter) {
       // Set the filters from the URL
       controls.changeFilters(URLfilters);
     } else {
-      const today = new Date();
-      const initYear = today.getMonth() < 7 ? today.getFullYear() - 2 : today.getFullYear() - 1;
-      // Then initialize filters to reporter=UK, year is estimate
-      // of most recent year where there is data, and type Goods
-      controls.changeFilters({ reporter: 826, year: initYear, type: 'C' });
+      // use latest available year
+      const initYear = years.reduce((acc, curr) => Math.max(acc, +curr.id), 2016);
+      // Then initialize filters to reporter=NI, and latest year available
+      controls.changeFilters({
+        reporter: 'NI',
+        year: initYear,
+        partner: 'all',
+        commodity: 'all'
+      });
     }
   },
 
@@ -258,11 +192,12 @@ const controls = {
     } catch (err) {
       queryString = window.location.search.substring(1);
     }
-    queryString.split('&').forEach((param) => {
-      const p = param.replace(/%20|\+/g, ' ').split('=');
-      filters[decodeURIComponent(p[0])] = (p[1] ? decodeURIComponent(p[1]) : undefined);
+    queryString.split('&').forEach((pair) => {
+      const [paramName, paramValue] = pair.replace(/%20|\+/g, ' ').split('=');
+      filters[decodeURIComponent(paramName)] = paramValue !== '' ? decodeURIComponent(paramValue) : null;
     });
-    if (filters.year) { filters.year = +filters.year; } return filters;
+    if (filters.year) { filters.year = +filters.year; }
+    return filters;
   },
 
   updateURL(filters) {
@@ -278,23 +213,6 @@ const controls = {
     window.history.replaceState(null, 'International Trade in Goods and Services by Country and Commodity', query);
   },
 
-  updateYears(yearList) {
-    if (yearList.length > 0) {
-      const current = +controls.$selectYear.val();
-      controls.$selectYear.html('');
-      yearList
-        .sort((a, b) => b - a)
-        .forEach((d) => {
-          controls.$selectYear.append(`<option value="${d}">${d}</option>`);
-        });
-      if (yearList.indexOf(current) >= 0) {
-        controls.$selectYear.val(+current);
-      } else {
-        controls.$selectYear.val(d3.max(yearList)).trigger('change');
-      }
-    }
-  },
-
   fadeControls(filters) {
     if (!filters.reporter) {
       $('#selectReporter, #selectPartner, #selectCommodity')
@@ -302,21 +220,13 @@ const controls = {
         .val(null)
         .trigger('change')
         .on('change', controls.onFilterChange);
-      $('#selectType').select2({ disabled: true });
-      $('#selectCommodity').select2({ disabled: true });
-      $('#selectPartner').select2({ disabled: true });
-      $('#selectYear').select2({ disabled: true });
-      $('#switchPartners').prop('disabled', true);
+      $('#selectCommodity').prop('disabled', true);
+      $('#selectPartner').prop('disabled', true);
+      $('#selectYear').prop('disabled', true);
     } else {
-      $('#selectType').select2('enable');
-      $('#selectCommodity').select2('enable');
-      $('#selectPartner').select2('enable');
-      $('#selectYear').select2('enable');
-      if (filters.partner && data.lookup(filters.partner, 'reporterAreas', 'id') !== 'unknown') {
-        $('#switchPartners').prop('disabled', false);
-      } else {
-        $('#switchPartners').prop('disabled', true);
-      }
+      $('#selectCommodity').prop('disabled', false);
+      $('#selectPartner').prop('disabled', false);
+      $('#selectYear').prop('disabled', false);
     }
   },
 
@@ -325,12 +235,10 @@ const controls = {
       // Empty viz: hide switch, chevrons and graphs and charts container
       $('#goToCharts, #goToMap, #flowButtons').hide();
       $('#charts').slideUp();
-      $('#contextMenu .setPartner').addClass('disabled');
     } else {
       // Show switch, chevrons and graphs
       $('#goToCharts, #goToMap, #flowButtons').show();
       $('#charts').slideDown();
-      $('#contextMenu .setPartner').removeClass('disabled');
     }
   },
 

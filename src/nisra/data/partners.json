@@ -1,772 +1,772 @@
-{
-  "A": {
+[
+  {
     "id": "A",
     "type": "labarea",
-    "name": "Asia and Oceania",
+    "text": "Asia and Oceania",
     "labarea": "",
     "mapNumerical": ""
   },
-  "B": {
+  {
     "id": "B",
     "type": "labarea",
-    "name": "Eastern Europe",
+    "text": "Eastern Europe",
     "labarea": "",
     "mapNumerical": ""
   },
-  "C": {
+  {
     "id": "C",
     "type": "labarea",
-    "name": "European Union",
+    "text": "European Union",
     "labarea": "",
     "mapNumerical": ""
   },
-  "D": {
+  {
     "id": "D",
     "type": "labarea",
-    "name": "Latin America and the Caribbean",
+    "text": "Latin America and the Caribbean",
     "labarea": "",
     "mapNumerical": ""
   },
-  "E": {
+  {
     "id": "E",
     "type": "labarea",
-    "name": "Low Value Trade (Non-EU)",
+    "text": "Low Value Trade (Non-EU)",
     "labarea": "",
     "mapNumerical": ""
   },
-  "F": {
+  {
     "id": "F",
     "type": "labarea",
-    "name": "Middle East and North Africa",
+    "text": "Middle East and North Africa",
     "labarea": "",
     "mapNumerical": ""
   },
-  "G": {
+  {
     "id": "G",
     "type": "labarea",
-    "name": "North America",
+    "text": "North America",
     "labarea": "",
     "mapNumerical": ""
   },
-  "H": {
+  {
     "id": "H",
     "type": "labarea",
-    "name": "Sub-Saharan Africa",
+    "text": "Sub-Saharan Africa",
     "labarea": "",
     "mapNumerical": ""
   },
-  "I": {
+  {
     "id": "I",
     "type": "labarea",
-    "name": "Western Europe",
+    "text": "Western Europe",
     "labarea": "",
     "mapNumerical": ""
   },
-  "J": {
+  {
     "id": "J",
     "type": "labarea",
-    "name": "Ships and Stores (Non-EU)",
+    "text": "Ships and Stores (Non-EU)",
     "labarea": "",
     "mapNumerical": ""
   },
-  "AE": {
+  {
     "id": "AE",
-    "type": "codalpha",
-    "name": "United Arab Emirates",
+    "type": "codealpha",
+    "text": "United Arab Emirates",
     "labarea": "F",
     "mapNumerical": "784"
   },
-  "AO": {
+  {
     "id": "AO",
-    "type": "codalpha",
-    "name": "Angola",
+    "type": "codealpha",
+    "text": "Angola",
     "labarea": "H",
     "mapNumerical": "24"
   },
-  "AR": {
+  {
     "id": "AR",
-    "type": "codalpha",
-    "name": "Argentina",
+    "type": "codealpha",
+    "text": "Argentina",
     "labarea": "D",
     "mapNumerical": "32"
   },
-  "AT": {
+  {
     "id": "AT",
-    "type": "codalpha",
-    "name": "Austria",
+    "type": "codealpha",
+    "text": "Austria",
     "labarea": "C",
     "mapNumerical": "40"
   },
-  "AU": {
+  {
     "id": "AU",
-    "type": "codalpha",
-    "name": "Australia",
+    "type": "codealpha",
+    "text": "Australia",
     "labarea": "A",
     "mapNumerical": "36"
   },
-  "AZ": {
+  {
     "id": "AZ",
-    "type": "codalpha",
-    "name": "Azerbaijan",
+    "type": "codealpha",
+    "text": "Azerbaijan",
     "labarea": "B",
     "mapNumerical": "31"
   },
-  "BD": {
+  {
     "id": "BD",
-    "type": "codalpha",
-    "name": "Bangladesh",
+    "type": "codealpha",
+    "text": "Bangladesh",
     "labarea": "A",
     "mapNumerical": "50"
   },
-  "BE": {
+  {
     "id": "BE",
-    "type": "codalpha",
-    "name": "Belgium",
+    "type": "codealpha",
+    "text": "Belgium",
     "labarea": "C",
     "mapNumerical": "56"
   },
-  "BG": {
+  {
     "id": "BG",
-    "type": "codalpha",
-    "name": "Bulgaria",
+    "type": "codealpha",
+    "text": "Bulgaria",
     "labarea": "C",
     "mapNumerical": "100"
   },
-  "BH": {
+  {
     "id": "BH",
-    "type": "codalpha",
-    "name": "Bahrain",
+    "type": "codealpha",
+    "text": "Bahrain",
     "labarea": "F",
     "mapNumerical": "48"
   },
-  "BR": {
+  {
     "id": "BR",
-    "type": "codalpha",
-    "name": "Brazil",
+    "type": "codealpha",
+    "text": "Brazil",
     "labarea": "D",
     "mapNumerical": "76"
   },
-  "CA": {
+  {
     "id": "CA",
-    "type": "codalpha",
-    "name": "Canada",
+    "type": "codealpha",
+    "text": "Canada",
     "labarea": "G",
     "mapNumerical": "124"
   },
-  "CG": {
+  {
     "id": "CG",
-    "type": "codalpha",
-    "name": "Congo (Brazzaville)",
+    "type": "codealpha",
+    "text": "Congo (Brazzaville)",
     "labarea": "H",
     "mapNumerical": "178"
   },
-  "CH": {
+  {
     "id": "CH",
-    "type": "codalpha",
-    "name": "Switzerland",
+    "type": "codealpha",
+    "text": "Switzerland",
     "labarea": "I",
     "mapNumerical": "756"
   },
-  "CI": {
+  {
     "id": "CI",
-    "type": "codalpha",
-    "name": "Côte d'Ivoire",
+    "type": "codealpha",
+    "text": "Côte d'Ivoire",
     "labarea": "H",
     "mapNumerical": "384"
   },
-  "CL": {
+  {
     "id": "CL",
-    "type": "codalpha",
-    "name": "Chile",
+    "type": "codealpha",
+    "text": "Chile",
     "labarea": "D",
     "mapNumerical": "152"
   },
-  "CM": {
+  {
     "id": "CM",
-    "type": "codalpha",
-    "name": "Cameroon",
+    "type": "codealpha",
+    "text": "Cameroon",
     "labarea": "H",
     "mapNumerical": "120"
   },
-  "CN": {
+  {
     "id": "CN",
-    "type": "codalpha",
-    "name": "China",
+    "type": "codealpha",
+    "text": "China",
     "labarea": "A",
     "mapNumerical": "156"
   },
-  "CO": {
+  {
     "id": "CO",
-    "type": "codalpha",
-    "name": "Colombia",
+    "type": "codealpha",
+    "text": "Colombia",
     "labarea": "D",
     "mapNumerical": "170"
   },
-  "CR": {
+  {
     "id": "CR",
-    "type": "codalpha",
-    "name": "Costa Rica",
+    "type": "codealpha",
+    "text": "Costa Rica",
     "labarea": "D",
     "mapNumerical": "188"
   },
-  "CY": {
+  {
     "id": "CY",
-    "type": "codalpha",
-    "name": "Cyprus",
+    "type": "codealpha",
+    "text": "Cyprus",
     "labarea": "C",
     "mapNumerical": "196"
   },
-  "CZ": {
+  {
     "id": "CZ",
-    "type": "codalpha",
-    "name": "Czech Republic",
+    "type": "codealpha",
+    "text": "Czech Republic",
     "labarea": "C",
     "mapNumerical": "203"
   },
-  "DE": {
+  {
     "id": "DE",
-    "type": "codalpha",
-    "name": "Germany",
+    "type": "codealpha",
+    "text": "Germany",
     "labarea": "C",
     "mapNumerical": "276"
   },
-  "DK": {
+  {
     "id": "DK",
-    "type": "codalpha",
-    "name": "Denmark",
+    "type": "codealpha",
+    "text": "Denmark",
     "labarea": "C",
     "mapNumerical": "208"
   },
-  "DO": {
+  {
     "id": "DO",
-    "type": "codalpha",
-    "name": "Dominican Republic",
+    "type": "codealpha",
+    "text": "Dominican Republic",
     "labarea": "D",
     "mapNumerical": "214"
   },
-  "DZ": {
+  {
     "id": "DZ",
-    "type": "codalpha",
-    "name": "Algeria",
+    "type": "codealpha",
+    "text": "Algeria",
     "labarea": "F",
     "mapNumerical": "12"
   },
-  "EC": {
+  {
     "id": "EC",
-    "type": "codalpha",
-    "name": "Ecuador",
+    "type": "codealpha",
+    "text": "Ecuador",
     "labarea": "D",
     "mapNumerical": "218"
   },
-  "EE": {
+  {
     "id": "EE",
-    "type": "codalpha",
-    "name": "Estonia",
+    "type": "codealpha",
+    "text": "Estonia",
     "labarea": "C",
     "mapNumerical": "233"
   },
-  "EG": {
+  {
     "id": "EG",
-    "type": "codalpha",
-    "name": "Egypt",
+    "type": "codealpha",
+    "text": "Egypt",
     "labarea": "F",
     "mapNumerical": "818"
   },
-  "ES": {
+  {
     "id": "ES",
-    "type": "codalpha",
-    "name": "Spain",
+    "type": "codealpha",
+    "text": "Spain",
     "labarea": "C",
     "mapNumerical": "724"
   },
-  "ET": {
+  {
     "id": "ET",
-    "type": "codalpha",
-    "name": "Ethiopia",
+    "type": "codealpha",
+    "text": "Ethiopia",
     "labarea": "H",
     "mapNumerical": "231"
   },
-  "FI": {
+  {
     "id": "FI",
-    "type": "codalpha",
-    "name": "Finland",
+    "type": "codealpha",
+    "text": "Finland",
     "labarea": "C",
     "mapNumerical": "246"
   },
-  "FK": {
+  {
     "id": "FK",
-    "type": "codalpha",
-    "name": "Falkland Islands (Malvinas) ",
+    "type": "codealpha",
+    "text": "Falkland Islands (Malvinas) ",
     "labarea": "D",
     "mapNumerical": "238"
   },
-  "FR": {
+  {
     "id": "FR",
-    "type": "codalpha",
-    "name": "France",
+    "type": "codealpha",
+    "text": "France",
     "labarea": "C",
     "mapNumerical": "250"
   },
-  "GE": {
+  {
     "id": "GE",
-    "type": "codalpha",
-    "name": "Georgia",
+    "type": "codealpha",
+    "text": "Georgia",
     "labarea": "B",
     "mapNumerical": "268"
   },
-  "GH": {
+  {
     "id": "GH",
-    "type": "codalpha",
-    "name": "Ghana",
+    "type": "codealpha",
+    "text": "Ghana",
     "labarea": "H",
     "mapNumerical": "288"
   },
-  "GI": {
+  {
     "id": "GI",
-    "type": "codalpha",
-    "name": "Gibraltar ",
+    "type": "codealpha",
+    "text": "Gibraltar ",
     "labarea": "I",
     "mapNumerical": "292"
   },
-  "GQ": {
+  {
     "id": "GQ",
-    "type": "codalpha",
-    "name": "Equatorial Guinea",
+    "type": "codealpha",
+    "text": "Equatorial Guinea",
     "labarea": "H",
     "mapNumerical": "226"
   },
-  "GR": {
+  {
     "id": "GR",
-    "type": "codalpha",
-    "name": "Greece",
+    "type": "codealpha",
+    "text": "Greece",
     "labarea": "C",
     "mapNumerical": "300"
   },
-  "GT": {
+  {
     "id": "GT",
-    "type": "codalpha",
-    "name": "Guatemala",
+    "type": "codealpha",
+    "text": "Guatemala",
     "labarea": "D",
     "mapNumerical": "320"
   },
-  "HK": {
+  {
     "id": "HK",
-    "type": "codalpha",
-    "name": "Hong Kong, SAR China",
+    "type": "codealpha",
+    "text": "Hong Kong, SAR China",
     "labarea": "A",
     "mapNumerical": "344"
   },
-  "HN": {
+  {
     "id": "HN",
-    "type": "codalpha",
-    "name": "Honduras",
+    "type": "codealpha",
+    "text": "Honduras",
     "labarea": "D",
     "mapNumerical": "340"
   },
-  "HR": {
+  {
     "id": "HR",
-    "type": "codalpha",
-    "name": "Croatia",
+    "type": "codealpha",
+    "text": "Croatia",
     "labarea": "C",
     "mapNumerical": "191"
   },
-  "HU": {
+  {
     "id": "HU",
-    "type": "codalpha",
-    "name": "Hungary",
+    "type": "codealpha",
+    "text": "Hungary",
     "labarea": "C",
     "mapNumerical": "348"
   },
-  "ID": {
+  {
     "id": "ID",
-    "type": "codalpha",
-    "name": "Indonesia",
+    "type": "codealpha",
+    "text": "Indonesia",
     "labarea": "A",
     "mapNumerical": "360"
   },
-  "IE": {
+  {
     "id": "IE",
-    "type": "codalpha",
-    "name": "Ireland",
+    "type": "codealpha",
+    "text": "Ireland",
     "labarea": "C",
     "mapNumerical": "372"
   },
-  "IL": {
+  {
     "id": "IL",
-    "type": "codalpha",
-    "name": "Israel",
+    "type": "codealpha",
+    "text": "Israel",
     "labarea": "F",
     "mapNumerical": "376"
   },
-  "IN": {
+  {
     "id": "IN",
-    "type": "codalpha",
-    "name": "India",
+    "type": "codealpha",
+    "text": "India",
     "labarea": "A",
     "mapNumerical": "356"
   },
-  "IQ": {
+  {
     "id": "IQ",
-    "type": "codalpha",
-    "name": "Iraq",
+    "type": "codealpha",
+    "text": "Iraq",
     "labarea": "F",
     "mapNumerical": "368"
   },
-  "IS": {
+  {
     "id": "IS",
-    "type": "codalpha",
-    "name": "Iceland",
+    "type": "codealpha",
+    "text": "Iceland",
     "labarea": "I",
     "mapNumerical": "352"
   },
-  "IT": {
+  {
     "id": "IT",
-    "type": "codalpha",
-    "name": "Italy",
+    "type": "codealpha",
+    "text": "Italy",
     "labarea": "C",
     "mapNumerical": "380"
   },
-  "JO": {
+  {
     "id": "JO",
-    "type": "codalpha",
-    "name": "Jordan",
+    "type": "codealpha",
+    "text": "Jordan",
     "labarea": "F",
     "mapNumerical": "400"
   },
-  "JP": {
+  {
     "id": "JP",
-    "type": "codalpha",
-    "name": "Japan",
+    "type": "codealpha",
+    "text": "Japan",
     "labarea": "A",
     "mapNumerical": "392"
   },
-  "KE": {
+  {
     "id": "KE",
-    "type": "codalpha",
-    "name": "Kenya",
+    "type": "codealpha",
+    "text": "Kenya",
     "labarea": "H",
     "mapNumerical": "404"
   },
-  "KR": {
+  {
     "id": "KR",
-    "type": "codalpha",
-    "name": "Korea (South)",
+    "type": "codealpha",
+    "text": "Korea (South)",
     "labarea": "A",
     "mapNumerical": "410"
   },
-  "KW": {
+  {
     "id": "KW",
-    "type": "codalpha",
-    "name": "Kuwait",
+    "type": "codealpha",
+    "text": "Kuwait",
     "labarea": "F",
     "mapNumerical": "414"
   },
-  "KZ": {
+  {
     "id": "KZ",
-    "type": "codalpha",
-    "name": "Kazakhstan",
+    "type": "codealpha",
+    "text": "Kazakhstan",
     "labarea": "B",
     "mapNumerical": "398"
   },
-  "LB": {
+  {
     "id": "LB",
-    "type": "codalpha",
-    "name": "Lebanon",
+    "type": "codealpha",
+    "text": "Lebanon",
     "labarea": "F",
     "mapNumerical": "422"
   },
-  "LK": {
+  {
     "id": "LK",
-    "type": "codalpha",
-    "name": "Sri Lanka",
+    "type": "codealpha",
+    "text": "Sri Lanka",
     "labarea": "A",
     "mapNumerical": "144"
   },
-  "LT": {
+  {
     "id": "LT",
-    "type": "codalpha",
-    "name": "Lithuania",
+    "type": "codealpha",
+    "text": "Lithuania",
     "labarea": "C",
     "mapNumerical": "440"
   },
-  "LU": {
+  {
     "id": "LU",
-    "type": "codalpha",
-    "name": "Luxembourg",
+    "type": "codealpha",
+    "text": "Luxembourg",
     "labarea": "C",
     "mapNumerical": "442"
   },
-  "LV": {
+  {
     "id": "LV",
-    "type": "codalpha",
-    "name": "Latvia",
+    "type": "codealpha",
+    "text": "Latvia",
     "labarea": "C",
     "mapNumerical": "428"
   },
-  "MA": {
+  {
     "id": "MA",
-    "type": "codalpha",
-    "name": "Morocco",
+    "type": "codealpha",
+    "text": "Morocco",
     "labarea": "F",
     "mapNumerical": "504"
   },
-  "MK": {
+  {
     "id": "MK",
-    "type": "codalpha",
-    "name": "Macedonia, Republic of",
+    "type": "codealpha",
+    "text": "Macedonia, Republic of",
     "labarea": "B",
     "mapNumerical": "807"
   },
-  "MT": {
+  {
     "id": "MT",
-    "type": "codalpha",
-    "name": "Malta",
+    "type": "codealpha",
+    "text": "Malta",
     "labarea": "C",
     "mapNumerical": "470"
   },
-  "MU": {
+  {
     "id": "MU",
-    "type": "codalpha",
-    "name": "Mauritius",
+    "type": "codealpha",
+    "text": "Mauritius",
     "labarea": "H",
     "mapNumerical": "480"
   },
-  "MX": {
+  {
     "id": "MX",
-    "type": "codalpha",
-    "name": "Mexico",
+    "type": "codealpha",
+    "text": "Mexico",
     "labarea": "G",
     "mapNumerical": "484"
   },
-  "MY": {
+  {
     "id": "MY",
-    "type": "codalpha",
-    "name": "Malaysia",
+    "type": "codealpha",
+    "text": "Malaysia",
     "labarea": "A",
     "mapNumerical": "458"
   },
-  "NG": {
+  {
     "id": "NG",
-    "type": "codalpha",
-    "name": "Nigeria",
+    "type": "codealpha",
+    "text": "Nigeria",
     "labarea": "H",
     "mapNumerical": "566"
   },
-  "NL": {
+  {
     "id": "NL",
-    "type": "codalpha",
-    "name": "Netherlands",
+    "type": "codealpha",
+    "text": "Netherlands",
     "labarea": "C",
     "mapNumerical": "528"
   },
-  "NO": {
+  {
     "id": "NO",
-    "type": "codalpha",
-    "name": "Norway",
+    "type": "codealpha",
+    "text": "Norway",
     "labarea": "I",
     "mapNumerical": "578"
   },
-  "NZ": {
+  {
     "id": "NZ",
-    "type": "codalpha",
-    "name": "New Zealand",
+    "type": "codealpha",
+    "text": "New Zealand",
     "labarea": "A",
     "mapNumerical": "554"
   },
-  "OM": {
+  {
     "id": "OM",
-    "type": "codalpha",
-    "name": "Oman",
+    "type": "codealpha",
+    "text": "Oman",
     "labarea": "F",
     "mapNumerical": "512"
   },
-  "PA": {
+  {
     "id": "PA",
-    "type": "codalpha",
-    "name": "Panama",
+    "type": "codealpha",
+    "text": "Panama",
     "labarea": "D",
     "mapNumerical": "591"
   },
-  "PE": {
+  {
     "id": "PE",
-    "type": "codalpha",
-    "name": "Peru",
+    "type": "codealpha",
+    "text": "Peru",
     "labarea": "D",
     "mapNumerical": "604"
   },
-  "PK": {
+  {
     "id": "PK",
-    "type": "codalpha",
-    "name": "Pakistan",
+    "type": "codealpha",
+    "text": "Pakistan",
     "labarea": "A",
     "mapNumerical": "586"
   },
-  "PL": {
+  {
     "id": "PL",
-    "type": "codalpha",
-    "name": "Poland",
+    "type": "codealpha",
+    "text": "Poland",
     "labarea": "C",
     "mapNumerical": "616"
   },
-  "PT": {
+  {
     "id": "PT",
-    "type": "codalpha",
-    "name": "Portugal",
+    "type": "codealpha",
+    "text": "Portugal",
     "labarea": "C",
     "mapNumerical": "620"
   },
-  "QA": {
+  {
     "id": "QA",
-    "type": "codalpha",
-    "name": "Qatar",
+    "type": "codealpha",
+    "text": "Qatar",
     "labarea": "F",
     "mapNumerical": "634"
   },
-  "RO": {
+  {
     "id": "RO",
-    "type": "codalpha",
-    "name": "Romania",
+    "type": "codealpha",
+    "text": "Romania",
     "labarea": "C",
     "mapNumerical": "642"
   },
-  "RU": {
+  {
     "id": "RU",
-    "type": "codalpha",
-    "name": "Russian Federation",
+    "type": "codealpha",
+    "text": "Russian Federation",
     "labarea": "B",
     "mapNumerical": "643"
   },
-  "SA": {
+  {
     "id": "SA",
-    "type": "codalpha",
-    "name": "Saudi Arabia",
+    "type": "codealpha",
+    "text": "Saudi Arabia",
     "labarea": "F",
     "mapNumerical": "682"
   },
-  "SE": {
+  {
     "id": "SE",
-    "type": "codalpha",
-    "name": "Sweden",
+    "type": "codealpha",
+    "text": "Sweden",
     "labarea": "C",
     "mapNumerical": "752"
   },
-  "SG": {
+  {
     "id": "SG",
-    "type": "codalpha",
-    "name": "Singapore",
+    "type": "codealpha",
+    "text": "Singapore",
     "labarea": "A",
     "mapNumerical": "702"
   },
-  "SI": {
+  {
     "id": "SI",
-    "type": "codalpha",
-    "name": "Slovenia",
+    "type": "codealpha",
+    "text": "Slovenia",
     "labarea": "C",
     "mapNumerical": "705"
   },
-  "SK": {
+  {
     "id": "SK",
-    "type": "codalpha",
-    "name": "Slovakia",
+    "type": "codealpha",
+    "text": "Slovakia",
     "labarea": "C",
     "mapNumerical": "703"
   },
-  "SN": {
+  {
     "id": "SN",
-    "type": "codalpha",
-    "name": "Senegal",
+    "type": "codealpha",
+    "text": "Senegal",
     "labarea": "H",
     "mapNumerical": "686"
   },
-  "TH": {
+  {
     "id": "TH",
-    "type": "codalpha",
-    "name": "Thailand",
+    "type": "codealpha",
+    "text": "Thailand",
     "labarea": "A",
     "mapNumerical": "764"
   },
-  "TR": {
+  {
     "id": "TR",
-    "type": "codalpha",
-    "name": "Turkey",
+    "type": "codealpha",
+    "text": "Turkey",
     "labarea": "I",
     "mapNumerical": "792"
   },
-  "TT": {
+  {
     "id": "TT",
-    "type": "codalpha",
-    "name": "Trinidad and Tobago",
+    "type": "codealpha",
+    "text": "Trinidad and Tobago",
     "labarea": "D",
     "mapNumerical": "780"
   },
-  "TW": {
+  {
     "id": "TW",
-    "type": "codalpha",
-    "name": "Taiwan, Republic of China",
+    "type": "codealpha",
+    "text": "Taiwan, Republic of China",
     "labarea": "A",
     "mapNumerical": ""
   },
-  "TZ": {
+  {
     "id": "TZ",
-    "type": "codalpha",
-    "name": "Tanzania, United Republic of",
+    "type": "codealpha",
+    "text": "Tanzania, United Republic of",
     "labarea": "H",
     "mapNumerical": "834"
   },
-  "UA": {
+  {
     "id": "UA",
-    "type": "codalpha",
-    "name": "Ukraine",
+    "type": "codealpha",
+    "text": "Ukraine",
     "labarea": "B",
     "mapNumerical": "804"
   },
-  "US": {
+  {
     "id": "US",
-    "type": "codalpha",
-    "name": "United States of America",
+    "type": "codealpha",
+    "text": "United States of America",
     "labarea": "G",
     "mapNumerical": "840"
   },
-  "UY": {
+  {
     "id": "UY",
-    "type": "codalpha",
-    "name": "Uruguay",
+    "type": "codealpha",
+    "text": "Uruguay",
     "labarea": "D",
     "mapNumerical": "858"
   },
-  "VE": {
+  {
     "id": "VE",
-    "type": "codalpha",
-    "name": "Venezuela (Bolivarian Republic)",
+    "type": "codealpha",
+    "text": "Venezuela (Bolivarian Republic)",
     "labarea": "D",
     "mapNumerical": "862"
   },
-  "VN": {
+  {
     "id": "VN",
-    "type": "codalpha",
-    "name": "Viet Nam",
+    "type": "codealpha",
+    "text": "Viet Nam",
     "labarea": "A",
     "mapNumerical": "704"
   },
-  "XS": {
+  {
     "id": "XS",
-    "type": "codalpha",
-    "name": "Serbia",
+    "type": "codealpha",
+    "text": "Serbia",
     "labarea": "B",
     "mapNumerical": "688"
   },
-  "ZA": {
+  {
     "id": "ZA",
-    "type": "codalpha",
-    "name": "South Africa",
+    "type": "codealpha",
+    "text": "South Africa",
     "labarea": "H",
     "mapNumerical": "710"
   },
-  "ZY": {
+  {
     "id": "ZY",
-    "type": "codalpha",
-    "name": "Low Value Trade (NON-EU)",
+    "type": "codealpha",
+    "text": "Low Value Trade (NON-EU)",
     "labarea": "E",
     "mapNumerical": "null"
   }
-}
+]
