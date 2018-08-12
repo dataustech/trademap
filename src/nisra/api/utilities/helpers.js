@@ -106,7 +106,7 @@ function addRecordToData(yearlyRecord, data) {
   ];
 
   aggregationRecords.forEach((record) => {
-    const { reporter, partner, year, commodity } = record;
+    const { reporter } = record;
     addRecord(record, data[reporter]);
   });
 }
@@ -117,20 +117,19 @@ function rankRecords(records, importTotal, exportTotal) {
     .map((record, i) => {
       // we modify the record directly (byreference)
       record.importRank = i + 1;
-      record.importPc = (record.importVal / importTotal).toFixed(2);
+      record.importPc = ((record.importVal / importTotal) * 100).toFixed(2);
       return record;
     })
     // sort descending by exportval & set rank and %
     .sort((a, b) => b.exportVal - a.exportVal)
     .map((record, i) => {
       record.exportRank = i + 1;
-      record.exportPc = (record.exportVal / exportTotal).toFixed(2);
+      record.exportPc = ((record.exportVal / exportTotal) * 100).toFixed(2);
       return record;
     });
 }
 
 function computeRanksAndPercentages(recordsHashmap, commodityType, partnerType) {
-  console.log(`Computing percentages and rankings for ${commodityType} and ${partnerType}`);
   const pivot = {};
   Object.values(recordsHashmap)
     .forEach((record) => {

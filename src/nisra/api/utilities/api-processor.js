@@ -115,6 +115,7 @@ fs.readdir(srcDir)
   .then(() => {
     console.log('Computing percentages and rankings');
     reportersList.forEach((reporter) => {
+      console.log(`Computing percentages and rankings for ${reporter}`);
       computeRanksAndPercentages(data[reporter], 'sitc1', 'codealpha');
       computeRanksAndPercentages(data[reporter], 'sitc2', 'codealpha');
       computeRanksAndPercentages(data[reporter], 'sitc1', 'labarea');
