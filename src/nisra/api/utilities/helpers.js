@@ -111,6 +111,24 @@ function addRecordToData(yearlyRecord, data) {
   });
 }
 
+function rankRecords(records, importTotal, exportTotal) {
+  records
+    .sort((a, b) => b.importVal - a.importVal)
+    .map((record, i) => {
+      // we modify the record directly (byreference)
+      record.importRank = i + 1;
+      record.importPc = (record.importVal / importTotal).toFixed(2);
+      return record;
+    })
+    // sort descending by exportval & set rank and %
+    .sort((a, b) => b.exportVal - a.exportVal)
+    .map((record, i) => {
+      record.exportRank = i + 1;
+      record.exportPc = (record.exportVal / exportTotal).toFixed(2);
+      return record;
+    });
+}
+
 function computeRanksAndPercentages(recordsHashmap, commodityType, partnerType) {
   console.log(`Computing percentages and rankings for ${commodityType} and ${partnerType}`);
   const pivot = {};
@@ -121,7 +139,7 @@ function computeRanksAndPercentages(recordsHashmap, commodityType, partnerType) 
       const { year, partner, commodity, importVal, exportVal } = record;
 
       // initialize if pivot paths if undefined
-      pivot[year] = pivot[year] || { importTotal: 0, exportTotal: 0, partners: {}};
+      pivot[year] = pivot[year] || { importTotal: 0, exportTotal: 0, partners: {} };
       pivot[year]['partners'][partner] = pivot[year]['partners'][partner] || { importTotal: 0, exportTotal: 0, commodities: {} };
       pivot[year]['partners'][partner]['commodities'][commodity] = pivot[year]['partners'][partner]['commodities'][commodity] || [];
       // add to pivot and add to totals
@@ -136,41 +154,13 @@ function computeRanksAndPercentages(recordsHashmap, commodityType, partnerType) 
     Object.keys(pivot[year]['partners']).forEach((partner) => {
       if (commodityType === 'all') {
         const { importTotal, exportTotal } = pivot[year];
-        const recordsForPartner = Object.values(pivot[year]['partners']).reduce((out, partnerObj) => out.concat([...partnerObj['commodities']['all']]), []);
-        recordsForPartner
-          .sort((a, b) => b.importVal - a.importVal)
-          .map((record, i) => {
-            // we modify the record directly (byreference)
-            record.importRank = i + 1;
-            record.importPc = (record.importVal / importTotal).toFixed(2);
-            return record;
-          })
-          // sort descending by exportval & set rank and %
-          .sort((a, b) => b.exportVal - a.exportVal)
-          .map((record, i) => {
-            record.exportRank = i + 1;
-            record.exportPc = (record.exportVal / exportTotal).toFixed(2);
-            return record;
-          });
+        const recordsToRank = Object.values(pivot[year]['partners']).reduce((out, partnerObj) => out.concat([...partnerObj['commodities']['all']]), []);
+        rankRecords(recordsToRank, importTotal, exportTotal);
       } else {
         const { importTotal, exportTotal } = pivot[year]['partners'][partner];
         Object.keys(pivot[year]['partners'][partner]['commodities']).forEach((commodity) => {
-          const recordsForCommodity = [].concat(...Object.values(pivot[year]['partners'][partner]['commodities']));
-          recordsForCommodity
-            .sort((a, b) => b.importVal - a.importVal)
-            .map((record, i) => {
-              // we modify the record directly (byreference)
-              record.importRank = i + 1;
-              record.importPc = (record.importVal / importTotal).toFixed(2);
-              return record;
-            })
-            // sort descending by exportval & set rank and %
-            .sort((a, b) => b.exportVal - a.exportVal)
-            .map((record, i) => {
-              record.exportRank = i + 1;
-              record.exportPc = (record.exportVal / exportTotal).toFixed(2);
-              return record;
-            });
+          const recordsToRank = [].concat(...Object.values(pivot[year]['partners'][partner]['commodities']));
+          rankRecords(recordsToRank, importTotal, exportTotal);
         });
       }
     });

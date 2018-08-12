@@ -14,6 +14,7 @@ TODO:
   - [x] remove aggregated
   - [x] fix missing pc and ranks
   - [x] maybe we should just export {reporter}.csv
+  - [ ] Update readme docs
 
 - more es6
 - remove ; & fix eslint
