@@ -18,7 +18,6 @@ const DEBUG = false;
 // libraries
 const fs = require('fs-extra');
 const path = require('path');
-const Promise = require('bluebird');
 
 // helpers
 const { toCsv, extractRows, addRecordToData, computeRanksAndPercentages, printProgress } = require('./helpers');
@@ -34,9 +33,6 @@ const commodities = require('../../data/commodities.json').reduce(reducer, {});
 const years = require('../../data/years.json').reduce(reducer, {});
 
 const reportersList = Object.keys(reporters);
-
-const labareacodes = Object.keys(partners).filter(key => partners[key].type === 'labarea');
-const codealphacodes = Object.keys(partners).filter(key => partners[key].type === 'codealpha');
 
 // config
 const srcDir = path.join(__dirname, '../');
@@ -133,18 +129,14 @@ fs.readdir(srcDir)
     const totalFiles = dataPaths.length;
     console.log(`${totalFiles} files need to be written`);
     let filesWritten = 0;
-    return Promise.map(
-      dataPaths,
-      (dataPath) => {
-        filesWritten++;
-        const reporter = dataPath;
-        const values = Object.values(data[reporter]);
-        if (!values.length) return null;
-        const destFile = path.join(destDir, `${reporter}.csv`);
-        printProgress(`Writing file ${filesWritten} of ${totalFiles}`);
-        return fs.outputFile(destFile, toCsv(values, outputFields));
-      },
-      { concurrency: 10 }
-    );
+    return Promise.all(dataPaths.map((dataPath) => {
+      filesWritten++;
+      const reporter = dataPath;
+      const values = Object.values(data[reporter]);
+      if (!values.length) return null;
+      const destFile = path.join(destDir, `${reporter}.csv`);
+      printProgress(`Writing file ${filesWritten} of ${totalFiles}`);
+      return fs.outputFile(destFile, toCsv(values, outputFields));
+    }));
   })
   .then(() => console.log('\nAll done!'));

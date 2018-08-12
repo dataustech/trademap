@@ -66,34 +66,21 @@ The aggregated totals should map to the following **aggregation levels** which r
 
 To make the data usable by the web-based visualization it needs to to be split into manageable chunks that can be loaded on demand via a simple API.
 
-The [`scripts/nisra/api-processor.js`](../../scripts/nisra/api-processor.js) script will read the source files from `src/nisra/api` and ouput them in a folder structure in `dist/nisra/api`. It currently takes a few minutes to run and generates the destination folder structure.
+The [`scripts/nisra/api-processor.js`](../../scripts/nisra/api-processor.js) script will read the source files from `src/nisra/api` and ouput them to `dist/nisra/api`. It currently takes a few minutes to run.
 
 **_NOTE:_** HMRC files are not included in this repository for licencing reasons.
 
 The static file api has the following structure:
 
-/api/`{reporter}`/`{partner}`/`{year}`/`{commodity}`/data.csv
-
-Values can be:
-
-| field     | values                                                         |
-| --------- | -------------------------------------------------------------- |
-| reporter  | A value from the `reporters` dictionary (see below)            |
-| partner   | A value from the `partners` dictionary (see below) or `"all"`  |
-| year      | A year value (2013-2017) or `"all"`                            |
-| commodity | An SITC1 value or SITC2 value or `"all"`                       |
-
-**_NOTE:_** wide queries (e.g. `/api/EA/all/all/all/data.csv`) are supporded but will return larger files.
+/api/`{reporter}`.csv
 
 ### Generating the static API
 
-The [`src/nisra/api/utilities/api-preprocessor.js`](src/nisra/api/utilities/api-preprocessor.js) script will read the HMRC txt files and generate a folder structure with generated CSV files. It can be run from command line from the root of the project with:
+The [`src/nisra/api/utilities/api-preprocessor.js`](src/nisra/api/utilities/api-preprocessor.js) script will read the HMRC txt files and generate the CSV files. It can be run from command line from the root of the project with:
 
 ```
 npm run preprocess:nisra
 ```
-
-The script may take a few minutes to complete and will generate a large aount amount of files and folers in `dist/nisra/api`.
 
 ### Data dictionaries
 
