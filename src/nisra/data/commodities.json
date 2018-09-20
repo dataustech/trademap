@@ -62,7 +62,7 @@
   {
     "id": "21",
     "type": "sitc2",
-    "text": "Hides"
+    "text": "Hides, skins & furskins, raw"
   },
   {
     "id": "22",
@@ -107,17 +107,17 @@
   {
     "id": "32",
     "type": "sitc2",
-    "text": "Coal"
+    "text": "Coal, coke & briquettes"
   },
   {
     "id": "33",
     "type": "sitc2",
-    "text": "Petroleum"
+    "text": "Petroleum, petroleum products & related materials"
   },
   {
     "id": "34",
     "type": "sitc2",
-    "text": "Gas"
+    "text": "Gas, natural & manufactured"
   },
   {
     "id": "35",
@@ -132,12 +132,12 @@
   {
     "id": "42",
     "type": "sitc2",
-    "text": "Fixed vegetable fats & oils"
+    "text": "Fixed vegetable fats & oils, crude,refined,fractionated"
   },
   {
     "id": "43",
     "type": "sitc2",
-    "text": "Animal or vegetable fats & oils"
+    "text": "Animal or vegetable fats & oils, processed, & waxes"
   },
   {
     "id": "51",
@@ -152,7 +152,7 @@
   {
     "id": "53",
     "type": "sitc2",
-    "text": "Dyeing"
+    "text": "Dyeing, tanning & colouring materials"
   },
   {
     "id": "54",
@@ -187,7 +187,7 @@
   {
     "id": "61",
     "type": "sitc2",
-    "text": "Leather"
+    "text": "Leather, leather manufactures n.e.s & dressed furskins"
   },
   {
     "id": "62",
@@ -202,12 +202,12 @@
   {
     "id": "64",
     "type": "sitc2",
-    "text": "Paper"
+    "text": "Paper, paperboard & manufactures thereof"
   },
   {
     "id": "65",
     "type": "sitc2",
-    "text": "Textile yarn"
+    "text": "Textile yarn, fabrics, made up articles etc"
   },
   {
     "id": "66",
@@ -262,7 +262,7 @@
   {
     "id": "77",
     "type": "sitc2",
-    "text": "Ele machinery"
+    "text": "Ele machinery, app & appliances & ele pt thereof n.e.s."
   },
   {
     "id": "78",
@@ -277,17 +277,17 @@
   {
     "id": "81",
     "type": "sitc2",
-    "text": "P/fab buildings;sanit."
+    "text": "P/fab buildings;sanit.,plumbing,heating &lighting fixt."
   },
   {
     "id": "82",
     "type": "sitc2",
-    "text": "Furniture & parts thereof; bedding"
+    "text": "Furniture & parts thereof; bedding, mattresses etc"
   },
   {
     "id": "83",
     "type": "sitc2",
-    "text": "Travel goods"
+    "text": "Travel goods, handbags & similar containers"
   },
   {
     "id": "84",
@@ -302,12 +302,12 @@
   {
     "id": "87",
     "type": "sitc2",
-    "text": "Professional"
+    "text": "Professional, scientific & controlling ins & app n.e.s."
   },
   {
     "id": "88",
     "type": "sitc2",
-    "text": "Photographic & optical goods"
+    "text": "Photographic & optical goods, n.e.s.; watches & clocks"
   },
   {
     "id": "89",
@@ -327,7 +327,7 @@
   {
     "id": "96",
     "type": "sitc2",
-    "text": "Coin (other than gold coin)"
+    "text": "Coin (other than gold coin), not being of legal tender"
   },
   {
     "id": "98",
@@ -352,7 +352,7 @@
   {
     "id": "03",
     "type": "sitc2",
-    "text": "Fish"
+    "text": "Fish,crustaceans,molluscs & aq.inverts & preps thereof"
   },
   {
     "id": "04",
@@ -367,12 +367,12 @@
   {
     "id": "06",
     "type": "sitc2",
-    "text": "Sugar"
+    "text": "Sugar, sugar preparations & honey"
   },
   {
     "id": "07",
     "type": "sitc2",
-    "text": "Coffee"
+    "text": "Coffee, tea, cocoa, spices & manufactures thereof"
   },
   {
     "id": "08",
