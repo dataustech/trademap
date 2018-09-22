@@ -195,15 +195,19 @@ const chart = {
     } else {
       // For import and export e have slightly different scales
       // depending on how many countries we have data for
-      if (count > 25) { // Quartiles plus top 3
-        domain = [4, count / 4, count / 2, (count * 3) / 4];
+      if (count > 25) {
+        // Quartiles plus top 3
+        domain = [4, count / 4, count / 2, count * 3 / 4];
         range = [4, 3, 2, 1, 0];
+        console.log(`making scale for domain,range ${domain}   ${range}`);
       }
-      if (count <= 25 && count > 4) { // Simple quartiles
+      if (count <= 25 && count > 4) {
+        // Simple quartiles
         domain = [count / 4, count / 2, (count * 3) / 4];
         range = [3, 2, 1, 0];
       }
-      if (count <= 4) { // No scale, all countries in a single bucket
+      if (count <= 4) {
+        // No scale, all countries in a single bucket
         domain = [count];
         range = [0];
       }
@@ -254,6 +258,7 @@ const chart = {
         count: values.length
       }))
       .entries(newData);
+    console.log('!!!', legendData, newData);
     chart.drawLegend(legendData, flow);
   },
 
@@ -262,7 +267,7 @@ const chart = {
     const rectHeight = 30;
     const padding = 5;
     // Cut the colors array to the length of out legend
-    const currentColors = chart.colors[flow].slice(0, legendData.length);
+    const currentColors = chart.colors[flow].slice(0, legendData.length).reverse();
     const flowName = ['Balance', 'Imports', 'Exports'][flow];
     const totalPartners = legendData.reduce(((prev, curr) => prev + curr.value.count), 0);
 
@@ -346,20 +351,20 @@ const chart = {
             if (totalPartners <= 4) {
               returnTxt = 'Not enough data to map';
             } else {
-              returnTxt = 'Up to 25th percentile';
+              returnTxt = `Top 3 - above ${topPercentile.toFixed(1)} percentile`;
             }
             break;
           case 1:
-            returnTxt = '25th to 50th percentile';
+            returnTxt = 'Above 75th percentile excl. top 3';
             break;
           case 2:
             returnTxt = '50th to 75th percentile';
             break;
           case 3:
-            returnTxt = 'Above 75th percentile excl. top 3';
+            returnTxt = '25th to 50th percentile';
             break;
           case 4:
-            returnTxt = `Top 3 - above ${topPercentile.toFixed(1)} percentile`;
+            returnTxt = 'Up to 25th percentile';
             break;
           default:
             throw new Error('Could not find percentile');
