@@ -46,6 +46,9 @@ const controls = {
         width: 'resolve',
         allowClear: true,
         templateSelection: opt => $(`<span><strong>Partner:</strong> ${opt.text}</span>`),
+        templateResult: (opt) => {
+          return opt.type === 'labarea' ? $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`) : $(`<span style="padding-left: 2em">${opt.text}</span>`);
+        },
         data: data.partners,
         disabled: true
       })
@@ -59,6 +62,9 @@ const controls = {
         width: 'resolve',
         allowClear: true,
         templateSelection: opt => $(`<span><strong>Commodity:</strong> ${opt.text}</span>`),
+        templateResult: (opt) => {
+          return opt.type === 'sitc1' ? $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`) : $(`<span style="padding-left: 2em">${opt.text}</span>`);
+        },
         data: data.commodities,
         disabled: false
       })

@@ -634,3 +634,9 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   font-weight: bold;
   padding-top: 14px;
 }
+
+#select2-selectReporter-results,
+#select2-selectCommodity-results,
+#select2-selectPartner-results {
+  max-height: 400px;
+}
