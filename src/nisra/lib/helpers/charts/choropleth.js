@@ -199,7 +199,6 @@ const chart = {
         // Quartiles plus top 3
         domain = [4, count / 4, count / 2, count * 3 / 4];
         range = [4, 3, 2, 1, 0];
-        console.log(`making scale for domain,range ${domain}   ${range}`);
       }
       if (count <= 25 && count > 4) {
         // Simple quartiles
@@ -258,7 +257,6 @@ const chart = {
         count: values.length
       }))
       .entries(newData);
-    console.log('!!!', legendData, newData);
     chart.drawLegend(legendData, flow);
   },
 
