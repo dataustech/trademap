@@ -37,14 +37,8 @@ function validateRowRecord(record) {
   const { year, nuts1, labarea, codalpha } = record;
   if (!years[parseInt(year, 10)]) throw new Error(`Invalid year used in record: ${year}`);
   if (!reporters[nuts1]) throw new Error(`Invalid reporter used in record: ${nuts1}`);
-  if (!partners[labarea]) {
-    console.warn(`Invalid labarea used in record: ${labarea}`);
-    // throw new Error(`Invalid labarea used in record: ${labarea}`);
-  }
-  if (!partners[codalpha]) {
-    console.warn(`Invalid codalpha used in record: ${codalpha}`);
-    // throw new Error(`Invalid codalpha used in record: ${codalpha}`);
-  }
+  if (!partners[labarea]) throw new Error(`Invalid labarea used in record: ${labarea}`);
+  if (!partners[codalpha]) throw new Error(`Invalid codalpha used in record: ${codalpha}`);
 }
 
 function shouldIgnore(record) {
