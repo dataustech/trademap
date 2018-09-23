@@ -101,8 +101,8 @@ const box = {
       if (err) { gui.showError(err); }
 
       const newData = data.getData(dataFilter);
-      if (newData.length > 1) throw new Error('Infobox retrived more than one record. Used %o filter and got %d results: %o', dataFilter, newData.length, newData);
-      box.populateBox($defaultPanel, newData[0], partner);
+      if (newData.length !== 1) throw new Error('Infobox retrived either none or more than one record. Used %o filter and got %d results: %o', dataFilter, newData.length, newData);
+      box.populateBox($defaultPanel, newData[0]);
     });
   },
 

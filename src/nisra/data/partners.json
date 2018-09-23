@@ -119,6 +119,13 @@
     "mapNumerical": "704"
   },
   {
+    "id": "#1",
+    "type": "codealpha",
+    "text": "Other Asia and Oceania",
+    "labarea": "A",
+    "mapNumerical": ""
+  },
+  {
     "id": "B",
     "type": "labarea",
     "text": "Eastern Europe",
@@ -173,6 +180,13 @@
     "text": "Ukraine",
     "labarea": "B",
     "mapNumerical": "804"
+  },
+  {
+    "id": "#2",
+    "type": "codealpha",
+    "text": "Other Eastern Europe",
+    "labarea": "",
+    "mapNumerical": ""
   },
   {
     "id": "C",
@@ -483,6 +497,13 @@
     "mapNumerical": "862"
   },
   {
+    "id": "#3",
+    "type": "codealpha",
+    "text": "Other Latin America and the Caribbean",
+    "labarea": "",
+    "mapNumerical": ""
+  },
+  {
     "id": "F",
     "type": "labarea",
     "text": "Middle East and North Africa",
@@ -581,6 +602,13 @@
     "mapNumerical": "784"
   },
   {
+    "id": "#4",
+    "type": "codealpha",
+    "text": "Other Middle East and North Africa",
+    "labarea": "",
+    "mapNumerical": ""
+  },
+  {
     "id": "G",
     "type": "labarea",
     "text": "North America",
@@ -607,6 +635,13 @@
     "text": "United States of America",
     "labarea": "G",
     "mapNumerical": "840"
+  },
+  {
+    "id": "#5",
+    "type": "codealpha",
+    "text": "Other North America",
+    "labarea": "",
+    "mapNumerical": ""
   },
   {
     "id": "H",
@@ -707,6 +742,13 @@
     "mapNumerical": "834"
   },
   {
+    "id": "#6",
+    "type": "codealpha",
+    "text": "Other Sub-Saharan Africa",
+    "labarea": "",
+    "mapNumerical": ""
+  },
+  {
     "id": "I",
     "type": "labarea",
     "text": "Western Europe",
@@ -749,6 +791,13 @@
     "mapNumerical": "792"
   },
   {
+    "id": "#7",
+    "type": "codealpha",
+    "text": "Other Western Europe",
+    "labarea": "",
+    "mapNumerical": ""
+  },
+  {
     "id": "J",
     "type": "labarea",
     "text": "Ships and Stores (Non-EU)",
@@ -767,6 +816,6 @@
     "type": "codealpha",
     "text": "Low Value Trade (NON-EU)",
     "labarea": "E",
-    "mapNumerical": null
+    "mapNumerical": ""
   }
  ]
