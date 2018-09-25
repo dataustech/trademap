@@ -113,6 +113,7 @@ function addRecordToData(yearlyRecord, data) {
 
 function rankRecords(records, importTotal, exportTotal) {
   records
+    // sort descending by importVal & set rank and %
     .sort((a, b) => b.importVal - a.importVal)
     .map((record, i) => {
       // we modify the record directly (byreference)
@@ -129,39 +130,32 @@ function rankRecords(records, importTotal, exportTotal) {
     });
 }
 
-function computeRanksAndPercentages(recordsHashmap, commodityType, partnerType) {
-  const pivot = {};
-  Object.values(recordsHashmap)
+// compute ranking of partners for each commodity (this is for the choropleth)
+function computeRanksAndPercentages(reporterRecordsHashmap, commodityType, partnerType) {
+  const pivotTable = {};
+  Object.values(reporterRecordsHashmap)
     .forEach((record) => {
-      // Only add to pivot if record matches types
+      // discard record if it does not match types
       if (record.commodityType !== commodityType || record.partnerType !== partnerType) return;
       const { year, partner, commodity, importVal, exportVal } = record;
 
-      // initialize if pivot paths if undefined
-      pivot[year] = pivot[year] || { importTotal: 0, exportTotal: 0, partners: {} };
-      pivot[year]['partners'][partner] = pivot[year]['partners'][partner] || { importTotal: 0, exportTotal: 0, commodities: {} };
-      pivot[year]['partners'][partner]['commodities'][commodity] = pivot[year]['partners'][partner]['commodities'][commodity] || [];
-      // add to pivot and add to totals
-      pivot[year].importTotal += importVal;
-      pivot[year].exportTotal += exportVal;
-      pivot[year]['partners'][partner].importTotal += importVal;
-      pivot[year]['partners'][partner].exportTotal += exportVal;
-      pivot[year]['partners'][partner]['commodities'][commodity].push(record);
+      // initialize pivot paths if undefined
+      pivotTable[year] = pivotTable[year] || { importTotal: 0, exportTotal: 0, commodities: {} };
+      pivotTable[year]['commodities'][commodity] = pivotTable[year]['commodities'][commodity] || { importTotal: 0, exportTotal: 0, records: [] };
+      // add to pivot and sum totals
+      pivotTable[year].importTotal += importVal;
+      pivotTable[year].exportTotal += exportVal;
+      pivotTable[year]['commodities'][commodity].importTotal += importVal;
+      pivotTable[year]['commodities'][commodity].exportTotal += exportVal;
+      pivotTable[year]['commodities'][commodity]['records'].push(record);
     });
 
-  Object.keys(pivot).forEach((year) => {
-    Object.keys(pivot[year]['partners']).forEach((partner) => {
-      if (commodityType === 'all') {
-        const { importTotal, exportTotal } = pivot[year];
-        const recordsToRank = Object.values(pivot[year]['partners']).reduce((out, partnerObj) => out.concat([...partnerObj['commodities']['all']]), []);
-        rankRecords(recordsToRank, importTotal, exportTotal);
-      } else {
-        const { importTotal, exportTotal } = pivot[year]['partners'][partner];
-        Object.keys(pivot[year]['partners'][partner]['commodities']).forEach((commodity) => {
-          const recordsToRank = [].concat(...Object.values(pivot[year]['partners'][partner]['commodities']));
-          rankRecords(recordsToRank, importTotal, exportTotal);
-        });
-      }
+  // for each year, commodity and partner compute % and rank
+  Object.keys(pivotTable).forEach((year) => {
+    Object.keys(pivotTable[year]['commodities']).forEach((commodity) => {
+      const { importTotal, exportTotal } = pivotTable[year]['commodities'][commodity];
+      const partnersInYearOfCommodity = pivotTable[year]['commodities'][commodity]['records'];
+      rankRecords(partnersInYearOfCommodity, importTotal, exportTotal);
     });
   });
 }
