@@ -13,10 +13,10 @@ const steps = [
   // 01. Welcome & description
   {
     intro: '<h3>Welcome to the International Trade in Goods visualization.</h3>' +
-      '<p style="font-size: 14px">This tool allows you to explore official trade in goods data using live data from the UN COMTRADE database.</p>' +
+      '<p style="font-size: 14px">This tool allows you to explore official trade in goods data using data from HMRC.</p>' +
       '<p style="font-size: 14px">The tool was developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK.</p>' +
       '<p style="font-size: 14px">This site uses cookies to make the site simpler. To find out more about cookies used here, please go to the "Cookie policy" page under the "About" menu.</p>' +
-      '<p style="font-size: 14px">Please note that there may be occasions when no data is loaded. In this case, the map will be shaded grey, and the graphs will display the message "No data available for this chart". This is because data is unavailable in the UN Comtrade database for the particular query made.</p>'
+      '<p style="font-size: 14px">Please note that there may be occasions when no data is loaded. In this case, the map will be shaded grey, and the graphs will display the message "No data available for this chart". This is because data is unavailable from HMRC for the particular query made.</p>'
   },
   // 02. Controls (overview)
   {
@@ -39,13 +39,13 @@ const steps = [
   // 05 Goods/Service selector
   {
     element: document.querySelector('#selectTypeContainer'),
-    intro: 'This will update the map and legend to display data on either goods or services, as selected.',
+    intro: 'This will update the map and legend to display data on goods, as selected.',
     position: 'left'
   },
   // 06. Commodity
   {
     element: document.querySelector('#selectCommodityContainer'),
-    intro: 'Selecting the commodity/service box will display a list of classification of goods or services. This allows you to drill down the trade data to a greater level of detail. Selecting a commodity or service will update the map and the graphs below.',
+    intro: 'Selecting the commodity box will display a classification of goods. This allows you to drill down the trade data to a greater level of detail. Selecting a commodity will update the map and the graphs below.',
     position: 'left'
   },
   // 07. Flow seleciton

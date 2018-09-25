@@ -216,7 +216,7 @@ const controls = {
       query += '&';
     });
     query = query.slice(0, -1);
-    window.history.replaceState(null, 'International Trade in Goods and Services by Country and Commodity', query);
+    window.history.replaceState(null, 'International Trade in Goods by Country and Commodity', query);
   },
 
   fadeControls(filters) {
@@ -249,7 +249,7 @@ const controls = {
   },
 
   showError(err) {
-    $('#myModalLabel').html('<span class="glyphicon glyphicon-warning-sign"></span> There was an error in querying the COMTRADE API.');
+    $('#myModalLabel').html('<span class="glyphicon glyphicon-warning-sign"></span> There was an error in querying the API.');
     $('#myModal .modal-body').html(err);
     $('#myModal').modal({ show: true });
   }
