@@ -125,6 +125,7 @@ p.navbar-text {
   margin-right: 15px;
 }
 .navbar-brand {
+  position: absolute;
   color: #000 !important;
   padding: 5px 15px;
   max-width: 900px;
@@ -132,6 +133,7 @@ p.navbar-text {
   padding-right: 0;
   overflow-x: hidden;
   overflow-y: hidden;
+  text-overflow: ellipsis;
 }
 .navbar-brand small {
   font-size: 13.5px;
@@ -369,6 +371,13 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   display: inline;
   background-color: #fff;
 }
+#partnerTypeButtons {
+  position: absolute;
+  top: 0px;
+  height: 35px;
+  width: 14em;
+  z-index: 10;
+}
 #flowButtons {
   position: absolute;
   top: 30px;
@@ -376,23 +385,35 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   width: 14em;
   z-index: 10;
 }
+#flowButtons .btn-sm,
+#partnerTypeButtons .btn-sm {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
 #mapLegend {
   position: absolute;
-  top:  63px;
+  top:  65px;
   background: rgba(255, 255, 255, 0.5);
 }
 @media (max-width: 768px) {
+  #choroplethTitle {
+    top: 20px;
+  }
   #choroplethTitle div.chartTitle {
     font-size: 18px;
   }
-  #flowButtons {
-    top: 40px;
+  #partnerTypeButtons {
+    top: 38px;
   }
+  #flowButtons {
+    top: 65px;
+  }
+  #partnerTypeButtons .btn-sm,
   #flowButtons .btn-sm {
     padding: 1px 5px;
   }
   #mapLegend {
-    top:  84%;
+    top:  100px;
   }
 }
 #choroplethInfo {
@@ -483,7 +504,6 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   box-sizing: border-box;
   display: inline;
   font-size: 10px;
-  width: 100%;
   line-height: 1;
   color: rgba(0, 0, 0, 0.8);
   content: "\25BC";

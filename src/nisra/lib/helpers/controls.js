@@ -17,6 +17,7 @@ const controls = {
   $selectCommodity: $('#selectCommodity'),
   $selectYear: $('#selectYear'),
   $selects: $('#selectReporter, #selectPartner, #selectType, #selectCommodity, #selectYear'),
+  $partnerTypeButtons: $('#partnerTypeButtons'),
   $flowButtons: $('#flowButtons'),
   $clearFilters: $('#clearFilters'),
 
@@ -49,7 +50,7 @@ const controls = {
         templateResult: (opt) => {
           return opt.type === 'labarea' ? $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`) : $(`<span style="padding-left: 2em">${opt.text}</span>`);
         },
-        data: data.partners,
+        data: data.partners.filter(partner => partner.selectMenu),
         disabled: true
       })
       .on('change', controls.onFilterChange);
@@ -81,6 +82,13 @@ const controls = {
       })
       .on('change', controls.onFilterChange);
 
+    // ADD REGION/COUNTRY behaviours
+    controls.$partnerTypeButtons.on('click', (event) => {
+      $('#partnerTypeButtons button').removeClass('btn-primary').addClass('btn-default');
+      $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
+      controls.onFilterChange();
+    });
+
     // ADD IMPORT/EXPORT/BALANCE BUTTON BEHAVIOURS
     controls.$flowButtons.on('click', (event) => {
       $('#flowButtons button').removeClass('btn-primary').addClass('btn-default');
@@ -106,6 +114,7 @@ const controls = {
     if (controls.$selectCommodity.val() !== '') { newFilters.commodity = controls.$selectCommodity.val(); }
     if (controls.$selectYear.val() !== '') { newFilters.year = +controls.$selectYear.val(); }
     if ($('#flowButtons .btn-primary').attr('data-value') !== '') { newFilters.flow = $('#flowButtons .btn-primary').attr('data-value'); }
+    if ($('#partnerTypeButtons .btn-primary').attr('data-value') !== '') { newFilters.partnerType = $('#partnerTypeButtons .btn-primary').attr('data-value'); }
     return newFilters;
   },
 
@@ -118,7 +127,8 @@ const controls = {
       controls.filters.partner === newfilters.partner &&
       controls.filters.commodity === newfilters.commodity &&
       controls.filters.year === newfilters.year &&
-      controls.filters.flow === newfilters.flow) {
+      controls.filters.flow === newfilters.flow &&
+      controls.filters.partnerType === newfilters.partnerType) {
       return;
     }
 
@@ -239,11 +249,11 @@ const controls = {
   showElements(filters) {
     if (!filters.reporter) {
       // Empty viz: hide switch, chevrons and graphs and charts container
-      $('#goToCharts, #goToMap, #flowButtons').hide();
+      $('#goToCharts, #goToMap, #flowButtons #partnerTypeButtons').hide();
       $('#charts').slideUp();
     } else {
       // Show switch, chevrons and graphs
-      $('#goToCharts, #goToMap, #flowButtons').show();
+      $('#goToCharts, #goToMap, #flowButtons #partnerTypeButtons').show();
       $('#charts').slideDown();
     }
   },

@@ -182,7 +182,7 @@ const data = {
     try {
       return data[`${mapName}Map`].get(lookupVal)[propertyName];
     } catch (err) {
-      // console.log(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
+      // console.log(`There was a problem looking up ${lookupVal} in ${mapName}. ${propertyName}: ${err}`);
       return null;
     }
   }

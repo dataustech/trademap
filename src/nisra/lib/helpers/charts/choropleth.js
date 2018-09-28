@@ -31,6 +31,27 @@ function resizeSvg() {
     .attr('height', '100%');
 }
 
+const getLegendDescriptions = (count) => {
+  if (count < 4) {
+    return ['Not enough data to map'];
+  }
+  const lines = [
+    '50th to 75th percentile',
+    '25th to 50th percentile',
+    'Up to 25th percentile'
+  ];
+  if (count > 25) {
+    const topPercentile = ((3 / count) * 100).toFixed(2);
+    lines.unshift(
+      `Top 3 - above ${topPercentile} percentile`,
+      'Above 75th percentile excl. top 3'
+    );
+    return lines;
+  }
+  lines.unshift('Above 75th percentile');
+  return lines;
+};
+
 const chart = {
   setup(callback) {
     svg = d3.select('#choropleth .chart')
@@ -101,7 +122,7 @@ const chart = {
   },
 
   refresh(event, filters) {
-    const { reporter, flow, commodity, year } = filters;
+    const { reporter, flow, commodity, year, partnerType } = filters;
 
     // force a resize on refresh
     resizeSvg();
@@ -114,9 +135,7 @@ const chart = {
     const dataFilter = {
       reporter,
       year,
-      // TODO ideally we would select and visualize codealpha or labarea depending on
-      // what kind of partner the user selected in the filter (defaulting to codealpha)
-      partnerType: 'codealpha'
+      partnerType
     };
 
     let title = '';
@@ -164,7 +183,7 @@ const chart = {
       $chartTitle.html(title);
 
       const newData = data.getData(dataFilter);
-      chart.redrawMap(+flow, newData);
+      chart.redrawMap(+flow, partnerType, newData);
 
       // Set download link
       $chart.find('.downloadData').unbind('click').on('click', (e) => {
@@ -174,7 +193,7 @@ const chart = {
     });
   },
 
-  redrawMap(flow, newData) {
+  redrawMap(flow, partnerType, newData) {
     // Based on user selected flow predefine value accessor
     const flowRank = ['balanceVal', 'importRank', 'exportRank'][flow];
     const flowVal = ['balanceVal', 'importVal', 'exportVal'][flow];
@@ -235,15 +254,22 @@ const chart = {
       .duration(1000)
       .style('fill', (d) => {
         try {
-          const partnerId = data.lookup(d.id.toString(), 'partnersByMapNumerical', 'id');
-          const partnerName = data.lookup(partnerId, 'partners', 'text');
-          if (partnerId === null) throw new Error(`Could not find partnerName for map id ${d.id}`);
-          const partnerRecord = newDataByPartner.get(partnerId);
-          if (partnerRecord[flowRank] === null) throw new Error(`'Incomplete data for ${partnerName}`);
+          const mapId = d.id.toString();
+          // this is a lookup for the codealpha (id)
+          // because only codealphas have a mapnumerical value
+          const codealpha = data.lookup(mapId, 'partnersByMapNumerical', 'id');
+          if (codealpha === null) throw new Error(`Could not find partnerName for map id ${d.id}`);
+          let partnerRecord;
+          if (partnerType === 'codealpha') {
+            partnerRecord = newDataByPartner.get(codealpha);
+          } else {
+            const labarea = data.lookup(codealpha, 'partners', 'labarea');
+            partnerRecord = newDataByPartner.get(labarea);
+          }
+          if (partnerRecord[flowRank] === null) throw new Error(`'Incomplete data for partner with mapId ${mapId}`);
           const bucket = colorScale(partnerRecord[flowRank]);
           return chart.colors[flow][bucket];
         } catch (err) {
-          // console.log(err.message);
           return noDataColor;
         }
       });
@@ -342,32 +368,8 @@ const chart = {
         if (+flow === 0) {
           return `${['Deficit', 'Surplus'][i]} (${legendData[i].value.count} partners)`;
         }
-        let returnTxt = '';
-        const topPercentile = (3 / totalPartners) * 100;
-        switch (i) {
-          case 0:
-            if (totalPartners <= 4) {
-              returnTxt = 'Not enough data to map';
-            } else {
-              returnTxt = `Top 3 - above ${topPercentile.toFixed(1)} percentile`;
-            }
-            break;
-          case 1:
-            returnTxt = 'Above 75th percentile excl. top 3';
-            break;
-          case 2:
-            returnTxt = '50th to 75th percentile';
-            break;
-          case 3:
-            returnTxt = '25th to 50th percentile';
-            break;
-          case 4:
-            returnTxt = 'Up to 25th percentile';
-            break;
-          default:
-            throw new Error('Could not find percentile');
-        }
-        return returnTxt;
+        const legendDescriptions = getLegendDescriptions(totalPartners);
+        return legendDescriptions[i];
       });
   }
 };
