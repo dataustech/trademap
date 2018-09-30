@@ -482,7 +482,14 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #topImportMarkets {
   padding-top: 6em;
 }
-
+#topExportCommodities .commodityTypeButtons,
+#topImportCommodities .commodityTypeButtons,
+#topExportMarkets .partnerTypeButtons,
+#topImportMarkets .partnerTypeButtons {
+  float: right;
+  display: block;
+  width: auto;
+}
 
 
 

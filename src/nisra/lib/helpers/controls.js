@@ -48,7 +48,10 @@ const controls = {
         allowClear: true,
         templateSelection: opt => $(`<span><strong>Partner:</strong> ${opt.text}</span>`),
         templateResult: (opt) => {
-          return opt.type === 'labarea' ? $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`) : $(`<span style="padding-left: 2em">${opt.text}</span>`);
+          if (opt.type === 'labarea') {
+            return $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`);
+          }
+          return $(`<span style="padding-left: 2em">${opt.text}</span>`);
         },
         data: data.partners.filter(partner => partner.selectMenu),
         disabled: true
@@ -64,7 +67,10 @@ const controls = {
         allowClear: true,
         templateSelection: opt => $(`<span><strong>Commodity:</strong> ${opt.text}</span>`),
         templateResult: (opt) => {
-          return opt.type === 'sitc1' ? $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`) : $(`<span style="padding-left: 2em">${opt.text}</span>`);
+          if (opt.type === 'sitc1') {
+            return $(`<span class="glyphicon glyphicon-list"></span> <strong>${opt.text}</strong>`);
+          }
+          return $(`<span style="padding-left: 2em">${opt.text}</span>`);
         },
         data: data.commodities,
         disabled: false
@@ -83,6 +89,7 @@ const controls = {
       .on('change', controls.onFilterChange);
 
     // ADD REGION/COUNTRY behaviours
+    // TODO this could be moved to the choropleth as it should not be app-wide but chart-wide
     controls.$partnerTypeButtons.on('click', (event) => {
       $('#partnerTypeButtons button').removeClass('btn-primary').addClass('btn-default');
       $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');

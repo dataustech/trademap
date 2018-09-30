@@ -11,6 +11,7 @@ import rowchart from '../rowchart';
 import gui from '../gui';
 
 const $container = $('#topExportMarkets');
+const $partnerTypeButtons = $('#topExportMarkets .partnerTypeButtons');
 const $chart = $container.children('.chart');
 const $chartTitle = $container.children('.chartTitle');
 
@@ -27,12 +28,21 @@ const numEntries = 10;
 
 const chart = {
 
+  currentFilters: null,
+
   setup() {
     // Bind the refresh function to the refreshFilters event
     $chart.on('refreshFilters', chart.refresh);
     // Bind the resize function to the window resize event
     $(window).on('resize', () => {
       rowchart.resizeSvg(svg, $chart.width(), 'exportVal');
+    });
+    // Add behaviours to selectors for partnerType
+    $partnerTypeButtons.on('click', (event) => {
+      $partnerTypeButtons.find('button').removeClass('btn-primary').addClass('btn-default');
+      $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
+      const partnerType = $partnerTypeButtons.find('.btn-primary').attr('data-value');
+      this.refresh(event, Object.assign({}, chart.currentFilters, { partnerType }));
     });
     // Setup the svg
     rowchart.setup(svg);
@@ -41,7 +51,9 @@ const chart = {
   },
 
   refresh(event, filters) {
-    const { reporter, partner, commodity, year } = filters;
+    chart.currentFilters = filters;
+
+    const { reporter, partner, commodity, year, partnerType } = filters;
 
     // CASE 1: reporter = null
     // CASE 3: commodity = null        partner = selected
@@ -60,8 +72,7 @@ const chart = {
     const dataFilter = {
       reporter,
       year,
-      // TODO see https://github.com/mjs2020/trademap/issues/25
-      partnerType: 'codealpha',
+      partnerType,
       initiator: 'topExportMarkets'
     };
     let title = '';
@@ -96,6 +107,7 @@ const chart = {
       });
     });
   }
+
 };
 
 export default chart;
