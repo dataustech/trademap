@@ -17,8 +17,6 @@ const controls = {
   $selectCommodity: $('#selectCommodity'),
   $selectYear: $('#selectYear'),
   $selects: $('#selectReporter, #selectPartner, #selectType, #selectCommodity, #selectYear'),
-  $partnerTypeButtons: $('#partnerTypeButtons'),
-  $flowButtons: $('#flowButtons'),
   $clearFilters: $('#clearFilters'),
 
   filters: {},
@@ -88,21 +86,6 @@ const controls = {
       })
       .on('change', controls.onFilterChange);
 
-    // ADD REGION/COUNTRY behaviours
-    // TODO this could be moved to the choropleth as it should not be app-wide but chart-wide
-    controls.$partnerTypeButtons.on('click', (event) => {
-      $('#partnerTypeButtons button').removeClass('btn-primary').addClass('btn-default');
-      $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
-      controls.onFilterChange();
-    });
-
-    // ADD IMPORT/EXPORT/BALANCE BUTTON BEHAVIOURS
-    controls.$flowButtons.on('click', (event) => {
-      $('#flowButtons button').removeClass('btn-primary').addClass('btn-default');
-      $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
-      controls.onFilterChange();
-    });
-
     // ADD CLEARFILTERS BUTTON BEHAVIOR
     controls.$clearFilters.on('click', () => {
       $('#selectPartner, #selectCommodity')
@@ -120,8 +103,6 @@ const controls = {
     if (controls.$selectPartner.val() !== '') { newFilters.partner = controls.$selectPartner.val(); }
     if (controls.$selectCommodity.val() !== '') { newFilters.commodity = controls.$selectCommodity.val(); }
     if (controls.$selectYear.val() !== '') { newFilters.year = +controls.$selectYear.val(); }
-    if ($('#flowButtons .btn-primary').attr('data-value') !== '') { newFilters.flow = $('#flowButtons .btn-primary').attr('data-value'); }
-    if ($('#partnerTypeButtons .btn-primary').attr('data-value') !== '') { newFilters.partnerType = $('#partnerTypeButtons .btn-primary').attr('data-value'); }
     return newFilters;
   },
 
@@ -133,9 +114,7 @@ const controls = {
     if (controls.filters.reporter === newfilters.reporter &&
       controls.filters.partner === newfilters.partner &&
       controls.filters.commodity === newfilters.commodity &&
-      controls.filters.year === newfilters.year &&
-      controls.filters.flow === newfilters.flow &&
-      controls.filters.partnerType === newfilters.partnerType) {
+      controls.filters.year === newfilters.year) {
       return;
     }
 

@@ -18,6 +18,8 @@ import { numFormat } from '../utils';
 
 const $chart = $('#choropleth');
 const $chartTitle = $('#choroplethTitle .chartTitle');
+const $partnerTypeButtons = $('#partnerTypeButtons');
+const $flowButtons = $('#flowButtons');
 
 // SVG main properties
 const height = 720;
@@ -26,10 +28,10 @@ let svg;
 
 const noDataColor = '#818181';
 
-function resizeSvg() {
+const resizeSvg = () => {
   svg.attr('width', $chart.width())
     .attr('height', '100%');
-}
+};
 
 const getLegendDescriptions = (count) => {
   if (count < 4) {
@@ -53,7 +55,29 @@ const getLegendDescriptions = (count) => {
 };
 
 const chart = {
+
+  currentFilters: {
+    flow: 2,
+    partnerType: 'codealpha'
+  },
+
   setup(callback) {
+    // ADD REGION/COUNTRY behaviours
+    $partnerTypeButtons.on('click', (event) => {
+      $('#partnerTypeButtons button').removeClass('btn-primary').addClass('btn-default');
+      $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
+      const partnerType = $partnerTypeButtons.find('.btn-primary').attr('data-value');
+      this.refresh(event, Object.assign({}, chart.currentFilters, { partnerType }));
+    });
+
+    // ADD IMPORT/EXPORT/BALANCE BUTTON BEHAVIOURS
+    $flowButtons.on('click', (event) => {
+      $('#flowButtons button').removeClass('btn-primary').addClass('btn-default');
+      $(event.target).closest('button').removeClass('btn-default').addClass('btn-primary');
+      const flow = $flowButtons.find('.btn-primary').attr('data-value');
+      this.refresh(event, Object.assign({}, chart.currentFilters, { flow }));
+    });
+
     svg = d3.select('#choropleth .chart')
       .append('svg')
       .classed('choropleth', true)
@@ -122,7 +146,9 @@ const chart = {
   },
 
   refresh(event, filters) {
-    const { reporter, flow, commodity, year, partnerType } = filters;
+    const newFilters = Object.assign({}, chart.currentFilters, filters);
+    chart.currentFilters = newFilters;
+    const { reporter, flow, commodity, year, partnerType } = newFilters;
 
     // force a resize on refresh
     resizeSvg();
@@ -372,6 +398,7 @@ const chart = {
         return legendDescriptions[i];
       });
   }
+
 };
 
 export default chart;
