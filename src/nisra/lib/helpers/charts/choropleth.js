@@ -146,9 +146,8 @@ const chart = {
   },
 
   refresh(event, filters) {
-    const newFilters = Object.assign({}, chart.currentFilters, filters);
-    chart.currentFilters = newFilters;
-    const { reporter, flow, commodity, year, partnerType } = newFilters;
+    chart.currentFilters = Object.assign({}, chart.currentFilters, filters);
+    const { reporter, flow, commodity, year, partnerType } = chart.currentFilters;
 
     // force a resize on refresh
     resizeSvg();

@@ -28,7 +28,9 @@ const numEntries = 10;
 
 const chart = {
 
-  currentFilters: null,
+  currentFilters: {
+    commodityType: 'sitc1'
+  },
 
   setup() {
     // Bind the refresh function to the refreshFilters event
@@ -51,9 +53,8 @@ const chart = {
   },
 
   refresh(event, filters) {
-    chart.currentFilters = filters;
-
-    const { reporter, partner, commodity, year, commodityType } = filters;
+    chart.currentFilters = Object.assign({}, chart.currentFilters, filters);
+    const { reporter, partner, commodity, year, commodityType } = chart.currentFilters;
 
     // CASE 1: reporter = null
     // CASE 4: commodity = selected    partner = selected
