@@ -235,7 +235,7 @@ const chart = {
     if (flow === 0) {
       // If flow is balance we create a threshold scale which has only
       // two cases positive (above 0 threshold) and negative (below 0 threshold)
-      colorScale.domain([0]).range([0, 1]);
+      colorScale.domain([0]).range([1, 0]);
     } else {
       // For import and export e have slightly different scales
       // depending on how many countries we have data for
