@@ -352,6 +352,7 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #partnerTypeButtons {
   position: absolute;
   top: 0px;
+  right: 0px;
   height: 35px;
   width: 14em;
   z-index: 10;
@@ -359,6 +360,7 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #flowButtons {
   position: absolute;
   top: 30px;
+  right: 0px;
   height: 35px;
   width: 14em;
   z-index: 10;
@@ -370,8 +372,10 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 }
 #mapLegend {
   position: absolute;
-  top:  65px;
-  background: rgba(255, 255, 255, 0.5);
+  bottom: 0px;
+  right: 50px;
+  background: hsla(0,0%,74%,.43);
+  padding: 0.5em
 }
 @media (max-width: 768px) {
   #choroplethTitle {
@@ -382,9 +386,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   }
   #partnerTypeButtons {
     top: 38px;
+    right: 0px;
   }
   #flowButtons {
     top: 65px;
+    right: 0px;
   }
   #partnerTypeButtons .btn-sm,
   #flowButtons .btn-sm {
