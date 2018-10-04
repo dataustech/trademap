@@ -440,6 +440,22 @@
     "selectMenu": true
   },
   {
+    "id": "QR",
+    "type": "codealpha",
+    "text": "Stores & Provisions (EU ships and aircraft)",
+    "labarea": "C",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "QS",
+    "type": "codealpha",
+    "text": "Stores & Provisions (non-EU ships and aircraft)",
+    "labarea": "C",
+    "mapNumerical": 752,
+    "selectMenu": true
+  },
+  {
     "id": "D",
     "type": "labarea",
     "text": "Latin America and the Caribbean",
