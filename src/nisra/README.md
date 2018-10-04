@@ -4,6 +4,8 @@
 
 ### Data sources
 
+[HMRC Build your own tables](https://www.uktradeinfo.com/Statistics/BuildYourOwnTables/Pages/Table.aspx)
+
 The NISRA trademap depends on HMRC data which is provided in txt files with fixed length values and no delimiters. Data is provided in separate `.txt` files by quarter. Each record represents the trade value (in GBP) and mass (in Kg) between a reporter (NUTS1) and a partner (country or area) within an SITC1 and SITC2 classification for that quarter.
 
 Each row is formatted as follows:
