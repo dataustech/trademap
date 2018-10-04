@@ -307,7 +307,8 @@ const chart = {
         max: d3.max(values, v => v[flowVal]),
         count: values.length
       }))
-      .entries(newData);
+      .entries(newData)
+      .sort((a, b) => b.key - a.key);
     chart.drawLegend(legendData, flow);
   },
 
