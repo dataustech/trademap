@@ -1,5 +1,4 @@
 /* global document window */
-/* eslint object-curly-newline: 0 */
 /*
  * THIS FILE SETS UP THE information box
  * */

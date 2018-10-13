@@ -1,6 +1,5 @@
 /* global window document */
-/* eslint no-restricted-syntax: 0 */
-/* eslint object-curly-newline: 0 */
+
 /*
  * THIS FILE MANAGES API QUERIES AND CROSSFILTER SETUP
  * */

@@ -1,5 +1,4 @@
 /* global window */
-/* eslint object-curly-newline: 0 */
 
 /*
  * THIS FILE MANAGES THE CHOROPLETH
