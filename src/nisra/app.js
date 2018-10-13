@@ -6,10 +6,8 @@
 
 // html
 import './index.html';
-import './pages/about.html';
 import './pages/contacts.html';
 import './pages/cookie_policy.html';
-import './pages/furtherinfo.html';
 import './pages/licence.html';
 
 // txt & csv
