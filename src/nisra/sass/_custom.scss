@@ -42,28 +42,6 @@ nav.navbar {
   margin-bottom: 3px;
   border-bottom-color: #054D82;
 }
-#feedback-tab {
-  position: fixed;
-  top: 40%;
-  right: -25px;
-  background: none repeat scroll 0% 0% padding-box #054D82;
-  z-index: 1050;
-  height: 7em;
-  border-radius: 5px 0px 0px 5px;
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
-  text-shadow: 0px -1px 0px rgba(68, 68, 68, 0.3);
-}
-#feedback-tab a {
-  display: block;
-  color: #FFF;
-  text-decoration: none;
-  -webkit-transform:rotate(-90deg);
-  -moz-transform:rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-  padding: 30px 0px 50px 0px;
-}
 #footer {
   margin-top: 90px;
   padding-top: 90px;

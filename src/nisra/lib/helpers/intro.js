@@ -78,11 +78,7 @@ const steps = [
     intro: 'Below the map, you will find charts showing further detail based on your filter selection. Please note that these will be displayed or hidden based on your selections. You can download these charts by selecting the arrows to the left of the charts.',
     position: 'top'
   },
-  // 12. Feeback
-  {
-    intro: "When you're done we'd really appreciate your thoughts on the visualization."
-  },
-  // 13. Goodbye
+  // 12. Goodbye
   {
     intro: 'Now try it yourself!'
   }
@@ -103,9 +99,6 @@ function enableScroll() {
 function scrollToElement(target) {
   let topOffset = Math.max(0, $(target).offset().top - ($(window).height() / 2));
   // Exceptions:
-  if (target.id === 'feedback-tab') {
-    topOffset = 0;
-  }
   if (target.id === 'infoBox') {
     topOffset = 0;
     $('#infoBox').css('top', `${$(window).height() - $('#infoBox').height() - 10}px`);
