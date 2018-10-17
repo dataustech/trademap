@@ -19,7 +19,7 @@ import { toTitleCase } from './utils';
 // privates
 
 // config
-const baseQueryUrl = '/api';
+const baseQueryUrl = 'api';
 const queryHistory = [];
 const runningQueries = {};
 
