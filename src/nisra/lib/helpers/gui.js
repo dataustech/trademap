@@ -1,4 +1,4 @@
-/* global window document screen navigator Blob Image */
+/* global window document screen Blob */
 /*
  * THIS FILE SETS UP GENERAL GUI FUNCTIONS THAT DO NOT BELONG TO CONTROLS SPECIFICALLY
  * */
@@ -6,6 +6,7 @@
 import $ from 'jquery';
 import Modernizr from 'modernizr';
 import { saveAs } from 'file-saver';
+import { saveSvgAsPng } from 'save-svg-as-png';
 
 export default {
 
@@ -41,13 +42,21 @@ export default {
       e.preventDefault();
       const winTop = (screen.height / 2) - (520 / 2);
       const winLeft = (screen.width / 2) - (350 / 2);
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`, 'sharer', `top=${winTop},left=${winLeft},toolbar=0,status=0,width=${520},height=${350}`);
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+        'sharer',
+        `top=${winTop},left=${winLeft},toolbar=0,status=0,width=${520},height=${350}`
+      );
     });
     $('#tweetLink').on('click', (e) => {
       e.preventDefault();
       const winTop = (screen.height / 2) - (520 / 2);
       const winLeft = (screen.width / 2) - (350 / 2);
-      window.open(`https://twitter.com/share?text=Check%20out%20the%20International%20Trade%20in%20Goods%20DataViz%20tool&url=${window.location.href}`, 'sharer', `top=${winTop},left=${winLeft},toolbar=0,status=0,width=${520},height=${350}`);
+      window.open(
+        `https://twitter.com/share?text=Check%20out%20the%20International%20Trade%20in%20Goods%20DataViz%20tool&url=${window.location.href}`,
+        'sharer',
+        `top=${winTop},left=${winLeft},toolbar=0,status=0,width=${520},height=${350}`
+      );
     });
 
     // ADD LOADING PROGRESSBAR BEHAVIOUR
@@ -64,18 +73,7 @@ export default {
     }, false);
 
     // ADD DOWNLOAD GRAPHS FUNCTIONS
-    // If we're not in a webkit browser disable PNG download
-    if (!/AppleWebKit/.test(navigator.userAgent)) {
-      $('a.downloadChart[data-format="png"]')
-        .parent()
-        .addClass('disabled')
-        .attr('title', 'This option is not available on your browser.')
-        .attr('data-toggle', 'tooltip')
-        .attr('data-placement', 'right')
-        .tooltip();
-    }
     // If blob constructor is not supported then we disable the download button
-    // Note: IE<10 could be supported in the future using this: https://github.com/koffsyrup/FileSaver.js#examples
     if (!Modernizr.blobconstructor) {
       $('a.downloadChart')
         .parent()
@@ -91,8 +89,8 @@ export default {
         const format = $(this).attr('data-format');
         const title = $(`#${svgId} .chartTitle`).text();
         const $svg = $(`#${svgId} .svgChart`);
-        let width = $svg.width();
-        let height = $svg.height();
+        const width = $(this).attr('data-width') || $svg.width();
+        const height = $(this).attr('data-height') || $svg.height();
         let footerPos = height;
         const range = document.createRange();
         const div = document.createElement('div');
@@ -104,8 +102,6 @@ export default {
         // If this is the choropleth inject the legend and remove viewBox
         if (svgId === 'choropleth') {
           if (format === 'svg') {
-            width = 1280;
-            height = 720;
             $(fragment)
               .children('svg')
               .removeAttr('viewBox')
@@ -113,7 +109,7 @@ export default {
               .attr('width', width)
               .attr('height', height);
           }
-          footerPos = 720 - 75;
+          footerPos = height - 75;
           $(fragment)
             .children('svg')
             .append(`<g class="legend" transform="translate(25,25) scale(1.5)">${$('#mapLegendSvg g.legend')[0].innerHTML}</g>`);
@@ -126,42 +122,26 @@ export default {
           .append(`<text y="${footerPos}">`
             + `<tspan x="10" class="creditTitle">${title}</tspan>`
             + '<tspan x="10" dy="15" class="creditSource">International Trade in Goods based on HMRC data</tspan>'
-            + '<tspan x="10" dy="15" class="creditSource">Developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK</tspan>'
+            + '<tspan x="10" dy="15" class="creditSource">'
+              + 'Developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK'
+            + '</tspan>'
             + `<tspan x="10" dy="15" class="creditLink">${document.location.href}</tspan>`
             + '</text>');
 
         // We need to push the documentFragment into a throwaway
         // (hidden) DOM element to get the innerHTML code
         div.appendChild(fragment.cloneNode(true));
-        const svgText = div.innerHTML;
+        const svgString = div.innerHTML;
 
         if (format === 'svg') {
           // Finally, for SVG,  we convert the SVG to a blob and save it
-          const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf8' });
-          saveAs(blob, `${svgId}.svg`);
+          const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf8' });
+          saveAs(blob, `${title} (${svgId}).svg`);
           return;
         }
 
         if (format === 'png') {
-          // For PNG we draw the SVG code to an image, render
-          // the image to a canvas and then get it as a download.
-          const image = new Image();
-
-          image.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height + 75;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(image, 0, 0);
-
-            const a = document.createElement('a');
-            a.download = `${svgId}.png`;
-            const dataUrl = canvas.toDataURL('image/png');
-            a.href = dataUrl;
-            document.body.appendChild(a);
-            a.click();
-          };
-          image.src = `data:image/svg+xml;base64,${window.btoa(unescape(encodeURIComponent(svgText)))}`;
+          saveSvgAsPng($(div).find('svg')[0], `${title} (${svgId}).png`);
         }
       });
     }
