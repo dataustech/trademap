@@ -12,6 +12,7 @@ import years from './../../data/years.json';
 const controls = {
   // Place some common jQuery objects so that we don't need to look for them each time.
   $selectReporter: $('#selectReporter'),
+  $nutsMap: $('#nutsMap'),
   $selectPartner: $('#selectPartner'),
   $selectType: $('#selectType'),
   $selectCommodity: $('#selectCommodity'),
@@ -95,6 +96,15 @@ const controls = {
         .on('change', controls.onFilterChange);
       controls.onFilterChange();
     });
+
+    // setup nuts map
+    const resizeNuts = () => {
+      controls.$nutsMap.css({
+        width: `${$('#infoBoxPlaceholder').width() - 20}px`
+      });
+    };
+    resizeNuts();
+    $(window).on('resize', resizeNuts);
   },
 
   getFilters: () => {
