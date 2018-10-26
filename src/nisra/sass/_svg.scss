@@ -16,6 +16,17 @@ svg {
 svg#mapLegendSvg {
   background: none;
 }
+svg#nutsMapSvg {
+  background: transparent;
+}
+
+/* Nuts map */
+.nutsRegion {
+  cursor: pointer;
+  stroke: #000;
+  fill: #818181;
+  stroke-width: .5px;
+}
 
 /* Choropleth */
 .fill {

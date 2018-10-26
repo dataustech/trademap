@@ -8,6 +8,7 @@ import $ from 'jquery';
 import 'select2';
 import data from './data';
 import years from './../../data/years.json';
+import nutsMap from './nuts-map';
 
 const controls = {
   // Place some common jQuery objects so that we don't need to look for them each time.
@@ -104,7 +105,9 @@ const controls = {
       });
     };
     resizeNuts();
+    nutsMap.setup();
     $(window).on('resize', resizeNuts);
+    $(window).on('resize', nutsMap.resizeSvg);
   },
 
   getFilters: () => {

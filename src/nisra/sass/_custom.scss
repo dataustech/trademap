@@ -282,6 +282,9 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #nutsMap {
   position: absolute;
   height: 18em;
+  background: rgba(255, 255, 255, 0.80);
+  border: 1px solid #337ab7;
+  border-radius: 4px;
 }
 @media (max-width: 992px) {
   #nutsMap {
