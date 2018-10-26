@@ -174,6 +174,7 @@ const data = {
   reportersMap: d3.map(reporters, d => d.id),
   partnersMap: d3.map(partners, d => d.id),
   partnersByMapNumericalMap: d3.map(partners, d => d.mapNumerical),
+  reportersByMapNumericalMap: d3.map(reporters, d => d.mapNumerical),
   commoditiesMap: d3.map(commodities, d => d.id),
 
   // lookup function with error handling

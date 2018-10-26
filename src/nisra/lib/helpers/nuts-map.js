@@ -4,6 +4,7 @@ import { geoKavrayskiy7 } from 'd3-geo-projection';
 import { feature } from 'topojson-client';
 
 import nutsJson from '../../data/nuts.topo.json';
+import data from './data';
 
 const $nutsMap = $('#nutsMap');
 
@@ -14,8 +15,7 @@ let svg;
 
 const nutsMap = {
 
-  setup() {
-    console.log('setup nutsmap called');
+  setup(clickHandler) {
     svg = d3.select('#nutsMap')
       .append('svg')
       .classed('nutsMap', true)
@@ -31,10 +31,8 @@ const nutsMap = {
       .precision(0.1);
     const path = d3.geoPath()
       .projection(projection);
-    console.log('extracting features');
     const nuts = feature(nutsJson, nutsJson.objects.nuts).features;
 
-    console.log(nuts);
     svg.append('g')
       .attr('class', 'nuts1')
       .selectAll('path')
@@ -42,7 +40,11 @@ const nutsMap = {
       .enter()
       .append('path')
       .attr('class', 'nutsRegion')
-      .attr('d', path);
+      .attr('d', path)
+      .on('click', (d) => {
+        d3.event.preventDefault();
+        clickHandler(d);
+      });
 
     nutsMap.resizeSvg();
   },

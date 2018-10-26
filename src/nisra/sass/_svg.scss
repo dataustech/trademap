@@ -27,6 +27,11 @@ svg#nutsMapSvg {
   fill: #818181;
   stroke-width: .5px;
 }
+.nutsRegion.highlighted, .nutsRegion:hover {
+  fill: rgb(216, 255, 0) !important;
+  stroke: #b10026;
+  stroke-width: 2px !important;
+}
 
 /* Choropleth */
 .fill {

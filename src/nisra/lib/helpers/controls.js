@@ -104,8 +104,11 @@ const controls = {
         width: `${$('#infoBoxPlaceholder').width() - 20}px`
       });
     };
+    const selectHandler = (d) => {
+      controls.changeFilters({ reporter: data.lookup(d.properties.objectid, 'reportersByMapNumerical', 'id') });
+    };
     resizeNuts();
-    nutsMap.setup();
+    nutsMap.setup(selectHandler);
     $(window).on('resize', resizeNuts);
     $(window).on('resize', nutsMap.resizeSvg);
   },
