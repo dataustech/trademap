@@ -13,6 +13,7 @@ const width = 250;
 let svg;
 
 const nutsMap = {
+
   setup() {
     console.log('setup nutsmap called');
     svg = d3.select('#nutsMap')
@@ -42,7 +43,10 @@ const nutsMap = {
       .append('path')
       .attr('class', 'nutsRegion')
       .attr('d', path);
+
+    nutsMap.resizeSvg();
   },
+
   resizeSvg() {
     svg.attr('width', $nutsMap.width())
       .attr('height', $nutsMap.height());
