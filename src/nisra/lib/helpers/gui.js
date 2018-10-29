@@ -1,4 +1,5 @@
 /* global window document screen Blob */
+
 /*
  * THIS FILE SETS UP GENERAL GUI FUNCTIONS THAT DO NOT BELONG TO CONTROLS SPECIFICALLY
  * */

@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 
 import data from './data';
 import controls from './controls';
+import { numFormat } from './utils';
 
 export default {
 
@@ -33,7 +34,7 @@ export default {
     this.yScale.range([0, this.innerHeight])
       .clamp(true);
     this.xAxis.scale(this.xScale)
-      .tickFormat(data.numFormat);
+      .tickFormat(numFormat);
     this.yAxis.scale(this.yScale);
     svg.append('g')
       .attr('class', 'bars')

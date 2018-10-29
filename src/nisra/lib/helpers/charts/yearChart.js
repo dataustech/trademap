@@ -1,4 +1,5 @@
 /* global window */
+
 /*
  * THIS FILE SETS UP THE yearChart chart
  * */

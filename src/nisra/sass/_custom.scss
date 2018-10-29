@@ -275,9 +275,22 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   }
 }
 
+/*
+* STYLES FOR THE NUTS1 map
+*/
 
-
-
+#nutsMap {
+  position: absolute;
+  height: 18em;
+  background: rgba(255, 255, 255, 0.80);
+  border: 1px solid #337ab7;
+  border-radius: 4px;
+}
+@media (max-width: 992px) {
+  #nutsMap {
+    display: none
+  }
+}
 /*
 * STYLES FOR THE INFOBOX
 */
@@ -352,15 +365,17 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #partnerTypeButtons {
   position: absolute;
   top: 0px;
+  right: 0px;
   height: 35px;
-  width: 14em;
+  width: 240px;
   z-index: 10;
 }
 #flowButtons {
   position: absolute;
   top: 30px;
+  right: 0px;
   height: 35px;
-  width: 14em;
+  width: 240px;
   z-index: 10;
 }
 #flowButtons .btn-sm,
@@ -370,8 +385,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 }
 #mapLegend {
   position: absolute;
-  top:  65px;
-  background: rgba(255, 255, 255, 0.5);
+  top: 70px;
+  right: 0px;
+  background: hsla(0,0%,74%,.43);
+  padding: 0.5em;
+  border-radius: 4px;
 }
 @media (max-width: 768px) {
   #choroplethTitle {
@@ -382,9 +400,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   }
   #partnerTypeButtons {
     top: 38px;
+    right: 0px;
   }
   #flowButtons {
     top: 65px;
+    right: 0px;
   }
   #partnerTypeButtons .btn-sm,
   #flowButtons .btn-sm {
@@ -466,7 +486,7 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #topImportMarkets .partnerTypeButtons {
   float: right;
   display: block;
-  width: auto;
+  width: 11em;
 }
 
 

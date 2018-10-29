@@ -1,5 +1,5 @@
 /* global window */
-/* eslint object-curly-newline: 0 */
+
 /*
  * THIS FILE SETS UP THE topExportMarkets chart
  * */

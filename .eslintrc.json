@@ -7,6 +7,8 @@
         "no-plusplus": 0,
         "no-underscore-dangle": 1,
         "no-restricted-globals": 0,
+        "object-curly-newline": 0,
+        "no-restricted-syntax": 0,
         "no-mixed-operators": [
           "error",
           { "allowSamePrecedence": true }

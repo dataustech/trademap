@@ -1,12 +1,10 @@
 /* global window */
-/* eslint object-curly-newline: 0 */
 
 /*
  * THIS FILE MANAGES THE CHOROPLETH
  * */
 import $ from 'jquery';
 import * as d3 from 'd3';
-import { geoPath } from 'd3-geo';
 import { geoKavrayskiy7 } from 'd3-geo-projection';
 import { feature } from 'topojson-client';
 import data from '../data';
@@ -99,7 +97,7 @@ const chart = {
       .scale(230)
       .translate([(width / 2), (height / 2)])
       .precision(0.1);
-    const path = geoPath()
+    const path = d3.geoPath()
       .projection(projection);
 
     // Sized the SVG and bind the resize function to the

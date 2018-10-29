@@ -1,4 +1,5 @@
 /* global document window */
+
 /*
  * THIS FILE SETS UP the introduction
  * */

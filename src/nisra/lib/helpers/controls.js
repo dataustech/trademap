@@ -8,10 +8,12 @@ import $ from 'jquery';
 import 'select2';
 import data from './data';
 import years from './../../data/years.json';
+import nutsMap from './nuts-map';
 
 const controls = {
   // Place some common jQuery objects so that we don't need to look for them each time.
   $selectReporter: $('#selectReporter'),
+  $nutsMap: $('#nutsMap'),
   $selectPartner: $('#selectPartner'),
   $selectType: $('#selectType'),
   $selectCommodity: $('#selectCommodity'),
@@ -95,6 +97,20 @@ const controls = {
         .on('change', controls.onFilterChange);
       controls.onFilterChange();
     });
+
+    // setup nuts map
+    const resizeNuts = () => {
+      controls.$nutsMap.css({
+        width: `${$('#infoBoxPlaceholder').width() - 20}px`
+      });
+    };
+    const selectHandler = (d) => {
+      controls.changeFilters({ reporter: data.lookup(d.properties.objectid, 'reportersByMapNumerical', 'id') });
+    };
+    resizeNuts();
+    nutsMap.setup(selectHandler);
+    $(window).on('resize', resizeNuts);
+    $(window).on('resize', nutsMap.resizeSvg);
   },
 
   getFilters: () => {
@@ -130,6 +146,9 @@ const controls = {
 
     // Show/hide elements on page according to filters
     controls.showElements(newfilters);
+
+    // update the nuts map
+    nutsMap.select(data.lookup(newfilters.reporter, 'reporters', 'mapNumerical'));
 
     // Trigger refresh on each chart passing along the new filters
     $('.chart').trigger('refreshFilters', newfilters);
