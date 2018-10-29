@@ -147,6 +147,9 @@ const controls = {
     // Show/hide elements on page according to filters
     controls.showElements(newfilters);
 
+    // update the nuts map
+    nutsMap.select(data.lookup(newfilters.reporter, 'reporters', 'mapNumerical'));
+
     // Trigger refresh on each chart passing along the new filters
     $('.chart').trigger('refreshFilters', newfilters);
 

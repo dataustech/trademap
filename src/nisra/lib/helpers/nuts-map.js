@@ -4,7 +4,6 @@ import { geoKavrayskiy7 } from 'd3-geo-projection';
 import { feature } from 'topojson-client';
 
 import nutsJson from '../../data/nuts.topo.json';
-import data from './data';
 
 const $nutsMap = $('#nutsMap');
 
@@ -27,7 +26,7 @@ const nutsMap = {
 
     const projection = geoKavrayskiy7()
       .scale(1450)
-      .translate([180, 1490])
+      .translate([180, 1488])
       .precision(0.1);
     const path = d3.geoPath()
       .projection(projection);
@@ -39,7 +38,8 @@ const nutsMap = {
       .data(nuts)
       .enter()
       .append('path')
-      .attr('class', 'nutsRegion')
+      .attr('class', d => `region-${d.properties.objectid}`)
+      .classed('nutsRegion', true)
       .attr('d', path)
       .on('click', (d) => {
         d3.event.preventDefault();
@@ -52,6 +52,13 @@ const nutsMap = {
   resizeSvg() {
     svg.attr('width', $nutsMap.width())
       .attr('height', $nutsMap.height());
+  },
+
+  select(mapId) {
+    svg.select('g.nuts1').selectAll('.nutsRegion')
+      .classed('highlighted', false);
+    svg.select('g.nuts1').select(`.region-${mapId}`)
+      .classed('highlighted', true);
   }
 };
 
