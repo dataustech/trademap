@@ -21,7 +21,7 @@ const commitLink = `${packageJson.homepage}/commit/${commitHash}`;
 const project = (process.env.PROJECT || 'nisra').trim();
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src', project, 'app.js'),
+  entry: ['@babel/polyfill', path.resolve(__dirname, 'src', project, 'app.js')],
   output: {
     filename: 'main.bundle.js',
     path: path.resolve(__dirname, 'dist', project)
