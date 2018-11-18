@@ -124,7 +124,7 @@ export default {
             + `<tspan x="10" class="creditTitle">${title}</tspan>`
             + '<tspan x="10" dy="15" class="creditSource">International Trade in Goods based on HMRC data</tspan>'
             + '<tspan x="10" dy="15" class="creditSource">'
-              + 'Developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK'
+              + 'Developed by NISRA Northern Ireland Statistics and Research Agency'
             + '</tspan>'
             + `<tspan x="10" dy="15" class="creditLink">${document.location.href}</tspan>`
             + '</text>');

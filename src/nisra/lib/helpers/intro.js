@@ -15,7 +15,7 @@ const steps = [
   {
     intro: '<h3>Welcome to the International Trade in Goods visualization.</h3>' +
       '<p style="font-size: 14px">This tool allows you to explore official trade in goods data using data from HMRC.</p>' +
-      '<p style="font-size: 14px">The tool was developed by the Department for International Trade and the Department for Business, Energy and Industrial Strategy in the UK.</p>' +
+      '<p style="font-size: 14px">The tool was developed by NISRA Northern Ireland Statistics and Research Agency.</p>' +
       '<p style="font-size: 14px">This site uses cookies to make the site simpler. To find out more about cookies used here, please go to the "Cookie policy" page under the "About" menu.</p>' +
       '<p style="font-size: 14px">Please note that there may be occasions when no data is loaded. In this case, the map will be shaded grey, and the graphs will display the message "No data available for this chart". This is because data is unavailable from HMRC for the particular query made.</p>'
   },
