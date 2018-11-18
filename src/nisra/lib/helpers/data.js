@@ -6,7 +6,7 @@
 
 import * as d3 from 'd3';
 import $ from 'jquery';
-import crossfilter from 'crossfilter';
+import crossfilter from 'crossfilter2';
 
 // data files
 import reporters from '../../data/reporters.json';
