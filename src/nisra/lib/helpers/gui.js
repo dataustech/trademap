@@ -178,12 +178,8 @@ export default {
     const fields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal'];
     const csvHeader = `data:text/csv;charset=utf-8,\n${fields.join(',')}\n`;
     const csvContent = newData.reduce((out, record) => `${fields.reduce((row, field) => `${row}${record[field]},`, out)}\n`, csvHeader);
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `${title}.csv`);
-    document.body.appendChild(link);
-    link.click();
+    const blob = new Blob([csvContent], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, `${title}.csv`);
   }
 
 };
