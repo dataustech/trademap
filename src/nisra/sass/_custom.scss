@@ -344,7 +344,9 @@ body.no-fontsupport .glyphicon-arrow-right:before {
 #choroplethTitle {
   position: absolute;
   top: 0px;
-  width: 100%;
+  left: 24%;
+  right: 240px;
+  width: auto;
   z-index: 100;
   text-align: center;
   z-index: 0;
@@ -390,6 +392,11 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   background: hsla(0,0%,74%,.43);
   padding: 0.5em;
   border-radius: 4px;
+}
+@media (max-width: 992px) {
+  #choroplethTitle {
+    left: 0;
+  }
 }
 @media (max-width: 768px) {
   #choroplethTitle {
