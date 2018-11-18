@@ -176,7 +176,7 @@ export default {
 
   downloadCsv(title, newData) {
     const fields = ['year', 'reporter', 'partner', 'partnerType', 'commodity', 'commodityType', 'importVal', 'exportVal'];
-    const csvHeader = `data:text/csv;charset=utf-8,\n${fields.join(',')}\n`;
+    const csvHeader = `${fields.join(',')}\n`;
     const csvContent = newData.reduce((out, record) => `${fields.reduce((row, field) => `${row}${record[field]},`, out)}\n`, csvHeader);
     const blob = new Blob([csvContent], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, `${title}.csv`);
