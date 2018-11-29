@@ -94,7 +94,7 @@ const data = {
       }
       return text;
     } catch (err) {
-      console.warn(`There was a problem getting a commodity name for ${commodity} of type ${type}: ${err}`);
+      // console.warn(`There was a problem getting a commodity name for ${commodity} of type ${type}: ${err}`);
       return 'unknown';
     }
   },
@@ -140,7 +140,7 @@ const data = {
     try {
       return data[`${mapName}Map`].get(lookupVal)[propertyName];
     } catch (err) {
-      console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
+      // console.warn(`There was a problem looking up ${lookupVal} in ${mapName}.${propertyName}: ${err}`);
       return 'unknown';
     }
   },

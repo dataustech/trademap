@@ -600,8 +600,8 @@ body.no-fontsupport .glyphicon-arrow-right:before {
   padding: 0;
 }
 .introjs-tooltip {
-  min-width: 600px;
-  max-width: 800px;
+  min-width: 600px !important;
+  max-width: 800px !important;
 }
 .introjs-tooltiptext {
   font-size: 18px;
