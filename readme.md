@@ -48,6 +48,8 @@ npm run build:comtrade
 npm run build:nisra
 ```
 
+To deploy a dev version to [now.sh](https://now.sh) run `npm run release:dev:nisra` or `npm run release:dev:comtrade`
+
 See [`src/comtrade/README.md`](src/comtrade/README.md) or [`src/nisra/README.md`](src/nisra/README.md) for more details.
 
 ## Credits

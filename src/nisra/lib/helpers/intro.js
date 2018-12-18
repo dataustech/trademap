@@ -15,6 +15,8 @@ const steps = [
   {
     intro: '<h3>Welcome to the UK Regions Imports and Exports of Goods by Country and World Region visualisation.</h3>' +
       '<p style="font-size: 14px">This tool allows you to explore official trade in goods data from HMRC.</p>' +
+      '<p style="font-size: 14px">The following application uses data from HMRC Regional Trade Statistics of the trade in GOODS ONLY between the United Kingdom and the rest of the world.</p>' +
+      '<p style="font-size: 14px">The data does NOT represent total trade as it does not include other trade e.g. trade in services etc. For further information please see the ‘Understanding RTS data’ and ‘RTS Methodology’ sections in the ‘About’ dropdown.</p>' +
       '<p style="font-size: 14px">The tool was developed by NISRA - Northern Ireland Statistics and Research Agency.</p>'
   },
   // 02. Controls (overview)
