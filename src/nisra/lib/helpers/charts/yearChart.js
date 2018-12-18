@@ -114,14 +114,14 @@ const chart = {
 
     // CASE 2: reporter = selected    commodity = null        partner = null
     if (reporter && commodity === null && partner === null) {
-      title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with the world`;
+      title = `Trade in goods between ${data.lookup(reporter, 'reporters', 'text')} and the world`;
       dataFilter.partner = 'all';
       dataFilter.commodity = 'all';
     }
 
     // CASE 3: reporter = selected    commodity = null        partner = selected
     if (reporter && commodity === null && partner !== null) {
-      title = `${data.lookup(reporter, 'reporters', 'text')} trade in goods with ${data.lookup(partner, 'partners', 'text')}`;
+      title = `Trade in goods between ${data.lookup(reporter, 'reporters', 'text')} and ${data.lookup(partner, 'partners', 'text')}`;
       dataFilter.partner = partner;
       dataFilter.commodity = 'all';
     }
