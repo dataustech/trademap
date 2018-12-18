@@ -382,18 +382,10 @@ const chart = {
         if (+flow > 0) {
           return `${numFormat(legendData[i].value.min, null, 1)} - ${numFormat(legendData[i].value.max, null, 1)} (${legendData[i].value.count} partners)`;
         }
-        return '';
-      });
-    texts.append('tspan')
-      .attr('class', 'line1')
-      .attr('x', 12)
-      .attr('dy', 15)
-      .text((d, i) => {
         if (+flow === 0) {
           return `${['Deficit', 'Surplus'][i]} (${legendData[i].value.count} partners)`;
         }
-        const legendDescriptions = getLegendDescriptions(totalPartners);
-        return legendDescriptions[i];
+        return '';
       });
   }
 
