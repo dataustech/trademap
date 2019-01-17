@@ -4,7 +4,7 @@ d3.formatDefaultLocale({
   decimal: '.',
   thousands: ',',
   grouping: [3],
-  currency: ['£', '']
+  currency: ['$', '']
 });
 
 export function numFormat(num) {
