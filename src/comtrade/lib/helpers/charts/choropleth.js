@@ -162,13 +162,13 @@ const chart = {
       title = [
         data.lookup(filters.reporter, 'countryByUnNum', 'name'),
         [
-          [' trade in ', data.commodityName(filters.commodity, filters.type), ' balance '].join(),
-          [' imports of ', data.commodityName(filters.commodity, filters.type), ' '].join(),
-          [' exports of ', data.commodityName(filters.commodity, filters.type), ' '].join()
+          [' trade in ', data.commodityName(filters.commodity, filters.type), ' balance '].join(''),
+          [' imports of ', data.commodityName(filters.commodity, filters.type), ' '].join(''),
+          [' exports of ', data.commodityName(filters.commodity, filters.type), ' '].join('')
         ][filters.flow],
         ' in ',
         filters.year
-      ].join();
+      ].join('');
     }
 
     data.query(queryFilter, (err, ready) => {
