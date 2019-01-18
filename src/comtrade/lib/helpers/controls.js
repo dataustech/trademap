@@ -61,7 +61,6 @@ const controls = {
       .on('change', controls.onFilterChange);
 
     // Setup the commodities dropdown
-
     controls.$selectCommodity
       .select2({
         placeholder: 'Select a commodity',
@@ -76,6 +75,9 @@ const controls = {
             let options = { text: 'undefined', results: [] };
             if (controls.filters.type === 'S') options = { text: 'services', results: data.serviceCodesSelectOptions };
             if (controls.filters.type === 'C') options = { text: 'goods', results: data.commodityCodesSelectOptions };
+            if (params.data.term) {
+              options.results = options.results.filter(option => option.text.toLowerCase().indexOf(params.data.term.toLowerCase()) >= 0);
+            }
             const promise = new Promise(resolve => resolve(options));
             promise.then(success);
             promise.catch(failure);
