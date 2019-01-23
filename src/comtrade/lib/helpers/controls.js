@@ -30,6 +30,7 @@ const controls = {
     controls.$selectReporter
       .select2({
         placeholder: 'Select a reporter',
+        templateSelection: opt => $(`<span><strong>Reporter:</strong> ${opt.text}</span>`),
         theme: 'classic',
         width: 'resolve',
         allowClear: true,
@@ -42,6 +43,7 @@ const controls = {
       .select2({
         placeholder: 'Select a partner',
         allowClear: true,
+        templateSelection: opt => $(`<span><strong>Partner:</strong> ${opt.text}</span>`),
         disabled: true,
         theme: 'classic',
         width: 'resolve',
@@ -65,6 +67,7 @@ const controls = {
       .select2({
         placeholder: 'Select a commodity',
         allowClear: true,
+        templateSelection: opt => $(`<span><strong>Commodity:</strong> ${opt.text}</span>`),
         theme: 'classic',
         width: 'resolve',
         disabled: true,
