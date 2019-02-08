@@ -1,0 +1,2002 @@
+[
+  {
+    "id": "A",
+    "type": "labarea",
+    "text": "Asia and Oceania",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "AU",
+    "type": "codealpha",
+    "text": "Australia",
+    "labarea": "A",
+    "mapNumerical": 36,
+    "selectMenu": true
+  },
+  {
+    "id": "BD",
+    "type": "codealpha",
+    "text": "Bangladesh",
+    "labarea": "A",
+    "mapNumerical": 50,
+    "selectMenu": true
+  },
+  {
+    "id": "CN",
+    "type": "codealpha",
+    "text": "China",
+    "labarea": "A",
+    "mapNumerical": 156,
+    "selectMenu": true
+  },
+  {
+    "id": "HK",
+    "type": "codealpha",
+    "text": "Hong Kong, SAR China",
+    "labarea": "A",
+    "mapNumerical": 344,
+    "selectMenu": true
+  },
+  {
+    "id": "IN",
+    "type": "codealpha",
+    "text": "India",
+    "labarea": "A",
+    "mapNumerical": 356,
+    "selectMenu": true
+  },
+  {
+    "id": "ID",
+    "type": "codealpha",
+    "text": "Indonesia",
+    "labarea": "A",
+    "mapNumerical": 360,
+    "selectMenu": true
+  },
+  {
+    "id": "JP",
+    "type": "codealpha",
+    "text": "Japan",
+    "labarea": "A",
+    "mapNumerical": 392,
+    "selectMenu": true
+  },
+  {
+    "id": "KR",
+    "type": "codealpha",
+    "text": "Korea (South)",
+    "labarea": "A",
+    "mapNumerical": 410,
+    "selectMenu": true
+  },
+  {
+    "id": "MY",
+    "type": "codealpha",
+    "text": "Malaysia",
+    "labarea": "A",
+    "mapNumerical": 458,
+    "selectMenu": true
+  },
+  {
+    "id": "NZ",
+    "type": "codealpha",
+    "text": "New Zealand",
+    "labarea": "A",
+    "mapNumerical": 554,
+    "selectMenu": true
+  },
+  {
+    "id": "PK",
+    "type": "codealpha",
+    "text": "Pakistan",
+    "labarea": "A",
+    "mapNumerical": 586,
+    "selectMenu": true
+  },
+  {
+    "id": "SG",
+    "type": "codealpha",
+    "text": "Singapore",
+    "labarea": "A",
+    "mapNumerical": 702,
+    "selectMenu": true
+  },
+  {
+    "id": "LK",
+    "type": "codealpha",
+    "text": "Sri Lanka",
+    "labarea": "A",
+    "mapNumerical": 144,
+    "selectMenu": true
+  },
+  {
+    "id": "TW",
+    "type": "codealpha",
+    "text": "Taiwan, Republic of China",
+    "labarea": "A",
+    "mapNumerical": 158,
+    "selectMenu": true
+  },
+  {
+    "id": "TH",
+    "type": "codealpha",
+    "text": "Thailand",
+    "labarea": "A",
+    "mapNumerical": 764,
+    "selectMenu": true
+  },
+  {
+    "id": "VN",
+    "type": "codealpha",
+    "text": "Viet Nam",
+    "labarea": "A",
+    "mapNumerical": 704,
+    "selectMenu": true
+  },
+  {
+    "id": "#1",
+    "type": "codealpha",
+    "text": "Other Asia and Oceania",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "B",
+    "type": "labarea",
+    "text": "Eastern Europe",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "AZ",
+    "type": "codealpha",
+    "text": "Azerbaijan",
+    "labarea": "B",
+    "mapNumerical": 31,
+    "selectMenu": true
+  },
+  {
+    "id": "GE",
+    "type": "codealpha",
+    "text": "Georgia",
+    "labarea": "B",
+    "mapNumerical": 268,
+    "selectMenu": true
+  },
+  {
+    "id": "KZ",
+    "type": "codealpha",
+    "text": "Kazakhstan",
+    "labarea": "B",
+    "mapNumerical": 398,
+    "selectMenu": true
+  },
+  {
+    "id": "MK",
+    "type": "codealpha",
+    "text": "Macedonia, Republic of",
+    "labarea": "B",
+    "mapNumerical": 807,
+    "selectMenu": true
+  },
+  {
+    "id": "RU",
+    "type": "codealpha",
+    "text": "Russian Federation",
+    "labarea": "B",
+    "mapNumerical": 643,
+    "selectMenu": true
+  },
+  {
+    "id": "XS",
+    "type": "codealpha",
+    "text": "Serbia",
+    "labarea": "B",
+    "mapNumerical": 688,
+    "selectMenu": true
+  },
+  {
+    "id": "UA",
+    "type": "codealpha",
+    "text": "Ukraine",
+    "labarea": "B",
+    "mapNumerical": 804,
+    "selectMenu": true
+  },
+  {
+    "id": "#2",
+    "type": "codealpha",
+    "text": "Other Eastern Europe",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "C",
+    "type": "labarea",
+    "text": "European Union",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "AT",
+    "type": "codealpha",
+    "text": "Austria",
+    "labarea": "C",
+    "mapNumerical": 40,
+    "selectMenu": true
+  },
+  {
+    "id": "BE",
+    "type": "codealpha",
+    "text": "Belgium",
+    "labarea": "C",
+    "mapNumerical": 56,
+    "selectMenu": true
+  },
+  {
+    "id": "BG",
+    "type": "codealpha",
+    "text": "Bulgaria",
+    "labarea": "C",
+    "mapNumerical": 100,
+    "selectMenu": true
+  },
+  {
+    "id": "HR",
+    "type": "codealpha",
+    "text": "Croatia",
+    "labarea": "C",
+    "mapNumerical": 191,
+    "selectMenu": true
+  },
+  {
+    "id": "CY",
+    "type": "codealpha",
+    "text": "Cyprus",
+    "labarea": "C",
+    "mapNumerical": 196,
+    "selectMenu": true
+  },
+  {
+    "id": "CZ",
+    "type": "codealpha",
+    "text": "Czech Republic",
+    "labarea": "C",
+    "mapNumerical": 203,
+    "selectMenu": true
+  },
+  {
+    "id": "DK",
+    "type": "codealpha",
+    "text": "Denmark",
+    "labarea": "C",
+    "mapNumerical": 208,
+    "selectMenu": true
+  },
+  {
+    "id": "EE",
+    "type": "codealpha",
+    "text": "Estonia",
+    "labarea": "C",
+    "mapNumerical": 233,
+    "selectMenu": true
+  },
+  {
+    "id": "FI",
+    "type": "codealpha",
+    "text": "Finland",
+    "labarea": "C",
+    "mapNumerical": 246,
+    "selectMenu": true
+  },
+  {
+    "id": "FR",
+    "type": "codealpha",
+    "text": "France",
+    "labarea": "C",
+    "mapNumerical": 250,
+    "selectMenu": true
+  },
+  {
+    "id": "DE",
+    "type": "codealpha",
+    "text": "Germany",
+    "labarea": "C",
+    "mapNumerical": 276,
+    "selectMenu": true
+  },
+  {
+    "id": "GR",
+    "type": "codealpha",
+    "text": "Greece",
+    "labarea": "C",
+    "mapNumerical": 300,
+    "selectMenu": true
+  },
+  {
+    "id": "HU",
+    "type": "codealpha",
+    "text": "Hungary",
+    "labarea": "C",
+    "mapNumerical": 348,
+    "selectMenu": true
+  },
+  {
+    "id": "IE",
+    "type": "codealpha",
+    "text": "Ireland",
+    "labarea": "C",
+    "mapNumerical": 372,
+    "selectMenu": true
+  },
+  {
+    "id": "IT",
+    "type": "codealpha",
+    "text": "Italy",
+    "labarea": "C",
+    "mapNumerical": 380,
+    "selectMenu": true
+  },
+  {
+    "id": "LV",
+    "type": "codealpha",
+    "text": "Latvia",
+    "labarea": "C",
+    "mapNumerical": 428,
+    "selectMenu": true
+  },
+  {
+    "id": "LT",
+    "type": "codealpha",
+    "text": "Lithuania",
+    "labarea": "C",
+    "mapNumerical": 440,
+    "selectMenu": true
+  },
+  {
+    "id": "LU",
+    "type": "codealpha",
+    "text": "Luxembourg",
+    "labarea": "C",
+    "mapNumerical": 442,
+    "selectMenu": true
+  },
+  {
+    "id": "MT",
+    "type": "codealpha",
+    "text": "Malta",
+    "labarea": "C",
+    "mapNumerical": 470,
+    "selectMenu": true
+  },
+  {
+    "id": "NL",
+    "type": "codealpha",
+    "text": "Netherlands",
+    "labarea": "C",
+    "mapNumerical": 528,
+    "selectMenu": true
+  },
+  {
+    "id": "PL",
+    "type": "codealpha",
+    "text": "Poland",
+    "labarea": "C",
+    "mapNumerical": 616,
+    "selectMenu": true
+  },
+  {
+    "id": "PT",
+    "type": "codealpha",
+    "text": "Portugal",
+    "labarea": "C",
+    "mapNumerical": 620,
+    "selectMenu": true
+  },
+  {
+    "id": "RO",
+    "type": "codealpha",
+    "text": "Romania",
+    "labarea": "C",
+    "mapNumerical": 642,
+    "selectMenu": true
+  },
+  {
+    "id": "SK",
+    "type": "codealpha",
+    "text": "Slovakia",
+    "labarea": "C",
+    "mapNumerical": 703,
+    "selectMenu": true
+  },
+  {
+    "id": "SI",
+    "type": "codealpha",
+    "text": "Slovenia",
+    "labarea": "C",
+    "mapNumerical": 705,
+    "selectMenu": true
+  },
+  {
+    "id": "ES",
+    "type": "codealpha",
+    "text": "Spain",
+    "labarea": "C",
+    "mapNumerical": 724,
+    "selectMenu": true
+  },
+  {
+    "id": "SE",
+    "type": "codealpha",
+    "text": "Sweden",
+    "labarea": "C",
+    "mapNumerical": 752,
+    "selectMenu": true
+  },
+  {
+    "id": "QR",
+    "type": "codealpha",
+    "text": "Stores & Provisions (EU ships and aircraft)",
+    "labarea": "C",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "QS",
+    "type": "codealpha",
+    "text": "Stores & Provisions (non-EU ships and aircraft)",
+    "labarea": "C",
+    "mapNumerical": 752,
+    "selectMenu": true
+  },
+  {
+    "id": "D",
+    "type": "labarea",
+    "text": "Latin America and the Caribbean",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "AR",
+    "type": "codealpha",
+    "text": "Argentina",
+    "labarea": "D",
+    "mapNumerical": 32,
+    "selectMenu": true
+  },
+  {
+    "id": "BR",
+    "type": "codealpha",
+    "text": "Brazil",
+    "labarea": "D",
+    "mapNumerical": 76,
+    "selectMenu": true
+  },
+  {
+    "id": "CL",
+    "type": "codealpha",
+    "text": "Chile",
+    "labarea": "D",
+    "mapNumerical": 152,
+    "selectMenu": true
+  },
+  {
+    "id": "CO",
+    "type": "codealpha",
+    "text": "Colombia",
+    "labarea": "D",
+    "mapNumerical": 170,
+    "selectMenu": true
+  },
+  {
+    "id": "CR",
+    "type": "codealpha",
+    "text": "Costa Rica",
+    "labarea": "D",
+    "mapNumerical": 188,
+    "selectMenu": true
+  },
+  {
+    "id": "DO",
+    "type": "codealpha",
+    "text": "Dominican Republic",
+    "labarea": "D",
+    "mapNumerical": 214,
+    "selectMenu": true
+  },
+  {
+    "id": "EC",
+    "type": "codealpha",
+    "text": "Ecuador",
+    "labarea": "D",
+    "mapNumerical": 218,
+    "selectMenu": true
+  },
+  {
+    "id": "FK",
+    "type": "codealpha",
+    "text": "Falkland Islands (Malvinas)",
+    "labarea": "D",
+    "mapNumerical": 238,
+    "selectMenu": true
+  },
+  {
+    "id": "GT",
+    "type": "codealpha",
+    "text": "Guatemala",
+    "labarea": "D",
+    "mapNumerical": 320,
+    "selectMenu": true
+  },
+  {
+    "id": "HN",
+    "type": "codealpha",
+    "text": "Honduras",
+    "labarea": "D",
+    "mapNumerical": 340,
+    "selectMenu": true
+  },
+  {
+    "id": "PA",
+    "type": "codealpha",
+    "text": "Panama",
+    "labarea": "D",
+    "mapNumerical": 591,
+    "selectMenu": true
+  },
+  {
+    "id": "PE",
+    "type": "codealpha",
+    "text": "Peru",
+    "labarea": "D",
+    "mapNumerical": 604,
+    "selectMenu": true
+  },
+  {
+    "id": "TT",
+    "type": "codealpha",
+    "text": "Trinidad and Tobago",
+    "labarea": "D",
+    "mapNumerical": 780,
+    "selectMenu": true
+  },
+  {
+    "id": "UY",
+    "type": "codealpha",
+    "text": "Uruguay",
+    "labarea": "D",
+    "mapNumerical": 858,
+    "selectMenu": true
+  },
+  {
+    "id": "VE",
+    "type": "codealpha",
+    "text": "Venezuela (Bolivarian Republic)",
+    "labarea": "D",
+    "mapNumerical": 862,
+    "selectMenu": true
+  },
+  {
+    "id": "#3",
+    "type": "codealpha",
+    "text": "Other Latin America and the Caribbean",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "F",
+    "type": "labarea",
+    "text": "Middle East and North Africa",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "DZ",
+    "type": "codealpha",
+    "text": "Algeria",
+    "labarea": "F",
+    "mapNumerical": 12,
+    "selectMenu": true
+  },
+  {
+    "id": "BH",
+    "type": "codealpha",
+    "text": "Bahrain",
+    "labarea": "F",
+    "mapNumerical": 48,
+    "selectMenu": true
+  },
+  {
+    "id": "EG",
+    "type": "codealpha",
+    "text": "Egypt",
+    "labarea": "F",
+    "mapNumerical": 818,
+    "selectMenu": true
+  },
+  {
+    "id": "IQ",
+    "type": "codealpha",
+    "text": "Iraq",
+    "labarea": "F",
+    "mapNumerical": 368,
+    "selectMenu": true
+  },
+  {
+    "id": "IL",
+    "type": "codealpha",
+    "text": "Israel",
+    "labarea": "F",
+    "mapNumerical": 376,
+    "selectMenu": true
+  },
+  {
+    "id": "JO",
+    "type": "codealpha",
+    "text": "Jordan",
+    "labarea": "F",
+    "mapNumerical": 400,
+    "selectMenu": true
+  },
+  {
+    "id": "KW",
+    "type": "codealpha",
+    "text": "Kuwait",
+    "labarea": "F",
+    "mapNumerical": 414,
+    "selectMenu": true
+  },
+  {
+    "id": "LB",
+    "type": "codealpha",
+    "text": "Lebanon",
+    "labarea": "F",
+    "mapNumerical": 422,
+    "selectMenu": true
+  },
+  {
+    "id": "MA",
+    "type": "codealpha",
+    "text": "Morocco",
+    "labarea": "F",
+    "mapNumerical": 504,
+    "selectMenu": true
+  },
+  {
+    "id": "OM",
+    "type": "codealpha",
+    "text": "Oman",
+    "labarea": "F",
+    "mapNumerical": 512,
+    "selectMenu": true
+  },
+  {
+    "id": "QA",
+    "type": "codealpha",
+    "text": "Qatar",
+    "labarea": "F",
+    "mapNumerical": 634,
+    "selectMenu": true
+  },
+  {
+    "id": "SA",
+    "type": "codealpha",
+    "text": "Saudi Arabia",
+    "labarea": "F",
+    "mapNumerical": 682,
+    "selectMenu": true
+  },
+  {
+    "id": "AE",
+    "type": "codealpha",
+    "text": "United Arab Emirates",
+    "labarea": "F",
+    "mapNumerical": 784,
+    "selectMenu": true
+  },
+  {
+    "id": "#4",
+    "type": "codealpha",
+    "text": "Other Middle East and North Africa",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "G",
+    "type": "labarea",
+    "text": "North America",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "CA",
+    "type": "codealpha",
+    "text": "Canada",
+    "labarea": "G",
+    "mapNumerical": 124,
+    "selectMenu": true
+  },
+  {
+    "id": "MX",
+    "type": "codealpha",
+    "text": "Mexico",
+    "labarea": "G",
+    "mapNumerical": 484,
+    "selectMenu": true
+  },
+  {
+    "id": "US",
+    "type": "codealpha",
+    "text": "United States of America",
+    "labarea": "G",
+    "mapNumerical": 840,
+    "selectMenu": true
+  },
+  {
+    "id": "#5",
+    "type": "codealpha",
+    "text": "Other North America",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "H",
+    "type": "labarea",
+    "text": "Sub-Saharan Africa",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "AO",
+    "type": "codealpha",
+    "text": "Angola",
+    "labarea": "H",
+    "mapNumerical": 24,
+    "selectMenu": true
+  },
+  {
+    "id": "CI",
+    "type": "codealpha",
+    "text": "Côte d'Ivoire",
+    "labarea": "H",
+    "mapNumerical": 384,
+    "selectMenu": true
+  },
+  {
+    "id": "CM",
+    "type": "codealpha",
+    "text": "Cameroon",
+    "labarea": "H",
+    "mapNumerical": 120,
+    "selectMenu": true
+  },
+  {
+    "id": "CG",
+    "type": "codealpha",
+    "text": "Congo (Brazzaville)",
+    "labarea": "H",
+    "mapNumerical": 178,
+    "selectMenu": true
+  },
+  {
+    "id": "GQ",
+    "type": "codealpha",
+    "text": "Equatorial Guinea",
+    "labarea": "H",
+    "mapNumerical": 226,
+    "selectMenu": true
+  },
+  {
+    "id": "ET",
+    "type": "codealpha",
+    "text": "Ethiopia",
+    "labarea": "H",
+    "mapNumerical": 231,
+    "selectMenu": true
+  },
+  {
+    "id": "GH",
+    "type": "codealpha",
+    "text": "Ghana",
+    "labarea": "H",
+    "mapNumerical": 288,
+    "selectMenu": true
+  },
+  {
+    "id": "KE",
+    "type": "codealpha",
+    "text": "Kenya",
+    "labarea": "H",
+    "mapNumerical": 404,
+    "selectMenu": true
+  },
+  {
+    "id": "MU",
+    "type": "codealpha",
+    "text": "Mauritius",
+    "labarea": "H",
+    "mapNumerical": 480,
+    "selectMenu": true
+  },
+  {
+    "id": "NG",
+    "type": "codealpha",
+    "text": "Nigeria",
+    "labarea": "H",
+    "mapNumerical": 566,
+    "selectMenu": true
+  },
+  {
+    "id": "SN",
+    "type": "codealpha",
+    "text": "Senegal",
+    "labarea": "H",
+    "mapNumerical": 686,
+    "selectMenu": true
+  },
+  {
+    "id": "ZA",
+    "type": "codealpha",
+    "text": "South Africa",
+    "labarea": "H",
+    "mapNumerical": 710,
+    "selectMenu": true
+  },
+  {
+    "id": "TZ",
+    "type": "codealpha",
+    "text": "Tanzania, United Republic of",
+    "labarea": "H",
+    "mapNumerical": 834,
+    "selectMenu": true
+  },
+  {
+    "id": "#6",
+    "type": "codealpha",
+    "text": "Other Sub-Saharan Africa",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "I",
+    "type": "labarea",
+    "text": "Western Europe",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "GI",
+    "type": "codealpha",
+    "text": "Gibraltar",
+    "labarea": "I",
+    "mapNumerical": 292,
+    "selectMenu": true
+  },
+  {
+    "id": "IS",
+    "type": "codealpha",
+    "text": "Iceland",
+    "labarea": "I",
+    "mapNumerical": 352,
+    "selectMenu": true
+  },
+  {
+    "id": "NO",
+    "type": "codealpha",
+    "text": "Norway",
+    "labarea": "I",
+    "mapNumerical": 578,
+    "selectMenu": true
+  },
+  {
+    "id": "CH",
+    "type": "codealpha",
+    "text": "Switzerland",
+    "labarea": "I",
+    "mapNumerical": 756,
+    "selectMenu": true
+  },
+  {
+    "id": "TR",
+    "type": "codealpha",
+    "text": "Turkey",
+    "labarea": "I",
+    "mapNumerical": 792,
+    "selectMenu": true
+  },
+  {
+    "id": "#7",
+    "type": "codealpha",
+    "text": "Other Western Europe",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "J",
+    "type": "labarea",
+    "text": "Ships and Stores (Non-EU)",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "E",
+    "type": "labarea",
+    "text": "Low Value Trade (Non-EU)",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "ZY",
+    "type": "codealpha",
+    "text": "Low Value Trade (NON-EU)",
+    "labarea": "",
+    "mapNumerical": null,
+    "selectMenu": true
+  },
+  {
+    "id": "BT",
+    "type": "codealpha",
+    "text": "Bhutan",
+    "labarea": "A",
+    "mapNumerical": 64,
+    "selectMenu": false
+  },
+  {
+    "id": "IO",
+    "type": "codealpha",
+    "text": "British Indian Ocean Territories",
+    "labarea": "A",
+    "mapNumerical": 86,
+    "selectMenu": false
+  },
+  {
+    "id": "BN",
+    "type": "codealpha",
+    "text": "Brunei Darussalam",
+    "labarea": "A",
+    "mapNumerical": 96,
+    "selectMenu": false
+  },
+  {
+    "id": "KH",
+    "type": "codealpha",
+    "text": "Cambodia",
+    "labarea": "A",
+    "mapNumerical": 116,
+    "selectMenu": false
+  },
+  {
+    "id": "MO",
+    "type": "codealpha",
+    "text": "China, Macao Special Administrative Region",
+    "labarea": "A",
+    "mapNumerical": 446,
+    "selectMenu": false
+  },
+  {
+    "id": "CX",
+    "type": "codealpha",
+    "text": "Christmas Islands",
+    "labarea": "A",
+    "mapNumerical": 162,
+    "selectMenu": false
+  },
+  {
+    "id": "CK",
+    "type": "codealpha",
+    "text": "Cook Islands",
+    "labarea": "A",
+    "mapNumerical": 184,
+    "selectMenu": false
+  },
+  {
+    "id": "KP",
+    "type": "codealpha",
+    "text": "Democratic People's Republic of Korea",
+    "labarea": "A",
+    "mapNumerical": 408,
+    "selectMenu": false
+  },
+  {
+    "id": "FM",
+    "type": "codealpha",
+    "text": "Federated State of Micronesia",
+    "labarea": "A",
+    "mapNumerical": 583,
+    "selectMenu": false
+  },
+  {
+    "id": "FJ",
+    "type": "codealpha",
+    "text": "Fiji",
+    "labarea": "A",
+    "mapNumerical": 242,
+    "selectMenu": false
+  },
+  {
+    "id": "PF",
+    "type": "codealpha",
+    "text": "French Polynesia",
+    "labarea": "A",
+    "mapNumerical": 258,
+    "selectMenu": false
+  },
+  {
+    "id": "KI",
+    "type": "codealpha",
+    "text": "Kiribati",
+    "labarea": "A",
+    "mapNumerical": 296,
+    "selectMenu": false
+  },
+  {
+    "id": "KG",
+    "type": "codealpha",
+    "text": "Kyrgyzstan",
+    "labarea": "A",
+    "mapNumerical": 417,
+    "selectMenu": false
+  },
+  {
+    "id": "LA",
+    "type": "codealpha",
+    "text": "Lao People's Dem. Rep.",
+    "labarea": "A",
+    "mapNumerical": 418,
+    "selectMenu": false
+  },
+  {
+    "id": "MV",
+    "type": "codealpha",
+    "text": "Maldives",
+    "labarea": "A",
+    "mapNumerical": 462,
+    "selectMenu": false
+  },
+  {
+    "id": "MH",
+    "type": "codealpha",
+    "text": "Marshall Islands",
+    "labarea": "A",
+    "mapNumerical": 584,
+    "selectMenu": false
+  },
+  {
+    "id": "MN",
+    "type": "codealpha",
+    "text": "Mongolia",
+    "labarea": "A",
+    "mapNumerical": 496,
+    "selectMenu": false
+  },
+  {
+    "id": "MM",
+    "type": "codealpha",
+    "text": "Myanmar",
+    "labarea": "A",
+    "mapNumerical": 104,
+    "selectMenu": false
+  },
+  {
+    "id": "NR",
+    "type": "codealpha",
+    "text": "Nauru",
+    "labarea": "A",
+    "mapNumerical": 520,
+    "selectMenu": false
+  },
+  {
+    "id": "NP",
+    "type": "codealpha",
+    "text": "Nepal",
+    "labarea": "A",
+    "mapNumerical": 524,
+    "selectMenu": false
+  },
+  {
+    "id": "NC",
+    "type": "codealpha",
+    "text": "New Caledonia",
+    "labarea": "A",
+    "mapNumerical": 540,
+    "selectMenu": false
+  },
+  {
+    "id": "NU",
+    "type": "codealpha",
+    "text": "Niue",
+    "labarea": "A",
+    "mapNumerical": 570,
+    "selectMenu": false
+  },
+  {
+    "id": "NF",
+    "type": "codealpha",
+    "text": "Norfolk Islands",
+    "labarea": "A",
+    "mapNumerical": 574,
+    "selectMenu": false
+  },
+  {
+    "id": "MP",
+    "type": "codealpha",
+    "text": "Northern Mariana Islands",
+    "labarea": "A",
+    "mapNumerical": 580,
+    "selectMenu": false
+  },
+  {
+    "id": "PW",
+    "type": "codealpha",
+    "text": "Palau",
+    "labarea": "A",
+    "mapNumerical": 585,
+    "selectMenu": false
+  },
+  {
+    "id": "PG",
+    "type": "codealpha",
+    "text": "Papua New Guinea",
+    "labarea": "A",
+    "mapNumerical": 598,
+    "selectMenu": false
+  },
+  {
+    "id": "PH",
+    "type": "codealpha",
+    "text": "Philippines",
+    "labarea": "A",
+    "mapNumerical": 608,
+    "selectMenu": false
+  },
+  {
+    "id": "PN",
+    "type": "codealpha",
+    "text": "Pitcairn",
+    "labarea": "A",
+    "mapNumerical": 612,
+    "selectMenu": false
+  },
+  {
+    "id": "WS",
+    "type": "codealpha",
+    "text": "Samoa",
+    "labarea": "A",
+    "mapNumerical": 882,
+    "selectMenu": false
+  },
+  {
+    "id": "SB",
+    "type": "codealpha",
+    "text": "Solomon Islands",
+    "labarea": "A",
+    "mapNumerical": 90,
+    "selectMenu": false
+  },
+  {
+    "id": "TJ",
+    "type": "codealpha",
+    "text": "Tajikistan",
+    "labarea": "A",
+    "mapNumerical": 762,
+    "selectMenu": false
+  },
+  {
+    "id": "TP",
+    "type": "codealpha",
+    "text": "Timor-Leste",
+    "labarea": "A",
+    "mapNumerical": 626,
+    "selectMenu": false
+  },
+  {
+    "id": "TK",
+    "type": "codealpha",
+    "text": "Tokelau",
+    "labarea": "A",
+    "mapNumerical": 772,
+    "selectMenu": false
+  },
+  {
+    "id": "TO",
+    "type": "codealpha",
+    "text": "Tonga",
+    "labarea": "A",
+    "mapNumerical": 776,
+    "selectMenu": false
+  },
+  {
+    "id": "TM",
+    "type": "codealpha",
+    "text": "Turkmenistan",
+    "labarea": "A",
+    "mapNumerical": 795,
+    "selectMenu": false
+  },
+  {
+    "id": "TV",
+    "type": "codealpha",
+    "text": "Tuvalu",
+    "labarea": "A",
+    "mapNumerical": 798,
+    "selectMenu": false
+  },
+  {
+    "id": "UZ",
+    "type": "codealpha",
+    "text": "Uzbekistan",
+    "labarea": "A",
+    "mapNumerical": 860,
+    "selectMenu": false
+  },
+  {
+    "id": "VU",
+    "type": "codealpha",
+    "text": "Vanuatu",
+    "labarea": "A",
+    "mapNumerical": 548,
+    "selectMenu": false
+  },
+  {
+    "id": "WF",
+    "type": "codealpha",
+    "text": "Wallis and Futuna Islands",
+    "labarea": "A",
+    "mapNumerical": 876,
+    "selectMenu": false
+  },
+  {
+    "id": "AL",
+    "type": "codealpha",
+    "text": "Albania",
+    "labarea": "B",
+    "mapNumerical": 8,
+    "selectMenu": false
+  },
+  {
+    "id": "AM",
+    "type": "codealpha",
+    "text": "Armenia",
+    "labarea": "B",
+    "mapNumerical": 51,
+    "selectMenu": false
+  },
+  {
+    "id": "BA",
+    "type": "codealpha",
+    "text": "Bosnia Herzegovina",
+    "labarea": "B",
+    "mapNumerical": 70,
+    "selectMenu": false
+  },
+  {
+    "id": "ME",
+    "type": "codealpha",
+    "text": "Montenegro",
+    "labarea": "B",
+    "mapNumerical": 499,
+    "selectMenu": false
+  },
+  {
+    "id": "MD",
+    "type": "codealpha",
+    "text": "Republic of Moldova",
+    "labarea": "B",
+    "mapNumerical": 498,
+    "selectMenu": false
+  },
+  {
+    "id": "RS",
+    "type": "codealpha",
+    "text": "Serbia",
+    "labarea": "B",
+    "mapNumerical": 688,
+    "selectMenu": false
+  },
+  {
+    "id": "BY",
+    "type": "codealpha",
+    "text": "Belarus",
+    "labarea": "C",
+    "mapNumerical": 112,
+    "selectMenu": false
+  },
+  {
+    "id": "AI",
+    "type": "codealpha",
+    "text": "Anguilla",
+    "labarea": "D",
+    "mapNumerical": 660,
+    "selectMenu": false
+  },
+  {
+    "id": "AG",
+    "type": "codealpha",
+    "text": "Antigua and Barbuda",
+    "labarea": "D",
+    "mapNumerical": 28,
+    "selectMenu": false
+  },
+  {
+    "id": "AB",
+    "type": "codealpha",
+    "text": "Aruba",
+    "labarea": "D",
+    "mapNumerical": 533,
+    "selectMenu": false
+  },
+  {
+    "id": "BS",
+    "type": "codealpha",
+    "text": "Bahamas",
+    "labarea": "D",
+    "mapNumerical": 44,
+    "selectMenu": false
+  },
+  {
+    "id": "BB",
+    "type": "codealpha",
+    "text": "Barbados",
+    "labarea": "D",
+    "mapNumerical": 52,
+    "selectMenu": false
+  },
+  {
+    "id": "BZ",
+    "type": "codealpha",
+    "text": "Belize",
+    "labarea": "D",
+    "mapNumerical": 84,
+    "selectMenu": false
+  },
+  {
+    "id": "BO",
+    "type": "codealpha",
+    "text": "Bolivia",
+    "labarea": "D",
+    "mapNumerical": 68,
+    "selectMenu": false
+  },
+  {
+    "id": "BQ",
+    "type": "codealpha",
+    "text": "Bonaire",
+    "labarea": "D",
+    "mapNumerical": 535,
+    "selectMenu": false
+  },
+  {
+    "id": "VG",
+    "type": "codealpha",
+    "text": "British Virgin Islands",
+    "labarea": "D",
+    "mapNumerical": 92,
+    "selectMenu": false
+  },
+  {
+    "id": "KY",
+    "type": "codealpha",
+    "text": "Cayman Islands",
+    "labarea": "D",
+    "mapNumerical": 136,
+    "selectMenu": false
+  },
+  {
+    "id": "CC",
+    "type": "codealpha",
+    "text": "Cocos Islands",
+    "labarea": "D",
+    "mapNumerical": 166,
+    "selectMenu": false
+  },
+  {
+    "id": "CU",
+    "type": "codealpha",
+    "text": "Cuba",
+    "labarea": "D",
+    "mapNumerical": 192,
+    "selectMenu": false
+  },
+  {
+    "id": "DM",
+    "type": "codealpha",
+    "text": "Dominica",
+    "labarea": "D",
+    "mapNumerical": 212,
+    "selectMenu": false
+  },
+  {
+    "id": "SV",
+    "type": "codealpha",
+    "text": "El Salvador",
+    "labarea": "D",
+    "mapNumerical": 222,
+    "selectMenu": false
+  },
+  {
+    "id": "GD",
+    "type": "codealpha",
+    "text": "Grenada",
+    "labarea": "D",
+    "mapNumerical": 308,
+    "selectMenu": false
+  },
+  {
+    "id": "GP",
+    "type": "codealpha",
+    "text": "Guadeloupe",
+    "labarea": "D",
+    "mapNumerical": 312,
+    "selectMenu": false
+  },
+  {
+    "id": "GY",
+    "type": "codealpha",
+    "text": "Guyana",
+    "labarea": "D",
+    "mapNumerical": 328,
+    "selectMenu": false
+  },
+  {
+    "id": "HT",
+    "type": "codealpha",
+    "text": "Haiti",
+    "labarea": "D",
+    "mapNumerical": 332,
+    "selectMenu": false
+  },
+  {
+    "id": "JM",
+    "type": "codealpha",
+    "text": "Jamaica",
+    "labarea": "D",
+    "mapNumerical": 388,
+    "selectMenu": false
+  },
+  {
+    "id": "MQ",
+    "type": "codealpha",
+    "text": "Martinique",
+    "labarea": "D",
+    "mapNumerical": 474,
+    "selectMenu": false
+  },
+  {
+    "id": "MS",
+    "type": "codealpha",
+    "text": "Montserrat",
+    "labarea": "D",
+    "mapNumerical": 500,
+    "selectMenu": false
+  },
+  {
+    "id": "NI",
+    "type": "codealpha",
+    "text": "Nicaragua",
+    "labarea": "D",
+    "mapNumerical": 558,
+    "selectMenu": false
+  },
+  {
+    "id": "PY",
+    "type": "codealpha",
+    "text": "Paraguay",
+    "labarea": "D",
+    "mapNumerical": 600,
+    "selectMenu": false
+  },
+  {
+    "id": "KN",
+    "type": "codealpha",
+    "text": "Saint Kitts and Nevis",
+    "labarea": "D",
+    "mapNumerical": 659,
+    "selectMenu": false
+  },
+  {
+    "id": "LC",
+    "type": "codealpha",
+    "text": "Saint Lucia",
+    "labarea": "D",
+    "mapNumerical": 662,
+    "selectMenu": false
+  },
+  {
+    "id": "VC",
+    "type": "codealpha",
+    "text": "Saint Vincent and the Grenadines",
+    "labarea": "D",
+    "mapNumerical": 670,
+    "selectMenu": false
+  },
+  {
+    "id": "SR",
+    "type": "codealpha",
+    "text": "Suriname",
+    "labarea": "D",
+    "mapNumerical": 740,
+    "selectMenu": false
+  },
+  {
+    "id": "TC",
+    "type": "codealpha",
+    "text": "Turks and Caicos Islands",
+    "labarea": "D",
+    "mapNumerical": 796,
+    "selectMenu": false
+  },
+  {
+    "id": "VI",
+    "type": "codealpha",
+    "text": "US Virgin Islands",
+    "labarea": "D",
+    "mapNumerical": 850,
+    "selectMenu": false
+  },
+  {
+    "id": "AF",
+    "type": "codealpha",
+    "text": "Afghanistan",
+    "labarea": "F",
+    "mapNumerical": 4,
+    "selectMenu": false
+  },
+  {
+    "id": "DJ",
+    "type": "codealpha",
+    "text": "Djibouti",
+    "labarea": "F",
+    "mapNumerical": 262,
+    "selectMenu": false
+  },
+  {
+    "id": "ER",
+    "type": "codealpha",
+    "text": "Eritrea",
+    "labarea": "F",
+    "mapNumerical": 232,
+    "selectMenu": false
+  },
+  {
+    "id": "IR",
+    "type": "codealpha",
+    "text": "Iran",
+    "labarea": "F",
+    "mapNumerical": 364,
+    "selectMenu": false
+  },
+  {
+    "id": "LY",
+    "type": "codealpha",
+    "text": "Libya",
+    "labarea": "F",
+    "mapNumerical": 434,
+    "selectMenu": false
+  },
+  {
+    "id": "PS",
+    "type": "codealpha",
+    "text": "Occupied Palestinian Territory",
+    "labarea": "F",
+    "mapNumerical": 275,
+    "selectMenu": false
+  },
+  {
+    "id": "SY",
+    "type": "codealpha",
+    "text": "Syria",
+    "labarea": "F",
+    "mapNumerical": 760,
+    "selectMenu": false
+  },
+  {
+    "id": "TN",
+    "type": "codealpha",
+    "text": "Tunisia",
+    "labarea": "F",
+    "mapNumerical": 788,
+    "selectMenu": false
+  },
+  {
+    "id": "EH",
+    "type": "codealpha",
+    "text": "Western Sahara",
+    "labarea": "F",
+    "mapNumerical": 732,
+    "selectMenu": false
+  },
+  {
+    "id": "YE",
+    "type": "codealpha",
+    "text": "Yemen",
+    "labarea": "F",
+    "mapNumerical": 887,
+    "selectMenu": false
+  },
+  {
+    "id": "BM",
+    "type": "codealpha",
+    "text": "Bermuda",
+    "labarea": "G",
+    "mapNumerical": 60,
+    "selectMenu": false
+  },
+  {
+    "id": "PR",
+    "type": "codealpha",
+    "text": "Puerto Rico",
+    "labarea": "G",
+    "mapNumerical": 630,
+    "selectMenu": false
+  },
+  {
+    "id": "PM",
+    "type": "codealpha",
+    "text": "Saint Pierre and Miquelon",
+    "labarea": "G",
+    "mapNumerical": 666,
+    "selectMenu": false
+  },
+  {
+    "id": "ST",
+    "type": "codealpha",
+    "text": "Sao Tome and Principe",
+    "labarea": "G",
+    "mapNumerical": 678,
+    "selectMenu": false
+  },
+  {
+    "id": "BJ",
+    "type": "codealpha",
+    "text": "Benin",
+    "labarea": "H",
+    "mapNumerical": 204,
+    "selectMenu": false
+  },
+  {
+    "id": "BW",
+    "type": "codealpha",
+    "text": "Botswana",
+    "labarea": "H",
+    "mapNumerical": 72,
+    "selectMenu": false
+  },
+  {
+    "id": "BF",
+    "type": "codealpha",
+    "text": "Burkina Faso",
+    "labarea": "H",
+    "mapNumerical": 854,
+    "selectMenu": false
+  },
+  {
+    "id": "BI",
+    "type": "codealpha",
+    "text": "Burundi",
+    "labarea": "H",
+    "mapNumerical": 108,
+    "selectMenu": false
+  },
+  {
+    "id": "CV",
+    "type": "codealpha",
+    "text": "Cabo Verde",
+    "labarea": "H",
+    "mapNumerical": 132,
+    "selectMenu": false
+  },
+  {
+    "id": "CF",
+    "type": "codealpha",
+    "text": "Central African Republic",
+    "labarea": "H",
+    "mapNumerical": 140,
+    "selectMenu": false
+  },
+  {
+    "id": "TD",
+    "type": "codealpha",
+    "text": "Chad",
+    "labarea": "H",
+    "mapNumerical": 148,
+    "selectMenu": false
+  },
+  {
+    "id": "KM",
+    "type": "codealpha",
+    "text": "Comoros",
+    "labarea": "H",
+    "mapNumerical": 174,
+    "selectMenu": false
+  },
+  {
+    "id": "CD",
+    "type": "codealpha",
+    "text": "Democratic Republic of the Congo",
+    "labarea": "H",
+    "mapNumerical": 180,
+    "selectMenu": false
+  },
+  {
+    "id": "GA",
+    "type": "codealpha",
+    "text": "Gabon",
+    "labarea": "H",
+    "mapNumerical": 266,
+    "selectMenu": false
+  },
+  {
+    "id": "GM",
+    "type": "codealpha",
+    "text": "Gambia",
+    "labarea": "H",
+    "mapNumerical": 270,
+    "selectMenu": false
+  },
+  {
+    "id": "GN",
+    "type": "codealpha",
+    "text": "Guinea",
+    "labarea": "H",
+    "mapNumerical": 324,
+    "selectMenu": false
+  },
+  {
+    "id": "GW",
+    "type": "codealpha",
+    "text": "Guinea-Bissau",
+    "labarea": "H",
+    "mapNumerical": 624,
+    "selectMenu": false
+  },
+  {
+    "id": "LS",
+    "type": "codealpha",
+    "text": "Lesotho",
+    "labarea": "H",
+    "mapNumerical": 426,
+    "selectMenu": false
+  },
+  {
+    "id": "LR",
+    "type": "codealpha",
+    "text": "Liberia",
+    "labarea": "H",
+    "mapNumerical": 430,
+    "selectMenu": false
+  },
+  {
+    "id": "MG",
+    "type": "codealpha",
+    "text": "Madagascar",
+    "labarea": "H",
+    "mapNumerical": 450,
+    "selectMenu": false
+  },
+  {
+    "id": "MW",
+    "type": "codealpha",
+    "text": "Malawi",
+    "labarea": "H",
+    "mapNumerical": 454,
+    "selectMenu": false
+  },
+  {
+    "id": "ML",
+    "type": "codealpha",
+    "text": "Mali",
+    "labarea": "H",
+    "mapNumerical": 466,
+    "selectMenu": false
+  },
+  {
+    "id": "MR",
+    "type": "codealpha",
+    "text": "Mauritania",
+    "labarea": "H",
+    "mapNumerical": 478,
+    "selectMenu": false
+  },
+  {
+    "id": "YT",
+    "type": "codealpha",
+    "text": "Mayotte",
+    "labarea": "H",
+    "mapNumerical": 175,
+    "selectMenu": false
+  },
+  {
+    "id": "MZ",
+    "type": "codealpha",
+    "text": "Mozambique",
+    "labarea": "H",
+    "mapNumerical": 508,
+    "selectMenu": false
+  },
+  {
+    "id": "NA",
+    "type": "codealpha",
+    "text": "Namibia",
+    "labarea": "H",
+    "mapNumerical": 516,
+    "selectMenu": false
+  },
+  {
+    "id": "NE",
+    "type": "codealpha",
+    "text": "Niger",
+    "labarea": "H",
+    "mapNumerical": 562,
+    "selectMenu": false
+  },
+  {
+    "id": "RE",
+    "type": "codealpha",
+    "text": "Réunion",
+    "labarea": "H",
+    "mapNumerical": 638,
+    "selectMenu": false
+  },
+  {
+    "id": "RW",
+    "type": "codealpha",
+    "text": "Rwanda",
+    "labarea": "H",
+    "mapNumerical": 646,
+    "selectMenu": false
+  },
+  {
+    "id": "SH",
+    "type": "codealpha",
+    "text": "Saint Helena",
+    "labarea": "H",
+    "mapNumerical": 654,
+    "selectMenu": false
+  },
+  {
+    "id": "SC",
+    "type": "codealpha",
+    "text": "Seychelles",
+    "labarea": "H",
+    "mapNumerical": 690,
+    "selectMenu": false
+  },
+  {
+    "id": "SL",
+    "type": "codealpha",
+    "text": "Sierra Leone",
+    "labarea": "H",
+    "mapNumerical": 694,
+    "selectMenu": false
+  },
+  {
+    "id": "SO",
+    "type": "codealpha",
+    "text": "Somalia",
+    "labarea": "H",
+    "mapNumerical": 706,
+    "selectMenu": false
+  },
+  {
+    "id": "SS",
+    "type": "codealpha",
+    "text": "South Sudan",
+    "labarea": "H",
+    "mapNumerical": 728,
+    "selectMenu": false
+  },
+  {
+    "id": "SD",
+    "type": "codealpha",
+    "text": "Sudan",
+    "labarea": "H",
+    "mapNumerical": 729,
+    "selectMenu": false
+  },
+  {
+    "id": "SZ",
+    "type": "codealpha",
+    "text": "Swaziland",
+    "labarea": "H",
+    "mapNumerical": 748,
+    "selectMenu": false
+  },
+  {
+    "id": "TG",
+    "type": "codealpha",
+    "text": "Togo",
+    "labarea": "H",
+    "mapNumerical": 768,
+    "selectMenu": false
+  },
+  {
+    "id": "UG",
+    "type": "codealpha",
+    "text": "Uganda",
+    "labarea": "H",
+    "mapNumerical": 800,
+    "selectMenu": false
+  },
+  {
+    "id": "ZM",
+    "type": "codealpha",
+    "text": "Zambia",
+    "labarea": "H",
+    "mapNumerical": 894,
+    "selectMenu": false
+  },
+  {
+    "id": "ZW",
+    "type": "codealpha",
+    "text": "Zimbabwe",
+    "labarea": "H",
+    "mapNumerical": 716,
+    "selectMenu": false
+  },
+  {
+    "id": "AD",
+    "type": "codealpha",
+    "text": "Andorra",
+    "labarea": "I",
+    "mapNumerical": 20,
+    "selectMenu": false
+  },
+  {
+    "id": "FO",
+    "type": "codealpha",
+    "text": "Faeroe Islands",
+    "labarea": "I",
+    "mapNumerical": 234,
+    "selectMenu": false
+  },
+  {
+    "id": "GF",
+    "type": "codealpha",
+    "text": "French Guiana",
+    "labarea": "I",
+    "mapNumerical": 254,
+    "selectMenu": false
+  },
+  {
+    "id": "GL",
+    "type": "codealpha",
+    "text": "Greenland",
+    "labarea": "I",
+    "mapNumerical": 304,
+    "selectMenu": false
+  },
+  {
+    "id": "VA",
+    "type": "codealpha",
+    "text": "Holy See (Vatican City State)",
+    "labarea": "I",
+    "mapNumerical": 336,
+    "selectMenu": false
+  },
+  {
+    "id": "SM",
+    "type": "codealpha",
+    "text": "San Marino",
+    "labarea": "I",
+    "mapNumerical": 674,
+    "selectMenu": false
+  }
+ ]
