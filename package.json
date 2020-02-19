@@ -15,7 +15,7 @@
   "sideEffects": false,
   "scripts": {
     "clean:comtrade": "rimraf dist/comtrade*",
-    "build:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack --progress --mode=production --display-error-details --config webpack.prod.js",
+    "build:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade DEBUG=false NODE_ENV=production webpack --progress --mode=production --display-error-details --config webpack.prod.js",
     "start:comtrade": "npm run clean:comtrade && cross-env PROJECT=comtrade webpack-dev-server --mode=development --config webpack.dev.js",
     "preprocess:nisra": "npm run clean:nisra && node src/nisra/api/utilities/api-processor.js",
     "clean:nisra": "rimraf dist/nisra*",
@@ -35,7 +35,7 @@
     "bootstrap": "^3.4.1",
     "cross-env": "^5.1.4",
     "crossfilter2": "^1.4.6",
-    "css-loader": "^0.28.10",
+    "css-loader": "^3.4.2",
     "d3": "^4.13.0",
     "d3-geo-projection": "^2.3.2",
     "d3-tip": "^0.7.1",
@@ -49,14 +49,14 @@
     "fs-extra": "^5.0.0",
     "html-loader": "^0.5.5",
     "intro.js": "git+https://github.com/usablica/intro.js.git#v2.9.3",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.1",
     "json-loader": "^0.5.7",
     "json-to-csv": "^1.0.0",
     "mini-css-extract-plugin": "^0.4.0",
     "mkdirp": "^0.5.1",
-    "modernizr": "^3.6.0",
+    "modernizr": "^3.9.0",
     "modernizr-loader": "^1.0.1",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "popper.js": "^1.12.9",
     "postcss-loader": "^2.1.0",
     "precss": "^3.1.0",
@@ -67,8 +67,7 @@
     "select2-bootstrap-theme": "0.1.0-beta.10",
     "style-loader": "^0.20.2",
     "topojson-client": "^3.0.0",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.8.3",
+    "webpack": "^4.41.6",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.1.1"
@@ -84,5 +83,8 @@
     "plugins": [
       "@babel/plugin-proposal-object-rest-spread"
     ]
+  },
+  "devDependencies": {
+    "terser-webpack-plugin": "^2.3.5"
   }
 }
